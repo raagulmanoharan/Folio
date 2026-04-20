@@ -61,7 +61,7 @@ export default function Page() {
           </p>
 
           <SectionAtmosphere
-            src="/img/atmosphere/00-index.svg"
+            src="/img/atmosphere/00-index.webp"
             alt="Muted gradient field, dark horizon band dissolving upward."
             priority
           />
@@ -116,7 +116,7 @@ export default function Page() {
         <section id="profile" className="pb-[var(--pad-section-y)]">
           <SectionHeader number="01" slug="PROFILE" title="Profile" />
           <SectionAtmosphere
-            src="/img/atmosphere/01-profile.svg"
+            src="/img/atmosphere/01-profile.webp"
             alt="Soft warm gradient field, ochre bleeding into paper."
           />
           <KeyValueTable rows={dossier.map((d) => ({ key: d.key, value: d.value }))} />
@@ -132,7 +132,7 @@ export default function Page() {
         <section id="work" className="pb-[var(--pad-section-y)]">
           <SectionHeader number="02" slug="WORK" title="Work" />
           <SectionAtmosphere
-            src="/img/atmosphere/02-work.svg"
+            src="/img/atmosphere/02-work.webp"
             alt="Three horizontal strata — paper, ochre, near-black — stacked like sediment."
             priority
           />
@@ -162,7 +162,7 @@ export default function Page() {
         <section id="writing" className="pb-[var(--pad-section-y)]">
           <SectionHeader number="03" slug="WRITING" title="Writing" />
           <SectionAtmosphere
-            src="/img/atmosphere/03-writing.svg"
+            src="/img/atmosphere/03-writing.webp"
             alt="Warm paper field with a dark charcoal column along the left edge."
           />
           {writing.length === 0 ? (
@@ -228,7 +228,7 @@ export default function Page() {
         <section id="contact" className="pb-[var(--pad-section-y)]">
           <SectionHeader number="04" slug="CONTACT" title="Contact" />
           <SectionAtmosphere
-            src="/img/atmosphere/04-contact.svg"
+            src="/img/atmosphere/04-contact.webp"
             alt="Near-black field with a soft ochre glow diffused into darkness."
           />
           <KeyValueTable
