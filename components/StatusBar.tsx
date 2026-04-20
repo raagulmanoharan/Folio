@@ -1,11 +1,12 @@
 import { Mark } from "./Mark";
-import { availability, identity } from "@/content/profile";
+import { identity } from "@/content/profile";
 
 const navItems = [
   { n: "01", label: "PROFILE", href: "#profile" },
-  { n: "02", label: "WORK", href: "#work" },
-  { n: "03", label: "WRITING", href: "#writing" },
-  { n: "04", label: "CONTACT", href: "#contact" },
+  { n: "02", label: "CURRENTLY", href: "#currently" },
+  { n: "03", label: "WORK", href: "#work" },
+  { n: "04", label: "WRITING", href: "#writing" },
+  { n: "05", label: "CONTACT", href: "#contact" },
 ];
 
 export function StatusBar() {
@@ -27,14 +28,6 @@ export function StatusBar() {
           <span className="hidden sm:inline">{identity.role}</span>
           <span className="hidden md:inline text-[var(--muted)]">·</span>
           <span className="hidden md:inline">{identity.location}</span>
-          {availability.state !== "hidden" && (
-            <span
-              className="hidden md:inline-flex items-center border border-[var(--accent)] text-[var(--accent)] px-1.5 py-px"
-              style={{ fontSize: "var(--t-meta)" }}
-            >
-              [ {availability.label} ]
-            </span>
-          )}
         </div>
         <nav
           aria-label="Sections"
