@@ -17,14 +17,14 @@ const sans = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Raagul R. — Lead Designer, Salesforce",
+  title: "Raagul Manoharan — UX Designer",
   description:
-    "Lead designer working on AI agent interactions, behavioral primitives, and design systems.",
+    "User Experience Designer based in Bengaluru. 8 years across 0→1 launches and enterprise systems. Currently at Salesforce, exploring Generative UI.",
   robots: { index: true, follow: true },
   openGraph: {
-    title: "Raagul R.",
+    title: "Raagul Manoharan",
     description:
-      "Lead designer working on AI agent interactions, behavioral primitives, and design systems.",
+      "User Experience Designer based in Bengaluru. Currently at Salesforce.",
     type: "website",
   },
 };

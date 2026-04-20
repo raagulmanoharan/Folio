@@ -8,25 +8,25 @@ export type ContactRow = {
 export const contact: ContactRow[] = [
   {
     key: "EMAIL",
-    value: "raagul@raagul.in",
-    href: "mailto:raagul@raagul.in",
+    value: "[RAAGUL: fill in]",
+    href: "mailto:[RAAGUL: fill in]",
   },
   {
     key: "LINKEDIN",
-    value: "/in/raagul-r",
-    href: "https://www.linkedin.com/in/raagul-r",
+    value: "/in/raagulmanoharan",
+    href: "https://www.linkedin.com/in/raagulmanoharan",
     external: true,
   },
   {
-    key: "ARE.NA",
-    value: "/raagul",
-    href: "https://www.are.na/raagul",
+    key: "PERSONAL",
+    value: "raagulmanoharan.com",
+    href: "https://raagulmanoharan.com",
     external: true,
   },
   {
-    key: "SOUND",
-    value: "Tomo — ambient electronic",
-    href: "https://tomo.bandcamp.com",
+    key: "WRITING",
+    value: "/ramblings",
+    href: "https://raagulmanoharan.com/ramblings",
     external: true,
   },
 ];

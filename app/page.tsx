@@ -12,10 +12,10 @@ import { contact } from "@/content/contact";
 const LAST_UPDATED = new Date().toISOString().slice(0, 10);
 
 const tocRows = [
-  { n: "02", section: "PROFILE", summary: "Role, focus, education, location", href: "#profile" },
-  { n: "03", section: "WORK", summary: "Projects, case studies, ongoing", href: "#work" },
-  { n: "04", section: "WRITING", summary: "Essays and notes", href: "#writing" },
-  { n: "05", section: "CONTACT", summary: "Email, socials, music", href: "#contact" },
+  { n: "01", section: "PROFILE", summary: "Role, focus, education, location", href: "#profile" },
+  { n: "02", section: "WORK", summary: "Projects, 0→1 and enterprise", href: "#work" },
+  { n: "03", section: "WRITING", summary: "Essays and notes", href: "#writing" },
+  { n: "04", section: "CONTACT", summary: "Email, socials, features", href: "#contact" },
 ];
 
 export default function Page() {
@@ -36,7 +36,7 @@ export default function Page() {
             className="text-[var(--muted)] uppercase"
             style={{ fontSize: "var(--t-meta)" }}
           >
-            INDEX —— R.R / 2026
+            R.R — 2026
           </div>
 
           <h1
@@ -105,9 +105,9 @@ export default function Page() {
           </div>
         </section>
 
-        {/* 02 — PROFILE */}
+        {/* 01 — PROFILE */}
         <section id="profile" className="pb-[var(--pad-section-y)]">
-          <SectionHeader number="02" slug="PROFILE" title="Profile" />
+          <SectionHeader number="01" slug="PROFILE" title="Profile" />
           <KeyValueTable rows={dossier.map((d) => ({ key: d.key, value: d.value }))} />
           <p
             className="mt-8 max-w-[64ch]"
@@ -117,12 +117,16 @@ export default function Page() {
           </p>
         </section>
 
-        {/* 03 — WORK */}
+        {/* 02 — WORK */}
         <section id="work" className="pb-[var(--pad-section-y)]">
-          <SectionHeader number="03" slug="WORK" title="Work" />
+          <SectionHeader number="02" slug="WORK" title="Work" />
           <div
-            className="grid gap-x-4 px-0 py-[var(--pad-row-y)] border-b border-[var(--rule)] text-[var(--muted)] uppercase grid-cols-[5rem_1fr_1fr_1fr_2rem] sm:grid-cols-[5rem_minmax(0,1.2fr)_minmax(0,1.4fr)_minmax(0,1fr)_2rem]"
-            style={{ fontSize: "var(--t-meta)" }}
+            className="grid gap-x-6 px-0 py-[var(--pad-row-y)] border-b border-[var(--rule)] text-[var(--muted)] uppercase"
+            style={{
+              fontSize: "var(--t-meta)",
+              gridTemplateColumns:
+                "5rem minmax(0, 1.2fr) minmax(0, 1.4fr) minmax(0, 1fr) 2rem",
+            }}
             role="row"
           >
             <span>DATE</span>
@@ -138,46 +142,63 @@ export default function Page() {
           </div>
         </section>
 
-        {/* 04 — WRITING */}
+        {/* 03 — WRITING */}
         <section id="writing" className="pb-[var(--pad-section-y)]">
-          <SectionHeader number="04" slug="WRITING" title="Writing" />
-          <LogTable
-            caption="Writing log"
-            columns={[
-              { key: "date", label: "DATE", className: "w-20" },
-              { key: "title", label: "TITLE" },
-              { key: "topic", label: "TOPIC", className: "hidden sm:table-cell w-32" },
-              { key: "length", label: "LEN", className: "w-16" },
-              { key: "link", label: "", className: "w-8 text-right" },
-            ]}
-            rows={writing.map((w) => ({
-              date: w.date,
-              title: (
-                <>
-                  <a href={w.url}>{w.title}</a>
-                  {w.draft && (
-                    <span className="ml-2 text-[var(--muted)]">[DRAFT]</span>
-                  )}
-                </>
-              ),
-              topic: <span className="text-[var(--muted)]">{w.topic}</span>,
-              length: <span className="text-[var(--muted)]">{w.length}</span>,
-              link: (
-                <a
-                  href={w.url}
-                  aria-label={`Read ${w.title}`}
-                  className="inline-block text-right"
-                >
-                  →
-                </a>
-              ),
-            }))}
-          />
+          <SectionHeader number="03" slug="WRITING" title="Writing" />
+          {writing.length === 0 ? (
+            <p
+              className="text-[var(--muted)]"
+              style={{ fontSize: "var(--t-body)" }}
+            >
+              Nothing here yet. Notes in progress at{" "}
+              <a
+                href="https://raagulmanoharan.com/ramblings"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                /ramblings
+              </a>
+              .
+            </p>
+          ) : (
+            <LogTable
+              caption="Writing log"
+              columns={[
+                { key: "date", label: "DATE", className: "w-20" },
+                { key: "title", label: "TITLE" },
+                { key: "topic", label: "TOPIC", className: "hidden sm:table-cell w-32" },
+                { key: "length", label: "LEN", className: "w-16" },
+                { key: "link", label: "", className: "w-8 text-right" },
+              ]}
+              rows={writing.map((w) => ({
+                date: w.date,
+                title: (
+                  <>
+                    <a href={w.url}>{w.title}</a>
+                    {w.draft && (
+                      <span className="ml-2 text-[var(--muted)]">[DRAFT]</span>
+                    )}
+                  </>
+                ),
+                topic: <span className="text-[var(--muted)]">{w.topic}</span>,
+                length: <span className="text-[var(--muted)]">{w.length}</span>,
+                link: (
+                  <a
+                    href={w.url}
+                    aria-label={`Read ${w.title}`}
+                    className="inline-block text-right"
+                  >
+                    →
+                  </a>
+                ),
+              }))}
+            />
+          )}
         </section>
 
-        {/* 05 — CONTACT */}
+        {/* 04 — CONTACT */}
         <section id="contact" className="pb-[var(--pad-section-y)]">
-          <SectionHeader number="05" slug="CONTACT" title="Contact" />
+          <SectionHeader number="04" slug="CONTACT" title="Contact" />
           <KeyValueTable
             rows={contact.map((c) => ({
               key: c.key,
@@ -192,7 +213,7 @@ export default function Page() {
           className="border-t border-[var(--rule)] py-6 text-[var(--muted)]"
           style={{ fontSize: "var(--t-meta)" }}
         >
-          © 2026 R.R — last updated {LAST_UPDATED}
+          © 2026 RAAGUL MANOHARAN — last updated {LAST_UPDATED}
         </footer>
       </main>
       <HashSync />

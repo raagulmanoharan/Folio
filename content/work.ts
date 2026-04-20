@@ -23,116 +23,84 @@ export type WorkRow = {
 
 export const work: WorkRow[] = [
   {
-    slug: "logic-kit",
-    date: "2026",
-    project: "Logic Kit",
-    context: "Salesforce, internal",
-    role: "Lead designer",
+    slug: "salesforce",
+    date: "2022 —",
+    project: "Salesforce",
+    context: "Referral, Loyalty, Business Rules Engine",
+    role: "Lead UX Designer",
     caseStudy: {
       problem:
-        "Agent surfaces across the org were inventing interaction patterns in isolation. The same primitive — a confirmation, a rollback, a tool-call preview — shipped in five different shapes. Onboarding a new agent team took weeks because there was no shared grammar.",
+        "Salesforce's industry solutions for Referral Marketing, Loyalty Management, and the Business Rules Engine each carry enterprise complexity — long configuration paths, branching logic, multi-role workflows. The common problem: turning that complexity into interfaces an operator can actually hold in their head.",
       approach:
-        "Audited twelve surfaces, extracted the recurring primitives, and defined a small kit: defaults, confirmations, interruptions, tool previews, rollback, and attribution. Each primitive has a behavioral spec, not just a visual one — what it does, when, and what it cannot do.",
+        "I work across these product lines on scalable systems and usability in deep workflows, and on 0→1 experiences for new enterprise surfaces. Current focus: interaction grammar for Generative UI — how users think, create, and co-work with intelligent systems.",
       outcome:
-        "Three agent teams now ship against the kit. Design review time for new agent flows dropped materially. The kit is the interface between design, research, and eng.",
+        "Shipping across multiple industry clouds. Recognition includes the Singapore Good Design Award (SG Mark) 2024 for UX work in enterprise systems.",
       figures: [
         {
           src: "/img/work/placeholder.svg",
           width: 1600,
           height: 800,
-          caption: "FIG. 03.1 — Logic Kit component inventory, 2026",
-          alt: "Component inventory diagram showing twelve agent UI primitives in a 1px grid.",
+          caption: "FIG. 02.1 — Salesforce industry solutions, 2024",
+          alt: "Placeholder for Salesforce project imagery.",
         },
       ],
     },
   },
   {
-    slug: "atelier",
-    date: "2026",
-    project: "Atelier",
-    context: "Independent R&D",
-    role: "Designer / build",
+    slug: "microsoft",
+    date: "2020 — 2022",
+    project: "Microsoft",
+    context: "SharePoint, Viva Connections",
+    role: "Designer",
+    link: "https://techcommunity.microsoft.com/t5/intrazone-podcast/bg-p/IntrazonePodcast",
     caseStudy: {
       problem:
-        "Design work lives in too many tools. Canvas, docs, chat, archive — the stitches show. I wanted one surface where a project could be sketched, annotated, and published without context-switching.",
+        "SharePoint on mobile served millions of enterprise users, but content discovery and collaboration lagged the desktop surface. In parallel, Microsoft Viva Connections was being built to unify the employee digital workplace — a new product inside a deeply established ecosystem.",
       approach:
-        "Built a single-canvas tool with typed notes, inline embeds, and a thin publishing layer. No templates, no sidebars, no onboarding. The constraint was: zero settings.",
+        "Owned the SharePoint mobile experience and played a key design role on Viva Connections through General Availability. Focus areas: feed experience, content discoverability, and the patterns that let a new product sit cleanly alongside existing Microsoft 365 surfaces.",
       outcome:
-        "In daily use for six months. Used to write this site, among other things. Not public yet.",
+        "Viva Connections shipped to GA. Featured guest on The Intrazone, Microsoft's SharePoint podcast, on the episode 'Building the Viva Connections Feed Experience.'",
       figures: [
         {
           src: "/img/work/placeholder.svg",
           width: 1600,
           height: 800,
-          caption: "FIG. 03.2 — Atelier canvas detail, 2026",
-          alt: "Stylized desktop canvas with floating note cards and a left tool strip.",
+          caption: "FIG. 02.2 — Viva Connections feed, 2021",
+          alt: "Placeholder for Microsoft project imagery.",
         },
       ],
     },
   },
   {
-    slug: "budgy",
-    date: "2025",
-    project: "Budgy",
-    context: "Independent",
-    role: "Designer / build",
-    link: "https://budgy.chat",
+    slug: "samsung",
+    date: "2018 — 2020",
+    project: "Samsung",
+    context: "Galaxy wearables, connected home",
+    role: "Senior Designer",
     caseStudy: {
       problem:
-        "Budgeting apps ask too much. I wanted to track spending without opening an app — just a chat, the way I already talk to friends about money.",
+        "Samsung's wearable ecosystem needed two things at once: deeper ties into the connected home (via the Tap2Continue framework), and local relevance for the Indian market — where default watch faces weren't culturally resonant.",
       approach:
-        "WhatsApp bot. One line in, one line back. Categories are learned, not configured. Weekly summary on Sundays. No charts, no streaks, no gamification.",
+        "Led design explorations for Galaxy smartwatches on connected-home flows and Tap2Continue. Separately, designed culturally resonant watch faces for India, treating personalization as a first-class part of the product, not a post-launch skin.",
       outcome:
-        "Running since early 2025. A few hundred users. Read-only for now.",
-      figures: [
-        {
-          src: "/img/work/placeholder.svg",
-          width: 1600,
-          height: 800,
-          caption: "FIG. 03.3 — Budgy conversation sample, 2025",
-          alt: "Stylized WhatsApp conversation showing a spending entry and bot summary.",
-        },
-      ],
+        "Shipped work across Galaxy wearables. The India-specific watch faces landed as a meaningful personalization channel inside the default Samsung wearable experience.",
+      figures: [],
     },
   },
   {
-    slug: "design-days-diary",
-    date: "2024",
-    project: "Design Days Diary",
-    context: "Book project",
-    role: "Editor / design",
+    slug: "freshworks",
+    date: "2018",
+    project: "Freshworks",
+    context: "Freshmarketer onboarding",
+    role: "Product Designer",
     caseStudy: {
       problem:
-        "A group of designers had been writing process notes for years without a home. The writing was good; the publishing bar was in the way.",
+        "Freshmarketer needed an onboarding flow that made sense inside the larger Freshworks product ecosystem — a first-time user experience that integrated cleanly with the suite, not a standalone funnel.",
       approach:
-        "Edited, sequenced, and set a 200-page softcover. Mono body, sans heads, wide outer margin for marginalia. Print-first, web as a secondary.",
+        "Designed the onboarding experience for Freshmarketer, focused on seamless integration and first-time user engagement across the Freshworks product family.",
       outcome:
-        "Printed 300 copies. Sold out the first run. The writing is the product; the book is the frame.",
-      figures: [
-        {
-          src: "/img/work/placeholder.svg",
-          width: 1600,
-          height: 800,
-          caption: "FIG. 03.4 — Design Days Diary spread, 2024",
-          alt: "Overhead photograph of an open book showing a dense two-column mono layout.",
-        },
-      ],
+        "A short stint — the onboarding work shipped into the Freshmarketer product.",
+      figures: [],
     },
-  },
-  {
-    slug: "prior-1",
-    date: "2023",
-    project: "[PRIOR PROJECT 1]",
-    context: "Salesforce",
-    role: "IC → lead",
-    caseStudy: null,
-  },
-  {
-    slug: "prior-2",
-    date: "2020",
-    project: "[PRIOR PROJECT 2]",
-    context: "Earlier role",
-    role: "IC",
-    caseStudy: null,
   },
 ];
