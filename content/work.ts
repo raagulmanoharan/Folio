@@ -15,10 +15,7 @@ export type CaseStudyFigure = {
 
 export type CaseStudy = {
   summary: string;
-  atmosphere: {
-    src: string;
-    alt: string;
-  };
+  atmosphere: "index" | "profile" | "currently" | "work" | "writing" | "contact";
   sections: CaseStudySection[];
   figures: CaseStudyFigure[];
   externalLink?: {
@@ -36,11 +33,6 @@ export type WorkRow = {
   caseStudy: CaseStudy | null;
 };
 
-const workAtmosphere = {
-  src: "/img/atmosphere/02-work.webp",
-  alt: "Three horizontal strata — paper, ochre, near-black — stacked like sediment.",
-};
-
 export const work: WorkRow[] = [
   {
     slug: "salesforce",
@@ -51,7 +43,7 @@ export const work: WorkRow[] = [
     caseStudy: {
       summary:
         "Enterprise workflows for Salesforce industry clouds — loyalty, referral, and the Business Rules Engine.",
-      atmosphere: workAtmosphere,
+      atmosphere: "work",
       sections: [
         {
           heading: "Context",
@@ -84,7 +76,7 @@ export const work: WorkRow[] = [
     caseStudy: {
       summary:
         "SharePoint on mobile and Viva Connections — unifying the Microsoft 365 employee workplace.",
-      atmosphere: workAtmosphere,
+      atmosphere: "work",
       sections: [
         {
           heading: "Context",
@@ -121,7 +113,7 @@ export const work: WorkRow[] = [
     caseStudy: {
       summary:
         "Galaxy wearables — connected home flows and culturally resonant watch faces for India.",
-      atmosphere: workAtmosphere,
+      atmosphere: "work",
       sections: [
         {
           heading: "Context",
@@ -154,7 +146,7 @@ export const work: WorkRow[] = [
     caseStudy: {
       summary:
         "Freshmarketer onboarding — a first-time experience built for the larger Freshworks suite.",
-      atmosphere: workAtmosphere,
+      atmosphere: "work",
       sections: [
         {
           heading: "Context",

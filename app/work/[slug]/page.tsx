@@ -6,7 +6,7 @@ import { PageMeta, type PageMetaRow } from "@/components/PageMeta";
 import { PageTitle } from "@/components/PageTitle";
 import { CaseStudyBody } from "@/components/CaseStudyBody";
 import { CaseStudyNav } from "@/components/CaseStudyNav";
-import { Atmosphere } from "@/components/Atmosphere";
+import { LiquidGradient } from "@/components/LiquidGradient";
 
 export function generateStaticParams() {
   return work.filter((p) => p.caseStudy).map((p) => ({ slug: p.slug }));
@@ -61,7 +61,7 @@ export default async function Page({
 
         <PageTitle>{cs.summary}</PageTitle>
 
-        <Atmosphere src={cs.atmosphere.src} alt={cs.atmosphere.alt} priority />
+        <LiquidGradient variant={cs.atmosphere} />
 
         <CaseStudyBody sections={cs.sections} figures={cs.figures} />
 

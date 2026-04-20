@@ -5,10 +5,7 @@ export type NoteSection = {
 
 export type Note = {
   summary: string;
-  atmosphere: {
-    src: string;
-    alt: string;
-  };
+  atmosphere: "index" | "profile" | "currently" | "work" | "writing" | "contact";
   sections: NoteSection[];
 };
 

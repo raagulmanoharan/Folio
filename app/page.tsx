@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { StatusBar } from "@/components/StatusBar";
 import { SectionHeader } from "@/components/SectionHeader";
-import { Atmosphere } from "@/components/Atmosphere";
+import { LiquidGradient } from "@/components/LiquidGradient";
 import { KeyValueTable } from "@/components/KeyValueTable";
 import { LogTable } from "@/components/LogTable";
 import { CurrentlyList } from "@/components/CurrentlyList";
@@ -55,11 +55,7 @@ export default function Page() {
             {hero.dek}
           </p>
 
-          <Atmosphere
-            src="/img/atmosphere/00-index.webp"
-            alt="Muted gradient field, dark horizon band dissolving upward."
-            priority
-          />
+          <LiquidGradient variant="index" />
 
           <div className="mt-12">
             <table
@@ -98,27 +94,21 @@ export default function Page() {
         {/* 01 — PROFILE */}
         <section id="profile" className="pb-[var(--pad-section-y)]">
           <SectionHeader title="Profile" />
-          <Atmosphere
-            src="/img/atmosphere/01-profile.webp"
-            alt="Soft warm gradient field, ochre bleeding into paper."
-          />
+          <LiquidGradient variant="profile" />
           <KeyValueTable rows={dossier.map((d) => ({ key: d.key, value: d.value }))} />
         </section>
 
         {/* 02 — CURRENTLY */}
         <section id="currently" className="pb-[var(--pad-section-y)]">
           <SectionHeader title="Currently" />
+          <LiquidGradient variant="currently" />
           <CurrentlyList items={currently} />
         </section>
 
         {/* 03 — WORK */}
         <section id="work" className="pb-[var(--pad-section-y)]">
           <SectionHeader title="Work" />
-          <Atmosphere
-            src="/img/atmosphere/02-work.webp"
-            alt="Three horizontal strata — paper, ochre, near-black — stacked like sediment."
-            priority
-          />
+          <LiquidGradient variant="work" />
           <div
             className="grid gap-x-6 px-0 py-[var(--pad-row-y)] border-b border-[var(--rule)] text-[var(--muted)] uppercase"
             style={{
@@ -158,10 +148,7 @@ export default function Page() {
         {/* 04 — WRITING */}
         <section id="writing" className="pb-[var(--pad-section-y)]">
           <SectionHeader title="Writing" />
-          <Atmosphere
-            src="/img/atmosphere/03-writing.webp"
-            alt="Warm paper field with a dark charcoal column along the left edge."
-          />
+          <LiquidGradient variant="writing" />
           {writing.length === 0 ? (
             <p
               className="text-[var(--muted)]"
@@ -219,10 +206,7 @@ export default function Page() {
         {/* 05 — CONTACT */}
         <section id="contact" className="pb-[var(--pad-section-y)]">
           <SectionHeader title="Contact" />
-          <Atmosphere
-            src="/img/atmosphere/04-contact.webp"
-            alt="Near-black field with a soft ochre glow diffused into darkness."
-          />
+          <LiquidGradient variant="contact" />
           <KeyValueTable
             rows={contact.map((c) => ({
               key: c.key,

@@ -6,7 +6,7 @@ import { PageMeta, type PageMetaRow } from "@/components/PageMeta";
 import { PageTitle } from "@/components/PageTitle";
 import { NoteBody } from "@/components/NoteBody";
 import { NoteNav } from "@/components/NoteNav";
-import { Atmosphere } from "@/components/Atmosphere";
+import { LiquidGradient } from "@/components/LiquidGradient";
 
 export function generateStaticParams() {
   return writing
@@ -55,11 +55,7 @@ export default async function Page({
 
         <PageTitle>{note.summary}</PageTitle>
 
-        <Atmosphere
-          src={note.atmosphere.src}
-          alt={note.atmosphere.alt}
-          priority
-        />
+        <LiquidGradient variant={note.atmosphere} />
 
         <NoteBody sections={note.sections} />
 
