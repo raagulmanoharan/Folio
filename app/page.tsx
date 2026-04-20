@@ -5,7 +5,7 @@ import { KeyValueTable } from "@/components/KeyValueTable";
 import { LogTable } from "@/components/LogTable";
 import { ExpandableRow } from "@/components/ExpandableRow";
 import { HashSync } from "@/components/HashSync";
-import { hero, dossier, bio } from "@/content/profile";
+import { hero, dossier } from "@/content/profile";
 import { work } from "@/content/work";
 import { writing } from "@/content/writing";
 import { contact } from "@/content/contact";
@@ -33,15 +33,8 @@ export default function Page() {
       >
         {/* 01 — INDEX */}
         <section id="index" className="pt-[var(--pad-section-y)] pb-8">
-          <div
-            className="text-[var(--muted)] uppercase"
-            style={{ fontSize: "var(--t-meta)" }}
-          >
-            R.R — 2026
-          </div>
-
           <h1
-            className="mt-8 max-w-[22ch]"
+            className="max-w-[22ch]"
             style={{
               fontFamily: "var(--font-sans)",
               fontSize: "var(--t-hero)",
@@ -67,12 +60,6 @@ export default function Page() {
           />
 
           <div className="mt-12">
-            <div
-              className="text-[var(--muted)] uppercase mb-2"
-              style={{ fontSize: "var(--t-meta)" }}
-            >
-              // CONTENTS
-            </div>
             <table
               className="w-full text-left"
               style={{ fontSize: "var(--t-body)" }}
@@ -82,7 +69,6 @@ export default function Page() {
                   <th>Number</th>
                   <th>Section</th>
                   <th>Summary</th>
-                  <th>Link</th>
                 </tr>
               </thead>
               <tbody>
@@ -97,13 +83,8 @@ export default function Page() {
                     <td className="py-[var(--pad-row-y)] pr-4 align-baseline w-28 sm:w-36">
                       <a href={r.href}>{r.section}</a>
                     </td>
-                    <td className="py-[var(--pad-row-y)] pr-4 align-baseline text-[var(--muted)] hidden sm:table-cell">
-                      {r.summary}
-                    </td>
-                    <td className="py-[var(--pad-row-y)] pr-0 align-baseline text-right w-8">
-                      <a href={r.href} aria-label={`Go to ${r.section}`}>
-                        →
-                      </a>
+                    <td className="py-[var(--pad-row-y)] pr-0 align-baseline text-[var(--muted)] hidden sm:table-cell">
+                      <a href={r.href}>{r.summary}</a>
                     </td>
                   </tr>
                 ))}
@@ -114,23 +95,17 @@ export default function Page() {
 
         {/* 01 — PROFILE */}
         <section id="profile" className="pb-[var(--pad-section-y)]">
-          <SectionHeader number="01" slug="PROFILE" title="Profile" />
+          <SectionHeader title="Profile" />
           <SectionAtmosphere
             src="/img/atmosphere/01-profile.webp"
             alt="Soft warm gradient field, ochre bleeding into paper."
           />
           <KeyValueTable rows={dossier.map((d) => ({ key: d.key, value: d.value }))} />
-          <p
-            className="mt-8 max-w-[64ch]"
-            style={{ fontSize: "var(--t-body-lg)" }}
-          >
-            {bio}
-          </p>
         </section>
 
         {/* 02 — WORK */}
         <section id="work" className="pb-[var(--pad-section-y)]">
-          <SectionHeader number="02" slug="WORK" title="Work" />
+          <SectionHeader title="Work" />
           <SectionAtmosphere
             src="/img/atmosphere/02-work.webp"
             alt="Three horizontal strata — paper, ochre, near-black — stacked like sediment."
@@ -141,7 +116,7 @@ export default function Page() {
             style={{
               fontSize: "var(--t-meta)",
               gridTemplateColumns:
-                "5rem minmax(0, 1.2fr) minmax(0, 1.4fr) minmax(0, 1fr) 2rem",
+                "5rem minmax(0, 1.2fr) minmax(0, 1.4fr) minmax(0, 1fr)",
             }}
             role="row"
           >
@@ -149,7 +124,6 @@ export default function Page() {
             <span>PROJECT</span>
             <span>CONTEXT</span>
             <span>ROLE</span>
-            <span className="text-right">+</span>
           </div>
           <div role="rowgroup">
             {work.map((row) => (
@@ -160,7 +134,7 @@ export default function Page() {
 
         {/* 03 — WRITING */}
         <section id="writing" className="pb-[var(--pad-section-y)]">
-          <SectionHeader number="03" slug="WRITING" title="Writing" />
+          <SectionHeader title="Writing" />
           <SectionAtmosphere
             src="/img/atmosphere/03-writing.webp"
             alt="Warm paper field with a dark charcoal column along the left edge."
@@ -188,7 +162,6 @@ export default function Page() {
                 { key: "title", label: "TITLE" },
                 { key: "topic", label: "TOPIC", className: "hidden sm:table-cell w-32" },
                 { key: "length", label: "LEN", className: "w-16" },
-                { key: "link", label: "", className: "w-8 text-right" },
               ]}
               rows={writing.map((w) => ({
                 date: w.date,
@@ -208,17 +181,6 @@ export default function Page() {
                 ),
                 topic: <span className="text-[var(--muted)]">{w.topic}</span>,
                 length: <span className="text-[var(--muted)]">{w.length}</span>,
-                link: (
-                  <a
-                    href={w.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Read ${w.title}`}
-                    className="inline-block text-right"
-                  >
-                    →
-                  </a>
-                ),
               }))}
             />
           )}
@@ -226,7 +188,7 @@ export default function Page() {
 
         {/* 04 — CONTACT */}
         <section id="contact" className="pb-[var(--pad-section-y)]">
-          <SectionHeader number="04" slug="CONTACT" title="Contact" />
+          <SectionHeader title="Contact" />
           <SectionAtmosphere
             src="/img/atmosphere/04-contact.webp"
             alt="Near-black field with a soft ochre glow diffused into darkness."

@@ -6,7 +6,7 @@ const gridClass =
 
 const gridStyle = {
   gridTemplateColumns:
-    "5rem minmax(0, 1.2fr) minmax(0, 1.4fr) minmax(0, 1fr) 2rem",
+    "5rem minmax(0, 1.2fr) minmax(0, 1.4fr) minmax(0, 1fr)",
 };
 
 export function ExpandableRow({ row }: { row: WorkRow }) {
@@ -19,9 +19,6 @@ export function ExpandableRow({ row }: { row: WorkRow }) {
       <span>{row.project}</span>
       <span className="text-[var(--muted)]">{row.context}</span>
       <span>{row.role}</span>
-      <span aria-hidden="true" className="text-right">
-        {hasCase ? "+" : "—"}
-      </span>
     </div>
   );
 
