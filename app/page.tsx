@@ -177,25 +177,32 @@ export default function Page() {
                 { key: "topic", label: "TOPIC", className: "hidden sm:table-cell w-32" },
                 { key: "length", label: "LEN", className: "w-16" },
               ]}
-              rows={writing.map((w) => ({
-                date: w.date,
-                title: (
-                  <>
-                    <a
-                      href={w.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {w.title}
-                    </a>
-                    {w.draft && (
-                      <span className="ml-2 text-[var(--muted)]">[DRAFT]</span>
-                    )}
-                  </>
-                ),
-                topic: <span className="text-[var(--muted)]">{w.topic}</span>,
-                length: <span className="text-[var(--muted)]">{w.length}</span>,
-              }))}
+              rows={writing.map((w) => {
+                const isNative = !!(w.slug && w.note);
+                return {
+                  date: w.date,
+                  title: (
+                    <>
+                      {isNative ? (
+                        <Link href={`/writing/${w.slug}`}>{w.title}</Link>
+                      ) : (
+                        <a
+                          href={w.externalUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {w.title}
+                        </a>
+                      )}
+                      {w.draft && (
+                        <span className="ml-2 text-[var(--muted)]">[DRAFT]</span>
+                      )}
+                    </>
+                  ),
+                  topic: <span className="text-[var(--muted)]">{w.topic}</span>,
+                  length: <span className="text-[var(--muted)]">{w.length}</span>,
+                };
+              })}
             />
           )}
         </section>
