@@ -14,7 +14,7 @@ const LAST_UPDATED = new Date().toISOString().slice(0, 10);
 const tocRows = [
   { n: "01", section: "PROFILE", summary: "Role, focus, education, location", href: "#profile" },
   { n: "02", section: "WORK", summary: "Projects, 0→1 and enterprise", href: "#work" },
-  { n: "03", section: "WRITING", summary: "Essays and notes", href: "#writing" },
+  { n: "03", section: "WRITING", summary: "On AI interfaces, interaction, and design", href: "#writing" },
   { n: "04", section: "CONTACT", summary: "Email, socials, features", href: "#contact" },
 ];
 
@@ -174,7 +174,13 @@ export default function Page() {
                 date: w.date,
                 title: (
                   <>
-                    <a href={w.url}>{w.title}</a>
+                    <a
+                      href={w.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {w.title}
+                    </a>
                     {w.draft && (
                       <span className="ml-2 text-[var(--muted)]">[DRAFT]</span>
                     )}
@@ -185,6 +191,8 @@ export default function Page() {
                 link: (
                   <a
                     href={w.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label={`Read ${w.title}`}
                     className="inline-block text-right"
                   >
