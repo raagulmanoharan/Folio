@@ -1,4 +1,5 @@
 import { GradientBlob, type BlobPreset } from "@/components/GradientBlob";
+import { LiquidGradient } from "@/components/LiquidGradient";
 
 const PRESETS: { preset: BlobPreset; seed: number; label: string; aspect: number }[] = [
   { preset: "flare", seed: 3, label: "flare / 03", aspect: 3 / 4 },
@@ -50,6 +51,41 @@ export default function BlobsPage() {
               style={{ fontSize: "var(--t-meta)" }}
             >
               {p.label}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <div
+        className="text-[var(--muted)] uppercase mt-16 mb-4"
+        style={{ fontSize: "var(--t-meta)" }}
+      >
+        // LIQUID — WEBGL DOMAIN-WARPED FBM
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        {[
+          { seed: 1.4, scale: 2.4, warp: 4.0, label: "liquid / 01" },
+          { seed: 2.7, scale: 2.8, warp: 4.5, label: "liquid / 02" },
+          { seed: 4.1, scale: 2.0, warp: 5.0, label: "liquid / 03" },
+          { seed: 5.9, scale: 3.2, warp: 3.5, label: "liquid / 04" },
+          { seed: 7.3, scale: 2.2, warp: 4.2, label: "liquid / 05" },
+          { seed: 9.8, scale: 2.6, warp: 4.8, label: "liquid / 06" },
+          { seed: 12.5, scale: 3.0, warp: 3.8, label: "liquid / 07" },
+          { seed: 14.2, scale: 2.5, warp: 5.2, label: "liquid / 08" },
+        ].map((l) => (
+          <figure key={l.label} className="space-y-2">
+            <LiquidGradient
+              seed={l.seed}
+              scale={l.scale}
+              warp={l.warp}
+              aspect={3 / 4}
+              ariaLabel={l.label}
+            />
+            <figcaption
+              className="text-[var(--muted)] uppercase"
+              style={{ fontSize: "var(--t-meta)" }}
+            >
+              {l.label}
             </figcaption>
           </figure>
         ))}
