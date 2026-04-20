@@ -1,0 +1,36 @@
+:root {
+  --bg: #F2F0EA;
+  --fg: #0E0E0C;
+  --muted: #6B6862;
+  --rule: #D4D0C6;
+  --accent: #C2410C;
+
+  --font-mono: var(--font-mono-loaded, "JetBrains Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: var(--font-sans-loaded, "Inter"), ui-sans-serif, system-ui, sans-serif;
+
+  --t-meta: 0.75rem;
+  --t-body: 0.875rem;
+  --t-body-lg: 1rem;
+  --t-h: 1.5rem;
+  --t-hero: 3.5rem;
+
+  --lh-body: 1.5;
+  --lh-display: 1.1;
+  --track-tight: -0.01em;
+
+  --max-w: 1200px;
+  --gutter: 24px;
+  --rule-w: 1px;
+
+  --pad-section-y: 64px;
+  --pad-row-y: 10px;
+}
+
+@media (max-width: 720px) {
+  :root {
+    --t-hero: 2.25rem;
+    --t-h: 1.25rem;
+    --gutter: 16px;
+    --pad-section-y: 40px;
+  }
+}
