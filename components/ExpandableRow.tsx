@@ -1,15 +1,20 @@
 import Image from "next/image";
 import type { WorkRow } from "@/content/work";
 
-const grid =
-  "grid gap-x-4 px-0 py-[var(--pad-row-y)] items-baseline grid-cols-[5rem_1fr_1fr_1fr_2rem] sm:grid-cols-[5rem_minmax(0,1.2fr)_minmax(0,1.4fr)_minmax(0,1fr)_2rem]";
+const gridClass =
+  "grid gap-x-6 px-0 py-[var(--pad-row-y)] items-baseline";
+
+const gridStyle = {
+  gridTemplateColumns:
+    "5rem minmax(0, 1.2fr) minmax(0, 1.4fr) minmax(0, 1fr) 2rem",
+};
 
 export function ExpandableRow({ row }: { row: WorkRow }) {
   const cs = row.caseStudy;
   const hasCase = cs !== null;
 
   const summary = (
-    <div className={grid}>
+    <div className={gridClass} style={gridStyle}>
       <span>{row.date}</span>
       <span>{row.project}</span>
       <span className="text-[var(--muted)]">{row.context}</span>
@@ -69,28 +74,30 @@ export function ExpandableRow({ row }: { row: WorkRow }) {
             <dd className="mt-1">{cs.outcome}</dd>
           </div>
         </dl>
-        {cs.figures.length > 0 && (
+        {cs.figures.filter((f) => !f.src.includes("placeholder")).length > 0 && (
           <div className="mt-6 space-y-6">
-            {cs.figures.map((fig) => (
-              <figure key={fig.src}>
-                <div className="border border-[var(--rule)]">
-                  <Image
-                    src={fig.src}
-                    alt={fig.alt}
-                    width={fig.width}
-                    height={fig.height}
-                    sizes="(max-width: 720px) 100vw, 720px"
-                    className="block w-full h-auto"
-                  />
-                </div>
-                <figcaption
-                  className="mt-2 text-[var(--muted)] uppercase"
-                  style={{ fontSize: "var(--t-meta)" }}
-                >
-                  {fig.caption}
-                </figcaption>
-              </figure>
-            ))}
+            {cs.figures
+              .filter((f) => !f.src.includes("placeholder"))
+              .map((fig) => (
+                <figure key={fig.src}>
+                  <div className="border border-[var(--rule)]">
+                    <Image
+                      src={fig.src}
+                      alt={fig.alt}
+                      width={fig.width}
+                      height={fig.height}
+                      sizes="(max-width: 720px) 100vw, 720px"
+                      className="block w-full h-auto"
+                    />
+                  </div>
+                  <figcaption
+                    className="mt-2 text-[var(--muted)] uppercase"
+                    style={{ fontSize: "var(--t-meta)" }}
+                  >
+                    {fig.caption}
+                  </figcaption>
+                </figure>
+              ))}
           </div>
         )}
         {row.link && (

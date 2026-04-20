@@ -1,38 +1,37 @@
 export type AvailabilityState = "available" | "booked" | "hidden";
 
 export const identity = {
-  name: "RAAGUL.R",
-  role: "LEAD DESIGNER, SALESFORCE",
-  location: "BLR → HYD",
+  name: "RAAGUL MANOHARAN",
+  role: "LEAD UX DESIGNER, SALESFORCE",
+  location: "BENGALURU, IN",
 };
 
 export const availability: {
   state: AvailabilityState;
   label: string;
 } = {
-  state: "available",
-  label: "AVAILABLE: Q3 2026",
+  state: "hidden",
+  label: "",
 };
 
 export const hero = {
-  line: "I design the behavioral primitives behind AI agents at Salesforce.",
-  dek: "Nine years in. Currently: interaction grammar for agents that act on behalf of people. Before: design systems, tooling, B2B surfaces.",
+  line: "I design how people think, create, and interact with intelligent systems.",
+  dek: "User Experience Designer in Bengaluru. Eight years across 0→1 launches and enterprise systems. Currently at Salesforce, exploring new modalities for Generative UI.",
 };
 
 export const dossier: { key: string; value: string }[] = [
-  { key: "ROLE", value: "Lead Designer" },
-  { key: "ORG", value: "Salesforce — Experience Org" },
+  { key: "ROLE", value: "Lead UX Designer" },
+  { key: "ORG", value: "Salesforce" },
   {
     key: "FOCUS",
-    value: "AI agent interactions, behavioral primitives, design systems",
+    value: "Generative UI, AI agent interactions, enterprise 0→1",
   },
-  { key: "EDUCATION", value: "IDC, IIT Bombay — Interaction Design, 2018" },
-  { key: "LOCATION", value: "Bangalore → Hyderabad (2026)" },
-  { key: "PRIOR", value: "Salesforce (2020 — present), earlier IC roles" },
-  { key: "WRITING", value: "See 04" },
-  { key: "SOUND", value: "Tomo — ambient electronic" },
-  { key: "CONTACT", value: "See 05" },
+  { key: "LOCATION", value: "Bengaluru, India" },
+  { key: "EXPERIENCE", value: "8 years — Salesforce, Microsoft, Samsung, Freshworks" },
+  { key: "RECOGNITION", value: "Singapore Good Design Award (SG Mark), 2024" },
+  { key: "SPEAKING", value: "Friends of Figma Chennai, 2025" },
+  { key: "ASIDE", value: "Synth & VST interfaces. A breakfast club." },
 ];
 
 export const bio =
-  "I work on the defaults, recovery paths, and interruption patterns for Salesforce's agent surfaces. Before that: design systems, developer tooling, and a few years on consumer surfaces that no longer exist. Outside of work I build small things — a budgeting bot, a studio canvas, a book — and release ambient music as Tomo.";
+  "I help teams build products — from 0-to-1 launches to complex enterprise systems. My current focus is on exploring new modalities for Generative UI: designing how people think, create, and interact with intelligent systems. Outside of work, I build interfaces for synthesizers and VSTs, and I run a breakfast club.";

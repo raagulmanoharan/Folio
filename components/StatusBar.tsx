@@ -2,11 +2,10 @@ import { Mark } from "./Mark";
 import { availability, identity } from "@/content/profile";
 
 const navItems = [
-  { n: "01", label: "INDEX", href: "#index" },
-  { n: "02", label: "PROFILE", href: "#profile" },
-  { n: "03", label: "WORK", href: "#work" },
-  { n: "04", label: "WRITING", href: "#writing" },
-  { n: "05", label: "CONTACT", href: "#contact" },
+  { n: "01", label: "PROFILE", href: "#profile" },
+  { n: "02", label: "WORK", href: "#work" },
+  { n: "03", label: "WRITING", href: "#writing" },
+  { n: "04", label: "CONTACT", href: "#contact" },
 ];
 
 export function StatusBar() {
