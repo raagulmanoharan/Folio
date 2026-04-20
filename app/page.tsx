@@ -1,5 +1,6 @@
 import { StatusBar } from "@/components/StatusBar";
 import { SectionHeader } from "@/components/SectionHeader";
+import { SectionAtmosphere } from "@/components/SectionAtmosphere";
 import { KeyValueTable } from "@/components/KeyValueTable";
 import { LogTable } from "@/components/LogTable";
 import { ExpandableRow } from "@/components/ExpandableRow";
@@ -59,6 +60,12 @@ export default function Page() {
             {hero.dek}
           </p>
 
+          <SectionAtmosphere
+            src="/img/atmosphere/00-index.svg"
+            alt="Muted gradient field, dark horizon band dissolving upward."
+            priority
+          />
+
           <div className="mt-12">
             <div
               className="text-[var(--muted)] uppercase mb-2"
@@ -108,6 +115,10 @@ export default function Page() {
         {/* 01 — PROFILE */}
         <section id="profile" className="pb-[var(--pad-section-y)]">
           <SectionHeader number="01" slug="PROFILE" title="Profile" />
+          <SectionAtmosphere
+            src="/img/atmosphere/01-profile.svg"
+            alt="Soft warm gradient field, ochre bleeding into paper."
+          />
           <KeyValueTable rows={dossier.map((d) => ({ key: d.key, value: d.value }))} />
           <p
             className="mt-8 max-w-[64ch]"
@@ -120,6 +131,11 @@ export default function Page() {
         {/* 02 — WORK */}
         <section id="work" className="pb-[var(--pad-section-y)]">
           <SectionHeader number="02" slug="WORK" title="Work" />
+          <SectionAtmosphere
+            src="/img/atmosphere/02-work.svg"
+            alt="Three horizontal strata — paper, ochre, near-black — stacked like sediment."
+            priority
+          />
           <div
             className="grid gap-x-6 px-0 py-[var(--pad-row-y)] border-b border-[var(--rule)] text-[var(--muted)] uppercase"
             style={{
@@ -145,6 +161,10 @@ export default function Page() {
         {/* 03 — WRITING */}
         <section id="writing" className="pb-[var(--pad-section-y)]">
           <SectionHeader number="03" slug="WRITING" title="Writing" />
+          <SectionAtmosphere
+            src="/img/atmosphere/03-writing.svg"
+            alt="Warm paper field with a dark charcoal column along the left edge."
+          />
           {writing.length === 0 ? (
             <p
               className="text-[var(--muted)]"
@@ -207,6 +227,10 @@ export default function Page() {
         {/* 04 — CONTACT */}
         <section id="contact" className="pb-[var(--pad-section-y)]">
           <SectionHeader number="04" slug="CONTACT" title="Contact" />
+          <SectionAtmosphere
+            src="/img/atmosphere/04-contact.svg"
+            alt="Near-black field with a soft ochre glow diffused into darkness."
+          />
           <KeyValueTable
             rows={contact.map((c) => ({
               key: c.key,
