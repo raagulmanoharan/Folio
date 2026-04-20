@@ -4,18 +4,21 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { Atmosphere } from "@/components/Atmosphere";
 import { KeyValueTable } from "@/components/KeyValueTable";
 import { LogTable } from "@/components/LogTable";
+import { CurrentlyList } from "@/components/CurrentlyList";
 import { hero, dossier } from "@/content/profile";
 import { work } from "@/content/work";
 import { writing } from "@/content/writing";
 import { contact } from "@/content/contact";
+import { currently } from "@/content/currently";
 
 const LAST_UPDATED = new Date().toISOString().slice(0, 10);
 
 const tocRows = [
   { n: "01", section: "PROFILE", summary: "Role, focus, education, location", href: "#profile" },
-  { n: "02", section: "WORK", summary: "Projects, 0→1 and enterprise", href: "#work" },
-  { n: "03", section: "WRITING", summary: "On AI interfaces, interaction, and design", href: "#writing" },
-  { n: "04", section: "CONTACT", summary: "Email, socials, features", href: "#contact" },
+  { n: "02", section: "CURRENTLY", summary: "What I'm building, reading, watching", href: "#currently" },
+  { n: "03", section: "WORK", summary: "Projects, 0→1 and enterprise", href: "#work" },
+  { n: "04", section: "WRITING", summary: "On AI interfaces, interaction, and design", href: "#writing" },
+  { n: "05", section: "CONTACT", summary: "Email, socials, features", href: "#contact" },
 ];
 
 export default function Page() {
@@ -102,7 +105,13 @@ export default function Page() {
           <KeyValueTable rows={dossier.map((d) => ({ key: d.key, value: d.value }))} />
         </section>
 
-        {/* 02 — WORK */}
+        {/* 02 — CURRENTLY */}
+        <section id="currently" className="pb-[var(--pad-section-y)]">
+          <SectionHeader title="Currently" />
+          <CurrentlyList items={currently} />
+        </section>
+
+        {/* 03 — WORK */}
         <section id="work" className="pb-[var(--pad-section-y)]">
           <SectionHeader title="Work" />
           <Atmosphere
@@ -146,7 +155,7 @@ export default function Page() {
           </div>
         </section>
 
-        {/* 03 — WRITING */}
+        {/* 04 — WRITING */}
         <section id="writing" className="pb-[var(--pad-section-y)]">
           <SectionHeader title="Writing" />
           <Atmosphere
@@ -207,7 +216,7 @@ export default function Page() {
           )}
         </section>
 
-        {/* 04 — CONTACT */}
+        {/* 05 — CONTACT */}
         <section id="contact" className="pb-[var(--pad-section-y)]">
           <SectionHeader title="Contact" />
           <Atmosphere
