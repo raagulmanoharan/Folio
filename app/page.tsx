@@ -1,10 +1,9 @@
+import Link from "next/link";
 import { StatusBar } from "@/components/StatusBar";
 import { SectionHeader } from "@/components/SectionHeader";
 import { SectionAtmosphere } from "@/components/SectionAtmosphere";
 import { KeyValueTable } from "@/components/KeyValueTable";
 import { LogTable } from "@/components/LogTable";
-import { ExpandableRow } from "@/components/ExpandableRow";
-import { HashSync } from "@/components/HashSync";
 import { hero, dossier } from "@/content/profile";
 import { work } from "@/content/work";
 import { writing } from "@/content/writing";
@@ -127,7 +126,22 @@ export default function Page() {
           </div>
           <div role="rowgroup">
             {work.map((row) => (
-              <ExpandableRow key={row.slug} row={row} />
+              <Link
+                key={row.slug}
+                href={`/work/${row.slug}`}
+                className="grid gap-x-6 px-0 py-[var(--pad-row-y)] border-b border-[var(--rule)] transition-colors hover:bg-[var(--rule)]/30"
+                style={{
+                  fontSize: "var(--t-body)",
+                  gridTemplateColumns:
+                    "5rem minmax(0, 1.2fr) minmax(0, 1.4fr) minmax(0, 1fr)",
+                }}
+                role="row"
+              >
+                <span className="text-[var(--muted)]">{row.date}</span>
+                <span>{row.project}</span>
+                <span className="text-[var(--muted)]">{row.context}</span>
+                <span className="text-[var(--muted)]">{row.role}</span>
+              </Link>
             ))}
           </div>
         </section>
@@ -210,7 +224,6 @@ export default function Page() {
           © 2026 RAAGUL MANOHARAN — last updated {LAST_UPDATED}
         </footer>
       </main>
-      <HashSync />
     </>
   );
 }
