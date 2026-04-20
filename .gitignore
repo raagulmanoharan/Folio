@@ -12,3 +12,6 @@ next-env.d.ts.bak
 
 # OS
 .DS_Store
+
+# Generated nano-banana outputs (local workspace only)
+generated/
