@@ -2,9 +2,11 @@ import { writing } from "@/content/writing";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { StatusBar } from "@/components/StatusBar";
+import { PageMeta, type PageMetaRow } from "@/components/PageMeta";
+import { PageTitle } from "@/components/PageTitle";
 import { NoteBody } from "@/components/NoteBody";
 import { NoteNav } from "@/components/NoteNav";
-import { SectionAtmosphere } from "@/components/SectionAtmosphere";
+import { Atmosphere } from "@/components/Atmosphere";
 
 export function generateStaticParams() {
   return writing
@@ -26,6 +28,12 @@ export default async function Page({
   const prev = idx > 0 ? writing[idx - 1] : null;
   const next = idx < writing.length - 1 ? writing[idx + 1] : null;
 
+  const rows: PageMetaRow[] = [
+    { key: "DATE", value: row.date },
+    { key: "TOPIC", value: row.topic },
+    { key: "LENGTH", value: row.length },
+  ];
+
   return (
     <>
       <StatusBar />
@@ -43,42 +51,11 @@ export default async function Page({
           {row.title.toUpperCase()}
         </nav>
 
-        <dl className="mt-6" style={{ fontSize: "var(--t-body)" }}>
-          {[
-            { key: "DATE", value: row.date },
-            { key: "TOPIC", value: row.topic },
-            { key: "LENGTH", value: row.length },
-          ].map((r) => (
-            <div
-              key={r.key}
-              className="grid gap-x-6 border-b border-[var(--rule)] py-[var(--pad-row-y)]"
-              style={{ gridTemplateColumns: "10rem minmax(0, 1fr)" }}
-            >
-              <dt
-                className="text-[var(--muted)] uppercase"
-                style={{ fontSize: "var(--t-meta)" }}
-              >
-                {r.key}
-              </dt>
-              <dd>{r.value}</dd>
-            </div>
-          ))}
-        </dl>
+        <PageMeta rows={rows} />
 
-        <h1
-          className="mt-10 max-w-[28ch]"
-          style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: "2rem",
-            lineHeight: 1.15,
-            letterSpacing: "-0.01em",
-            fontWeight: 500,
-          }}
-        >
-          {note.summary}
-        </h1>
+        <PageTitle>{note.summary}</PageTitle>
 
-        <SectionAtmosphere
+        <Atmosphere
           src={note.atmosphere.src}
           alt={note.atmosphere.alt}
           priority

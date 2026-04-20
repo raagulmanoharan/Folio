@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { StatusBar } from "@/components/StatusBar";
 import { SectionHeader } from "@/components/SectionHeader";
-import { SectionAtmosphere } from "@/components/SectionAtmosphere";
+import { Atmosphere } from "@/components/Atmosphere";
 import { KeyValueTable } from "@/components/KeyValueTable";
 import { LogTable } from "@/components/LogTable";
 import { hero, dossier } from "@/content/profile";
@@ -52,7 +52,7 @@ export default function Page() {
             {hero.dek}
           </p>
 
-          <SectionAtmosphere
+          <Atmosphere
             src="/img/atmosphere/00-index.webp"
             alt="Muted gradient field, dark horizon band dissolving upward."
             priority
@@ -95,7 +95,7 @@ export default function Page() {
         {/* 01 — PROFILE */}
         <section id="profile" className="pb-[var(--pad-section-y)]">
           <SectionHeader title="Profile" />
-          <SectionAtmosphere
+          <Atmosphere
             src="/img/atmosphere/01-profile.webp"
             alt="Soft warm gradient field, ochre bleeding into paper."
           />
@@ -105,7 +105,7 @@ export default function Page() {
         {/* 02 — WORK */}
         <section id="work" className="pb-[var(--pad-section-y)]">
           <SectionHeader title="Work" />
-          <SectionAtmosphere
+          <Atmosphere
             src="/img/atmosphere/02-work.webp"
             alt="Three horizontal strata — paper, ochre, near-black — stacked like sediment."
             priority
@@ -149,7 +149,7 @@ export default function Page() {
         {/* 03 — WRITING */}
         <section id="writing" className="pb-[var(--pad-section-y)]">
           <SectionHeader title="Writing" />
-          <SectionAtmosphere
+          <Atmosphere
             src="/img/atmosphere/03-writing.webp"
             alt="Warm paper field with a dark charcoal column along the left edge."
           />
@@ -210,7 +210,7 @@ export default function Page() {
         {/* 04 — CONTACT */}
         <section id="contact" className="pb-[var(--pad-section-y)]">
           <SectionHeader title="Contact" />
-          <SectionAtmosphere
+          <Atmosphere
             src="/img/atmosphere/04-contact.webp"
             alt="Near-black field with a soft ochre glow diffused into darkness."
           />

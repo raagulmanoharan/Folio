@@ -6,7 +6,7 @@ export type AtmosphereProps = {
   priority?: boolean;
 };
 
-export function SectionAtmosphere({ src, alt, priority = false }: AtmosphereProps) {
+export function Atmosphere({ src, alt, priority = false }: AtmosphereProps) {
   return (
     <figure className="mt-6 mb-8 border border-[var(--rule)]">
       <Image

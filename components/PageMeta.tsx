@@ -1,21 +1,10 @@
-import type { WorkRow } from "@/content/work";
+export type PageMetaRow = {
+  key: string;
+  value: string;
+  href?: string;
+};
 
-export function CaseStudyMeta({ project }: { project: WorkRow }) {
-  const cs = project.caseStudy!;
-  const rows: { key: string; value: string; href?: string }[] = [
-    { key: "PROJECT", value: project.project },
-    { key: "DATE", value: project.date },
-    { key: "ROLE", value: project.role },
-    { key: "CONTEXT", value: project.context },
-  ];
-  if (cs.externalLink) {
-    rows.push({
-      key: "LINK",
-      value: cs.externalLink.label,
-      href: cs.externalLink.href,
-    });
-  }
-
+export function PageMeta({ rows }: { rows: PageMetaRow[] }) {
   return (
     <dl className="mt-6" style={{ fontSize: "var(--t-body)" }}>
       {rows.map((r) => (
@@ -24,7 +13,10 @@ export function CaseStudyMeta({ project }: { project: WorkRow }) {
           className="grid gap-x-6 border-b border-[var(--rule)] py-[var(--pad-row-y)]"
           style={{ gridTemplateColumns: "10rem minmax(0, 1fr)" }}
         >
-          <dt className="text-[var(--muted)] uppercase" style={{ fontSize: "var(--t-meta)" }}>
+          <dt
+            className="text-[var(--muted)] uppercase"
+            style={{ fontSize: "var(--t-meta)" }}
+          >
             {r.key}
           </dt>
           <dd>

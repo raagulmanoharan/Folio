@@ -2,10 +2,11 @@ import { work } from "@/content/work";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { StatusBar } from "@/components/StatusBar";
-import { CaseStudyMeta } from "@/components/CaseStudyMeta";
+import { PageMeta, type PageMetaRow } from "@/components/PageMeta";
+import { PageTitle } from "@/components/PageTitle";
 import { CaseStudyBody } from "@/components/CaseStudyBody";
 import { CaseStudyNav } from "@/components/CaseStudyNav";
-import { SectionAtmosphere } from "@/components/SectionAtmosphere";
+import { Atmosphere } from "@/components/Atmosphere";
 
 export function generateStaticParams() {
   return work.filter((p) => p.caseStudy).map((p) => ({ slug: p.slug }));
@@ -25,6 +26,20 @@ export default async function Page({
   const prev = idx > 0 ? work[idx - 1] : null;
   const next = idx < work.length - 1 ? work[idx + 1] : null;
 
+  const rows: PageMetaRow[] = [
+    { key: "PROJECT", value: project.project },
+    { key: "DATE", value: project.date },
+    { key: "ROLE", value: project.role },
+    { key: "CONTEXT", value: project.context },
+  ];
+  if (cs.externalLink) {
+    rows.push({
+      key: "LINK",
+      value: cs.externalLink.label,
+      href: cs.externalLink.href,
+    });
+  }
+
   return (
     <>
       <StatusBar />
@@ -42,26 +57,11 @@ export default async function Page({
           {project.project.toUpperCase()}
         </nav>
 
-        <CaseStudyMeta project={project} />
+        <PageMeta rows={rows} />
 
-        <h1
-          className="mt-10 max-w-[28ch]"
-          style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: "2rem",
-            lineHeight: 1.15,
-            letterSpacing: "-0.01em",
-            fontWeight: 500,
-          }}
-        >
-          {cs.summary}
-        </h1>
+        <PageTitle>{cs.summary}</PageTitle>
 
-        <SectionAtmosphere
-          src={cs.atmosphere.src}
-          alt={cs.atmosphere.alt}
-          priority
-        />
+        <Atmosphere src={cs.atmosphere.src} alt={cs.atmosphere.alt} priority />
 
         <CaseStudyBody sections={cs.sections} figures={cs.figures} />
 
