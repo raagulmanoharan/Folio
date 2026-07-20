@@ -136,8 +136,9 @@ main {
   margin: 0;
   text-align: center;
   font-weight: 400;
-  font-size: clamp(1.8rem, 4.4vw, 3.4rem);
-  line-height: 1.12;
+  /* matches reference hero: 42px */
+  font-size: clamp(1.4rem, 2.9vw, 2.625rem);
+  line-height: 1.06;
   letter-spacing: -0.2px;
   text-wrap: balance;
 }
