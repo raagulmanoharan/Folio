@@ -39,6 +39,15 @@ export function initMotif(canvas, cameraButton) {
   )
   scene.add(knot)
 
+  // Two rim lights give the chrome sharp specular highlights independent of
+  // the environment — so it never reads as flat/dark, even on a dim webcam.
+  const keyLight = new THREE.DirectionalLight(0xffffff, 2.5)
+  keyLight.position.set(3, 4, 5)
+  scene.add(keyLight)
+  const fillLight = new THREE.DirectionalLight(0xffffff, 1.4)
+  fillLight.position.set(-4, -2, 2)
+  scene.add(fillLight)
+
   function resize() {
     const w = canvas.clientWidth
     const h = canvas.clientHeight
@@ -72,8 +81,11 @@ export function initMotif(canvas, cameraButton) {
         videoTexture.colorSpace = THREE.SRGBColorSpace
         videoTexture.mapping = THREE.EquirectangularReflectionMapping
         chrome.envMap = videoTexture
-        chrome.envMapIntensity = 1.0
+        // Webcam feeds are LDR and dim once tone-mapped, so lift the
+        // reflection: stronger env intensity + a brighter exposure.
+        chrome.envMapIntensity = 3.2
         chrome.needsUpdate = true
+        renderer.toneMappingExposure = 1.5
 
         cameraButton.textContent = 'Reflection: live'
         cameraButton.classList.add('is-live')
