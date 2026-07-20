@@ -114,6 +114,11 @@ body {
   justify-self: end;
 }
 
+/* Center wordmark: full name normally, abbreviated to "RM" on phones. */
+.wordmark-short {
+  display: none;
+}
+
 /* ---------- Hero ---------- */
 main {
   padding-top: var(--header-h);
@@ -191,13 +196,13 @@ main {
 }
 
 @media (max-width: 640px) {
-  /* tighten the header so the three items keep a clear gap on narrow screens */
-  .header-link {
-    font-size: 10px;
-    letter-spacing: 0;
+  /* header text stays 12px (matching the footer); the wordmark shortens to "RM"
+     so the three items keep a clear gap without shrinking the type */
+  .wordmark-full {
+    display: none;
   }
-  .header-inner {
-    padding: 0 16px;
+  .wordmark-short {
+    display: inline;
   }
   .hero-statement {
     max-width: none;
