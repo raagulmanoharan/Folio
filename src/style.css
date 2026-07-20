@@ -121,11 +121,11 @@ main {
   min-height: calc(100vh - var(--header-h));
   display: flex;
   align-items: flex-start;
-  padding: clamp(48px, 12vh, 140px) var(--gutter) 0;
+  padding: clamp(48px, 12vh, 140px) clamp(16px, 2.5vw, 40px) 0;
 }
 
 .hero-statement {
-  max-width: 24ch;
+  max-width: 22em;
   margin: 0 auto;
   text-align: center;
   font-weight: 400;
