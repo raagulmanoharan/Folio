@@ -594,25 +594,16 @@ main {
 }
 
 /* A slim bar with a collapse control; sticks under the header while reading */
+/* A minimal sticky close, right-aligned — no module header, so the card
+   just reveals more content rather than opening a separate section */
 .case-bar {
   position: sticky;
   top: var(--header-h);
   z-index: 3;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  margin-bottom: 4px;
+  justify-content: flex-end;
+  padding: 12px 0 4px;
   background: var(--bg);
-  border-bottom: 1px solid var(--hairline);
-}
-
-.case-bar__label {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.1px;
-  text-transform: uppercase;
-  color: var(--fg-dim);
 }
 
 .case-bar__close,
@@ -718,6 +709,11 @@ main {
 /* Sections */
 .case-section {
   margin-top: clamp(48px, 8vh, 88px);
+}
+
+/* first section follows the meta block, so it needs less breathing room */
+.case-section--first {
+  margin-top: clamp(30px, 5vh, 52px);
 }
 
 .case-section__label {
