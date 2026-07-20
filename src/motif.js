@@ -8,7 +8,7 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
 import { Evaluator, Brush, SUBTRACTION } from 'three-bvh-csg'
 
-// A chrome die tumbling inside a spinning Möbius ribbon, with a Y2K bloom glow.
+// A chrome die tumbling inside three gimbal-mounted chrome rings, with a Y2K glow.
 // Reflects a studio environment by default; if the visitor grants camera
 // access on load, a bright dome + the live feed become the environment, so
 // the die reflects a lit room with the visitor's face in it.
@@ -94,58 +94,24 @@ export function initMotif(canvas) {
   die.add(dieBrush)
   scene.add(die)
 
-  // ---- Hoop: a Möbius band with real volume (rectangular cross-section) ----
-  // A thin chrome band with a single half-twist. Giving it thickness (rather
-  // than a zero-width ribbon) means it reads as a solid with depth, and a
-  // matte-ish finish lets that depth register as it rotates.
-  const HOOP_R = 1.95      // ring radius
-  const HOOP_W = 0.3       // half-width of the band (thinner than before)
-  const HOOP_T = 0.1       // half-thickness — the volume that gives it depth
-  function mobiusBand(R, halfW, halfT, seg) {
-    const pos = []
-    const idx = []
-    // rectangular cross-section, corners walked around the perimeter
-    const corners = [
-      [halfW, halfT], [-halfW, halfT], [-halfW, -halfT], [halfW, -halfT],
-    ]
-    const nC = corners.length
-    for (let i = 0; i <= seg; i++) {
-      const a = (i / seg) * Math.PI * 2 // around the ring
-      const half = a / 2                // the single half-twist of the frame
-      const ca = Math.cos(a), sa = Math.sin(a)
-      const ch = Math.cos(half), sh = Math.sin(half)
-      // cross-section axes: width twists between radial and z; thickness is
-      // perpendicular to it in the same plane
-      const wx = ch * ca, wy = ch * sa, wz = sh
-      const nx = -sh * ca, ny = -sh * sa, nz = ch
-      const cx = R * ca, cy = R * sa
-      for (let c = 0; c < nC; c++) {
-        const [wv, tv] = corners[c]
-        pos.push(cx + wx * wv + nx * tv, cy + wy * wv + ny * tv, wz * wv + nz * tv)
-      }
-    }
-    for (let i = 0; i < seg; i++) {
-      for (let c = 0; c < nC; c++) {
-        const d = (c + 1) % nC
-        const a0 = i * nC + c, b0 = i * nC + d
-        const a1 = (i + 1) * nC + c, b1 = (i + 1) * nC + d
-        idx.push(a0, a1, b1, a0, b1, b0)
-      }
-    }
-    const g = new THREE.BufferGeometry()
-    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
-    g.setIndex(idx)
-    g.computeVertexNormals()
-    return g
-  }
-  const hoopMat = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
-    metalness: 1.0,
-    roughness: 0.2, // 20% rough so the band's form and depth read
-    envMapIntensity: 0.75,
+  // ---- Rings: three chrome rings in a gimbal, the die at the shared centre ----
+  // Nested torus rings, each mounted on a perpendicular axis (like a gyroscope)
+  // so the die sits inside the innermost/centre ring.
+  const ringGroup = new THREE.Group()
+  const RINGS = [
+    { r: 2.2, rot: [0, 0, 0], axis: 'x' },          // outer
+    { r: 1.9, rot: [Math.PI / 2, 0, 0], axis: 'y' }, // middle
+    { r: 1.6, rot: [0, Math.PI / 2, 0], axis: 'z' }, // inner (holds the die)
+  ]
+  const rings = RINGS.map(({ r, rot, axis }) => {
+    const pivot = new THREE.Group()
+    pivot.rotation.set(rot[0], rot[1], rot[2])
+    const mesh = new THREE.Mesh(new THREE.TorusGeometry(r, 0.08, 24, 200), chrome)
+    pivot.add(mesh)
+    ringGroup.add(pivot)
+    return { mesh, axis }
   })
-  const hoop = new THREE.Mesh(mobiusBand(HOOP_R, HOOP_W, HOOP_T, 320), hoopMat)
-  scene.add(hoop)
+  scene.add(ringGroup)
 
   // ---- Bloom (Y2K glow + flare), kept fully transparent ----
   // Selective-bloom setup: one composer renders the scene and extracts the
@@ -242,7 +208,7 @@ export function initMotif(canvas) {
       cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT)
       cubeCamera.layers.set(CAM_LAYER)
 
-      for (const m of [chrome, pipRough, hoopMat]) {
+      for (const m of [chrome, pipRough]) {
         m.envMap = cubeRT.texture
         m.envMapIntensity = 1.05
         m.needsUpdate = true
@@ -261,7 +227,7 @@ export function initMotif(canvas) {
 
   if (reduced) {
     die.rotation.set(0.5, 0.7, 0.1)
-    hoop.rotation.set(0.3, 0, 0)
+    ringGroup.rotation.set(0.2, 0.3, 0)
     renderFrame()
     if (navigator.mediaDevices) {
       ;(function loop() {
@@ -284,11 +250,13 @@ export function initMotif(canvas) {
     die.rotation.x = t * 0.7
     die.rotation.y = t * 0.9
     die.rotation.z = t * 0.35
-    // hoop spins facing the camera in the OPPOSITE direction to the die (its
-    // Möbius twist sweeps around, ring frames the die) and rocks in 3D
-    hoop.rotation.z = t * -0.5
-    hoop.rotation.x = Math.sin(t * 0.4) * 0.5
-    hoop.rotation.y = Math.sin(t * 0.3) * 0.5
+    // the ring cage turns as a whole in the OPPOSITE direction to the die,
+    // while each ring also spins on its own gimbal axis (gyroscope motion)
+    ringGroup.rotation.y = t * -0.35
+    ringGroup.rotation.x = Math.sin(t * 0.25) * 0.3
+    rings[0].mesh.rotation.x = t * 0.5
+    rings[1].mesh.rotation.y = t * 0.6
+    rings[2].mesh.rotation.z = t * 0.7
     renderFrame()
   }
   tick()
