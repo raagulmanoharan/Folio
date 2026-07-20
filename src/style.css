@@ -580,9 +580,9 @@ main {
   }
 }
 
-/* ---------- Case study (expands inline, in place, below the work item) ---------- */
+/* ---------- Case study (the work item itself expands into it, in place) ---------- */
 .case-inline {
-  border-bottom: 1px solid var(--hairline); /* keeps the work-list rhythm when open */
+  grid-column: 1 / -1; /* span the full width of the work-item grid */
 }
 
 /* Collapsible height: max-height is driven in JS (measured), so it animates
@@ -601,9 +601,9 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px var(--gutter);
-  background: rgba(22, 22, 22, 0.85);
-  backdrop-filter: blur(10px);
+  padding: 12px 0;
+  margin-bottom: 4px;
+  background: var(--bg);
   border-bottom: 1px solid var(--hairline);
 }
 
@@ -643,7 +643,8 @@ main {
 .case-inner {
   max-width: 860px;
   margin: 0 auto;
-  padding: clamp(28px, 4vh, 48px) var(--gutter) clamp(48px, 7vh, 80px);
+  /* the work item already supplies the gutter; align to its content edges */
+  padding: clamp(28px, 4vh, 48px) 0 clamp(48px, 7vh, 80px);
 }
 
 /* Header block */
