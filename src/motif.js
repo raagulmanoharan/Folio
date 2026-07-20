@@ -94,12 +94,13 @@ export function initMotif(canvas) {
   // ---- Ring: a single chrome ring around the die, tumbling in all directions ----
   const ring = new THREE.Mesh(new THREE.TorusGeometry(1.9, 0.08, 24, 220), chrome)
 
-  // Group both and nudge up a touch: a focal object at true centre reads as
-  // slightly low, so this optical-centres it under the hero text.
+  // Group both and nudge down: the balanced spot is the middle of the gap
+  // between the hero text (top) and the footer (bottom), which sits below the
+  // geometric centre — otherwise there's too much empty space at the bottom.
   const motif = new THREE.Group()
   motif.add(die)
   motif.add(ring)
-  motif.position.y = 0.35
+  motif.position.y = -0.45
   scene.add(motif)
 
   // ---- Bloom (Y2K glow + flare), kept fully transparent ----
