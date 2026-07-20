@@ -312,6 +312,71 @@ main {
   background: var(--fg);
 }
 
+/* Featured work: one board thumbnail that expands into the case study.
+   The whole thumbnail is a button spanning the full work-item width. */
+.work-shot--open {
+  grid-column: 1 / -1;
+  margin: clamp(28px, 4vh, 44px) 0 0;
+  padding: 0;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: #0f0f0f;
+  overflow: hidden;
+  position: relative;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  color: var(--fg);
+  transition: border-color 0.3s ease;
+}
+
+.work-shot--open img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.work-shot__hint {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(14, 14, 14, 0.7);
+  border: 1px solid var(--hairline);
+  backdrop-filter: blur(6px);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  color: var(--fg);
+  opacity: 0.85;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.work-shot--open:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.work-shot--open:hover img {
+  transform: scale(1.02);
+  opacity: 0.92;
+}
+
+.work-shot--open:hover .work-shot__hint {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.work-shot--open:focus-visible {
+  outline: 1px solid var(--fg);
+  outline-offset: 3px;
+}
+
 @media (max-width: 720px) {
   .work-item {
     grid-template-columns: 1fr auto;
@@ -512,5 +577,326 @@ main {
   .drawer {
     width: 100vw;
     max-width: none;
+  }
+}
+
+/* ---------- Case study (the work item itself expands into it, in place) ---------- */
+.case-inline {
+  grid-column: 1 / -1; /* span the full width of the work-item grid */
+}
+
+/* Collapsible height: max-height is driven in JS (measured), so it animates
+   to the exact content height and back to 0 smoothly. */
+.case-inline__reveal {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* A slim bar with a collapse control; sticks under the header while reading */
+.case-bar {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  margin-bottom: 4px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.case-bar__label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.case-bar__close,
+.case-collapse {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  color: var(--fg);
+  transition: opacity 0.2s ease;
+}
+.case-bar__close:hover,
+.case-collapse:hover {
+  opacity: 0.6;
+}
+.case-bar__close:focus-visible,
+.case-collapse:focus-visible {
+  outline: 1px solid var(--fg);
+  outline-offset: 3px;
+}
+
+.case-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  /* the work item already supplies the gutter; align to its content edges */
+  padding: clamp(28px, 4vh, 48px) 0 clamp(48px, 7vh, 80px);
+}
+
+/* Header block */
+.case-eyebrow {
+  margin: 0 0 18px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.case-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: clamp(1.9rem, 5vw, 3.2rem);
+  line-height: 1.04;
+  letter-spacing: -0.5px;
+  text-wrap: balance;
+}
+
+.case-lede {
+  margin: clamp(20px, 3vh, 30px) 0 0;
+  max-width: 30ch;
+  font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+  line-height: 1.28;
+  letter-spacing: -0.2px;
+  color: var(--fg);
+}
+
+/* Meta facts */
+.case-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 20px 28px;
+  margin: clamp(34px, 5vh, 52px) 0 0;
+  padding: clamp(24px, 3vh, 32px) 0 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.case-meta div {
+  margin: 0;
+}
+
+.case-meta dt {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.case-meta dd {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--fg);
+}
+
+.case-meta a {
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hairline);
+  transition: opacity 0.2s ease;
+}
+.case-meta a:hover {
+  opacity: 0.6;
+}
+
+/* Sections */
+.case-section {
+  margin-top: clamp(48px, 8vh, 88px);
+}
+
+.case-section__label {
+  margin: 0 0 18px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.case-h {
+  margin: 0 0 clamp(16px, 2vh, 22px);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.3px;
+  text-wrap: balance;
+}
+
+.case-p {
+  margin: 0 0 1.15em;
+  max-width: 66ch;
+  font-size: clamp(1rem, 1.5vw, 1.075rem);
+  line-height: 1.62;
+  color: #cfcfcf;
+}
+
+.case-p:last-child {
+  margin-bottom: 0;
+}
+
+.case-p b,
+.case-p strong {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.case-p a {
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hairline);
+  transition: opacity 0.2s ease;
+}
+.case-p a:hover {
+  opacity: 0.6;
+}
+
+/* Bulleted takeaways */
+.case-list {
+  margin: 0.4em 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: 66ch;
+}
+
+.case-list li {
+  position: relative;
+  padding: 14px 0 14px 22px;
+  border-top: 1px solid var(--hairline);
+  font-size: clamp(1rem, 1.5vw, 1.05rem);
+  line-height: 1.5;
+  color: #cfcfcf;
+}
+.case-list li:last-child {
+  border-bottom: 1px solid var(--hairline);
+}
+.case-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 22px;
+  width: 10px;
+  height: 1px;
+  background: var(--fg);
+}
+.case-list b {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+/* Pull quote */
+.case-quote {
+  margin: clamp(40px, 6vh, 64px) 0;
+  padding: 0 0 0 clamp(18px, 3vw, 28px);
+  border-left: 2px solid var(--fg);
+  font-weight: 400;
+  font-size: clamp(1.35rem, 3vw, 1.9rem);
+  line-height: 1.24;
+  letter-spacing: -0.3px;
+  color: var(--fg);
+  text-wrap: balance;
+}
+
+/* Figures */
+.case-figure {
+  margin: clamp(28px, 4vh, 44px) 0 0;
+}
+
+.case-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--hairline);
+  background: #0f0f0f;
+}
+
+.case-figure figcaption {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg-dim);
+}
+
+.case-figure--hero {
+  margin-top: clamp(40px, 6vh, 64px);
+}
+
+/* Two-up figure grid */
+.case-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 1.6vw, 20px);
+  margin: clamp(28px, 4vh, 44px) 0 0;
+}
+
+.case-grid .case-figure {
+  margin: 0;
+}
+
+.case-grid .case-figure img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* The doc card is wide and short — anchor left so its heading survives the crop */
+.case-grid .case-figure--doc img {
+  object-position: left center;
+}
+
+/* Closing CTA */
+.case-cta {
+  margin-top: clamp(48px, 8vh, 88px);
+  padding-top: clamp(28px, 4vh, 40px);
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+}
+
+.case-cta a {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: 3px;
+  transition: opacity 0.2s ease;
+}
+.case-cta a:hover {
+  opacity: 0.6;
+}
+
+@media (max-width: 640px) {
+  .case-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-inline__reveal {
+    transition: max-height 0.001s linear;
+  }
+  .work-shot--open img,
+  .work-shot__hint {
+    transition: none;
   }
 }

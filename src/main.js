@@ -87,6 +87,70 @@ if (drawer && backdrop && openBtn) {
   drawer.addEventListener('mouseleave', () => drawer.classList.remove('show-close'))
 }
 
+/* ---------- Case study (expands inline, in place, below the work item) ---------- */
+const caseInline = document.querySelector('[data-case]')
+if (caseInline) {
+  const toggles = document.querySelectorAll('[data-case-open]')
+  const closers = caseInline.querySelectorAll('[data-case-close]')
+  const hint = document.querySelector('[data-case-hint]')
+  const featured = document.querySelector('.work-item--featured')
+  const headerEl = document.querySelector('[data-header]')
+
+  const scrollToEl = (el) => {
+    if (!el) return
+    const offset = (headerEl?.offsetHeight || 43) + 8
+    const y = el.getBoundingClientRect().top + window.scrollY - offset
+    window.scrollTo({ top: y, behavior: reducedMotion ? 'auto' : 'smooth' })
+  }
+
+  const reveal = caseInline.querySelector('.case-inline__reveal')
+  const DUR = reducedMotion ? 20 : 560
+  let settleTimer
+
+  const setState = (open) => {
+    caseInline.classList.toggle('is-open', open)
+    toggles.forEach((t) => t.setAttribute('aria-expanded', String(open)))
+    if (hint) {
+      hint.innerHTML = open
+        ? 'Hide case study <span aria-hidden="true">&#8593;</span>'
+        : 'Read the case study <span aria-hidden="true">&#8595;</span>'
+    }
+  }
+
+  const openCase = () => {
+    setState(true)
+    clearTimeout(settleTimer)
+    // animate to the measured content height, then release to `none` so the
+    // panel can grow if images finish loading or the viewport reflows
+    reveal.style.maxHeight = `${reveal.scrollHeight}px`
+    settleTimer = setTimeout(() => {
+      if (caseInline.classList.contains('is-open')) reveal.style.maxHeight = 'none'
+    }, DUR)
+    scrollToEl(caseInline)
+  }
+  const closeCase = () => {
+    setState(false)
+    clearTimeout(settleTimer)
+    // from `none`/auto back to a fixed height, then to 0 so it animates
+    reveal.style.maxHeight = `${reveal.scrollHeight}px`
+    // force a reflow so the browser registers the fixed start height
+    void reveal.offsetHeight
+    requestAnimationFrame(() => {
+      reveal.style.maxHeight = '0px'
+    })
+    // return the reader to its trigger so the viewport isn't left in whitespace
+    scrollToEl(featured)
+  }
+  const toggleCase = () =>
+    caseInline.classList.contains('is-open') ? closeCase() : openCase()
+
+  toggles.forEach((el) => el.addEventListener('click', toggleCase))
+  closers.forEach((el) => el.addEventListener('click', closeCase))
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && caseInline.classList.contains('is-open')) closeCase()
+  })
+}
+
 /* ---------- Header headroom ---------- */
 // "Headroom" behavior: hide the header when scrolling down, reveal on scroll up.
 const header = document.querySelector('[data-header]')
