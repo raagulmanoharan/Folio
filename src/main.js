@@ -1,5 +1,14 @@
 import './style.css'
 
+/* ---------- 3D hero motif (three.js, code-split) ---------- */
+const motifCanvas = document.querySelector('[data-motif]')
+if (motifCanvas) {
+  const cameraButton = document.querySelector('[data-motif-camera]')
+  import('./motif.js')
+    .then((m) => m.initMotif(motifCanvas, cameraButton))
+    .catch(() => {})
+}
+
 /* ---------- Custom cursor ---------- */
 const cursor = document.querySelector('[data-cursor]')
 const finePointer = window.matchMedia('(pointer: fine)').matches
