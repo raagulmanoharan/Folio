@@ -5,6 +5,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
+import { Evaluator, Brush, SUBTRACTION } from 'three-bvh-csg'
 
 // A chrome die tumbling inside a spinning hoop, with a Y2K bloom glow.
 // Reflects a studio environment by default; if the visitor grants camera
@@ -26,7 +27,7 @@ export function initMotif(canvas) {
 
   const scene = new THREE.Scene() // transparent — the page ground shows through
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
-  camera.position.set(0, 0, 8.5)
+  camera.position.set(0, 0, 9.5)
 
   const pmrem = new THREE.PMREMGenerator(renderer)
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
@@ -37,19 +38,10 @@ export function initMotif(canvas) {
     roughness: 0.06,
     envMapIntensity: 1.15,
   })
-  const pipMat = new THREE.MeshStandardMaterial({
-    color: 0x0b0b0b,
-    metalness: 0.3,
-    roughness: 0.5,
-  })
-
-  // ---- Die ----
-  const die = new THREE.Group()
-  die.add(new THREE.Mesh(new RoundedBoxGeometry(1.2, 1.2, 1.2, 6, 0.18), chrome))
-
-  const o = 0.26 // pip offset from face centre
-  const H = 0.61 // distance to face surface
-  const pipGeo = new THREE.SphereGeometry(0.072, 24, 24)
+  // ---- Die (chrome, with pip depressions carved via CSG) ----
+  const DIE = 1.5
+  const o = 0.32 // pip offset from face centre
+  const H = DIE / 2 // face surface
   const LAYOUTS = {
     1: [[0, 0]],
     2: [[-o, o], [o, -o]],
@@ -64,19 +56,29 @@ export function initMotif(canvas) {
     ['x', 1, 2], ['x', -1, 5],
     ['y', 1, 3], ['y', -1, 4],
   ]
+  const evaluator = new Evaluator()
+  evaluator.useGroups = false // single (chrome) material throughout
+  let dieBrush = new Brush(new RoundedBoxGeometry(DIE, DIE, DIE, 6, 0.16))
+  dieBrush.updateMatrixWorld()
+  const holeGeo = new THREE.SphereGeometry(0.14, 24, 24)
   for (const [axis, sign, count] of FACES) {
     for (const [u, v] of LAYOUTS[count]) {
-      const pip = new THREE.Mesh(pipGeo, pipMat)
-      if (axis === 'z') pip.position.set(u, v, sign * H)
-      else if (axis === 'x') pip.position.set(sign * H, u, v)
-      else pip.position.set(u, sign * H, v)
-      die.add(pip)
+      const hole = new Brush(holeGeo)
+      if (axis === 'z') hole.position.set(u, v, sign * H)
+      else if (axis === 'x') hole.position.set(sign * H, u, v)
+      else hole.position.set(u, sign * H, v)
+      hole.updateMatrixWorld()
+      dieBrush = evaluator.evaluate(dieBrush, hole, SUBTRACTION)
     }
   }
+  dieBrush.material = chrome
+  dieBrush.geometry.computeVertexNormals()
+  const die = new THREE.Group()
+  die.add(dieBrush)
   scene.add(die)
 
   // ---- Hoop ----
-  const hoop = new THREE.Mesh(new THREE.TorusGeometry(1.72, 0.1, 32, 180), chrome)
+  const hoop = new THREE.Mesh(new THREE.TorusGeometry(1.9, 0.1, 32, 180), chrome)
   scene.add(hoop)
 
   // Rim lights keep the chrome's speculars sharp (and feed the bloom).
@@ -133,19 +135,24 @@ export function initMotif(canvas) {
       const videoTexture = new THREE.VideoTexture(video)
       videoTexture.colorSpace = THREE.SRGBColorSpace
 
-      const dome = new THREE.Mesh(
-        new THREE.SphereGeometry(20, 48, 48),
-        new THREE.MeshBasicMaterial({ map: videoTexture, side: THREE.BackSide }),
+      // A large screen in front of the die shows the (mirrored) feed. Only the
+      // CubeCamera sees it, so the chrome mirrors it back — the face lands on
+      // whichever face is pointing toward the viewer.
+      const screen = new THREE.Mesh(
+        new THREE.PlaneGeometry(26, 15),
+        new THREE.MeshBasicMaterial({ map: videoTexture, toneMapped: false }),
       )
-      dome.layers.set(CAM_LAYER)
-      scene.add(dome)
+      screen.position.set(0, 0, 11)
+      screen.rotation.y = Math.PI // face the die; also mirrors it (selfie view)
+      screen.layers.set(CAM_LAYER)
+      scene.add(screen)
 
-      const cubeRT = new THREE.WebGLCubeRenderTarget(256, { type: THREE.HalfFloatType })
+      const cubeRT = new THREE.WebGLCubeRenderTarget(512, { type: THREE.HalfFloatType })
       cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT)
       cubeCamera.layers.set(CAM_LAYER)
 
       chrome.envMap = cubeRT.texture
-      chrome.envMapIntensity = 1.4
+      chrome.envMapIntensity = 1.6
       chrome.needsUpdate = true
     } catch {
       // denied or unavailable — studio reflections remain
