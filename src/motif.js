@@ -171,44 +171,58 @@ export function initMotif(canvas) {
   motif.position.y = -0.45
   scene.add(motif)
 
-  // ---- Click to roll the die ----
-  // Clicking the die spins it fast in 3D, then decelerates and locks a random
-  // face toward the camera (like rolling a real die). It stays on that face
-  // until the next click; the ring keeps moving throughout.
-  const VIEW = new THREE.Vector3(0, 0, 1) // face that ends up pointing at us
-  const FACE_NORMAL = {
-    1: new THREE.Vector3(0, 0, 1),
-    6: new THREE.Vector3(0, 0, -1),
-    2: new THREE.Vector3(1, 0, 0),
-    5: new THREE.Vector3(-1, 0, 0),
-    3: new THREE.Vector3(0, 1, 0),
-    4: new THREE.Vector3(0, -1, 0),
+  // ---- Click interaction: globe spin → merge → die roll ----
+  // Click the die and: (1) the ring snaps its pinch points to top & bottom, fans
+  // open and spins one full turn — a globe of longitude rings; (2) the globe
+  // merges back to a single ring; (3) the die spins fast and locks a random face
+  // square to the camera (no pitch/roll). Click outside → resume the auto swing.
+  const WORLD_Y = new THREE.Vector3(0, 1, 0)
+  // Globe rest pose: face-on to the camera with the fan pinch axis vertical, so
+  // the two pinch points sit at the top and bottom.
+  const Q_GLOBE = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI / 2)
+  // Exact axis-aligned orientations that bring each face square to the camera.
+  const FACE_QUAT = {}
+  for (const [v, ex, ey, ez] of [
+    [1, 0, 0, 0], [6, Math.PI, 0, 0],
+    [2, 0, -Math.PI / 2, 0], [5, 0, Math.PI / 2, 0],
+    [3, Math.PI / 2, 0, 0], [4, -Math.PI / 2, 0, 0],
+  ]) {
+    FACE_QUAT[v] = new THREE.Quaternion().setFromEuler(new THREE.Euler(ex, ey, ez))
   }
-  const ROLL_DUR = 1.15 // seconds
-  const ROLL_SPINS = 4 // extra whole turns that decay away
-  const roll = {
-    active: false,
-    locked: false,
+
+  const T_FAN = 1.0 // ring fans open + spins one full turn (globe)
+  const T_MERGE = 0.45 // globe merges back to a single ring
+  const T_DIE = 0.9 // die spins fast and locks
+  const GLOBE_ANGLE = 0.5 // fan spread while it's a globe
+  const DIE_SPINS = 3
+
+  const seq = {
+    mode: 'auto', // 'auto' | 'seq' | 'locked'
     start: 0,
-    from: new THREE.Quaternion(),
-    target: new THREE.Quaternion(),
-    axis: new THREE.Vector3(),
-    value: 1,
+    ringFrom: new THREE.Quaternion(),
+    dieFrom: new THREE.Quaternion(),
+    dieTarget: new THREE.Quaternion(),
+    dieAxis: new THREE.Vector3(),
+    dieCaptured: false,
   }
   const _spinQ = new THREE.Quaternion()
-  function startRoll(now) {
-    roll.value = 1 + Math.floor(Math.random() * 6)
-    roll.from.copy(die.quaternion)
-    // orientation that brings the chosen face's normal to the camera, plus a
-    // random twist about the view axis so the number lands at a random angle
-    roll.target.setFromUnitVectors(FACE_NORMAL[roll.value], VIEW)
-    // snap the in-plane twist to a quarter turn so the face settles square/upright
-    _spinQ.setFromAxisAngle(VIEW, Math.floor(Math.random() * 4) * (Math.PI / 2))
-    roll.target.premultiply(_spinQ)
-    roll.axis.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize()
-    roll.start = now
-    roll.active = true
-    roll.locked = false
+  const _globeQ = new THREE.Quaternion()
+  const ease = (p) => 1 - Math.pow(1 - p, 3) // easeOutCubic
+  const smooth = (a, b, x) => {
+    const t = Math.min(1, Math.max(0, (x - a) / (b - a)))
+    return t * t * (3 - 2 * t)
+  }
+
+  function startSequence(now) {
+    seq.ringFrom.copy(ringSpread.quaternion)
+    const value = 1 + Math.floor(Math.random() * 6)
+    seq.dieTarget.copy(FACE_QUAT[value])
+    _spinQ.setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.floor(Math.random() * 4) * (Math.PI / 2))
+    seq.dieTarget.premultiply(_spinQ)
+    seq.dieAxis.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize()
+    seq.dieCaptured = false
+    seq.start = now
+    seq.mode = 'seq'
   }
 
   const raycaster = new THREE.Raycaster()
@@ -221,7 +235,9 @@ export function initMotif(canvas) {
       ndc.y = -((ev.clientY - r.top) / r.height) * 2 + 1
       raycaster.setFromCamera(ndc, camera)
       if (raycaster.intersectObject(dieBrush, false).length) {
-        startRoll(clock.getElapsedTime())
+        startSequence(clock.getElapsedTime()) // hit the die → run the sequence
+      } else {
+        seq.mode = 'auto' // clicked outside → resume auto swing
       }
     })
   }
@@ -408,30 +424,54 @@ export function initMotif(canvas) {
     requestAnimationFrame(tick)
     if (!visible) return
     const t = clock.getElapsedTime()
-    if (roll.active) {
-      // spin fast, decelerate, and settle onto the chosen face
-      const p = Math.min(1, (t - roll.start) / ROLL_DUR)
-      const e = 1 - Math.pow(1 - p, 3) // easeOutCubic → smooth lock
-      die.quaternion.copy(roll.from).slerp(roll.target, e)
-      _spinQ.setFromAxisAngle(roll.axis, ROLL_SPINS * Math.PI * 2 * (1 - p))
-      die.quaternion.multiply(_spinQ)
-      if (p >= 1) {
-        roll.active = false
-        roll.locked = true
-        die.quaternion.copy(roll.target)
+
+    if (seq.mode === 'seq') {
+      const tau = t - seq.start
+      if (tau < T_FAN + T_MERGE) {
+        // ---- Globe: fan open and spin one full turn, then merge back ----
+        const spinAngle = 2 * Math.PI * ease(Math.min(1, tau / T_FAN))
+        _globeQ.setFromAxisAngle(WORLD_Y, spinAngle).multiply(Q_GLOBE)
+        // ease from the auto pose into the spinning globe over the first slice
+        ringSpread.quaternion.copy(seq.ringFrom).slerp(_globeQ, smooth(0, 0.28 * T_FAN, tau))
+        const angle = tau < T_FAN
+          ? GLOBE_ANGLE * ease(tau / T_FAN)
+          : GLOBE_ANGLE * (1 - smooth(0, T_MERGE, tau - T_FAN))
+        layoutRing(angle)
+        // die keeps tumbling until it's its turn
+        die.rotation.x = t * 0.7
+        die.rotation.y = t * 0.9
+        die.rotation.z = t * 0.35
+      } else {
+        // ---- Die: spin fast and lock a face; ring holds as a single ring ----
+        ringSpread.quaternion.copy(Q_GLOBE)
+        layoutRing(0)
+        if (!seq.dieCaptured) {
+          seq.dieFrom.copy(die.quaternion)
+          seq.dieCaptured = true
+        }
+        const p = Math.min(1, (tau - T_FAN - T_MERGE) / T_DIE)
+        die.quaternion.copy(seq.dieFrom).slerp(seq.dieTarget, ease(p))
+        _spinQ.setFromAxisAngle(seq.dieAxis, DIE_SPINS * Math.PI * 2 * (1 - p))
+        die.quaternion.multiply(_spinQ)
+        if (p >= 1) {
+          die.quaternion.copy(seq.dieTarget)
+          seq.mode = 'locked'
+        }
       }
-    } else if (!roll.locked) {
-      // idle tumble until the first click; after a roll the die holds its face
+    } else if (seq.mode === 'locked') {
+      // hold the result: die on its face, ring a single vertical-pinch ring
+      ringSpread.quaternion.copy(Q_GLOBE)
+      layoutRing(0)
+      die.quaternion.copy(seq.dieTarget)
+    } else {
+      // ---- Auto swing ----
       die.rotation.x = t * 0.7
       die.rotation.y = t * 0.9
       die.rotation.z = t * 0.35
+      ringPose(t, ringSpread.rotation)
+      layoutRing(RING_MAXANGLE * spreadPulse(t))
     }
-    // The ring tumbles in all directions — a steady spin on every axis
-    // (opposite the die) plus a wobble at incommensurate frequencies so the
-    // motion drifts unpredictably instead of looping.
-    ringPose(t, ringSpread.rotation)
-    // The bundle fans open and closes back with a gentle pulse.
-    layoutRing(RING_MAXANGLE * spreadPulse(t))
+
     renderFrame()
   }
   tick()
