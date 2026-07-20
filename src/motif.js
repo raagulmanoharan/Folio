@@ -5,6 +5,7 @@ import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.j
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
 import { Evaluator, Brush, SUBTRACTION } from 'three-bvh-csg'
 
@@ -23,19 +24,16 @@ export function initMotif(canvas) {
   }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = 1.05
+  renderer.toneMappingExposure = 0.62
   renderer.outputColorSpace = THREE.SRGBColorSpace
 
-  // The bloom composer writes an opaque frame, so instead of a transparent
-  // canvas we clear to a colour that — once ACES tone-mapping runs in the
-  // OutputPass — lands exactly on the page ground (#161616). That keeps the
-  // motif box seamless with the page while the glow stays intact.
-  const GROUND = 0x050505
-  renderer.setClearColor(GROUND, 1)
+  // Fully transparent canvas: the page ground shows through, and the bloom
+  // glow spills softly onto the page instead of being clipped inside a box.
+  renderer.setClearColor(0x000000, 0)
 
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
-  camera.position.set(0, 0, 8.8)
+  camera.position.set(0, 0, 10.5)
 
   const pmrem = new THREE.PMREMGenerator(renderer)
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
@@ -44,7 +42,7 @@ export function initMotif(canvas) {
     color: 0xffffff,
     metalness: 1.0,
     roughness: 0.06,
-    envMapIntensity: 1.15,
+    envMapIntensity: 0.75,
   })
 
   // The carved pip cavities read slightly rougher than the mirror body, so the
@@ -53,7 +51,7 @@ export function initMotif(canvas) {
     color: 0xffffff,
     metalness: 1.0,
     roughness: 0.28,
-    envMapIntensity: 1.15,
+    envMapIntensity: 0.75,
   })
 
   // ---- Die (chrome, with pip depressions carved via CSG) ----
@@ -99,7 +97,7 @@ export function initMotif(canvas) {
 
   // ---- Hoop (a Möbius ribbon — a chrome band with a single half-twist) ----
   const HOOP_R = 1.95      // ring radius
-  const HOOP_W = 0.34      // half-width of the ribbon
+  const HOOP_W = 0.5       // half-width of the ribbon (a wide chrome band)
   function mobius(u, v, target) {
     const a = u * Math.PI * 2          // around the ring
     const t = (v - 0.5) * 2 * HOOP_W   // across the ribbon, −W..W
@@ -111,29 +109,68 @@ export function initMotif(canvas) {
     color: 0xffffff,
     metalness: 1.0,
     roughness: 0.06,
-    envMapIntensity: 1.15,
+    envMapIntensity: 0.75,
     side: THREE.DoubleSide, // a ribbon shows both faces
   })
   const hoop = new THREE.Mesh(new ParametricGeometry(mobius, 260, 6), hoopMat)
   hoop.geometry.computeVertexNormals()
   scene.add(hoop)
 
-  // ---- Bloom (Y2K glow + flare on the brightest chrome highlights) ----
-  // The composer output is opaque; the tuned GROUND clear (above) keeps the
-  // motif box seamless with the page ground while the glow stays intact.
-  const composer = new EffectComposer(renderer)
+  // ---- Bloom (Y2K glow + flare), kept fully transparent ----
+  // Selective-bloom setup: one composer renders the scene and extracts the
+  // glow; the final composer adds that glow back onto the base render. The
+  // base keeps its alpha, so the page shows through and the halo spills onto
+  // the page (additive over the premultiplied canvas) instead of a dark box.
   const renderPass = new RenderPass(scene, camera)
-  composer.addPass(renderPass)
-  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.55, 0.5, 0.82)
-  composer.addPass(bloom)
-  composer.addPass(new OutputPass())
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.4, 0.9)
+
+  const bloomComposer = new EffectComposer(renderer)
+  bloomComposer.renderToScreen = false
+  bloomComposer.addPass(renderPass)
+  bloomComposer.addPass(bloom)
+
+  const mixPass = new ShaderPass(
+    new THREE.ShaderMaterial({
+      uniforms: {
+        baseTexture: { value: null },
+        bloomTexture: { value: bloomComposer.renderTarget2.texture },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }`,
+      fragmentShader: `
+        uniform sampler2D baseTexture;
+        uniform sampler2D bloomTexture;
+        varying vec2 vUv;
+        void main() {
+          vec4 base = texture2D(baseTexture, vUv);
+          vec4 glow = texture2D(bloomTexture, vUv);
+          // UnrealBloomPass writes alpha 1 everywhere, so drive the halo alpha
+          // from the glow's brightness instead — transparent where there's no
+          // glow, so the page shows through and the halo spills onto it.
+          float halo = clamp(dot(glow.rgb, vec3(0.2126, 0.7152, 0.0722)), 0.0, 1.0);
+          gl_FragColor = vec4(base.rgb + glow.rgb, clamp(base.a + halo, 0.0, 1.0));
+        }`,
+    }),
+    'baseTexture',
+  )
+  mixPass.needsSwap = true
+
+  const finalComposer = new EffectComposer(renderer)
+  finalComposer.addPass(renderPass)
+  finalComposer.addPass(mixPass)
+  finalComposer.addPass(new OutputPass())
 
   function resize() {
     const w = canvas.clientWidth
     const h = canvas.clientHeight
     if (!w || !h) return
     renderer.setSize(w, h, false)
-    composer.setSize(w, h)
+    bloomComposer.setSize(w, h)
+    finalComposer.setSize(w, h)
     bloom.setSize(w, h)
     camera.aspect = w / h
     camera.updateProjectionMatrix()
@@ -176,7 +213,7 @@ export function initMotif(canvas) {
 
       for (const m of [chrome, pipRough, hoopMat]) {
         m.envMap = cubeRT.texture
-        m.envMapIntensity = 1.4
+        m.envMapIntensity = 1.05
         m.needsUpdate = true
       }
     } catch {
@@ -187,7 +224,8 @@ export function initMotif(canvas) {
 
   function renderFrame() {
     if (cubeCamera) cubeCamera.update(renderer, scene)
-    composer.render()
+    bloomComposer.render()
+    finalComposer.render()
   }
 
   if (reduced) {
@@ -211,10 +249,15 @@ export function initMotif(canvas) {
     requestAnimationFrame(tick)
     if (!visible) return
     const t = clock.getElapsedTime()
+    // die tumbles freely on all three axes
     die.rotation.x = t * 0.7
     die.rotation.y = t * 0.9
-    hoop.rotation.y = t * 0.5
-    hoop.rotation.z = Math.sin(t * 0.4) * 0.3
+    die.rotation.z = t * 0.35
+    // hoop spins facing the camera (its Möbius twist sweeps around, ring stays
+    // a full circle framing the die) and rocks in 3D so it also rotates in space
+    hoop.rotation.z = t * 0.5
+    hoop.rotation.x = Math.sin(t * 0.4) * 0.5
+    hoop.rotation.y = Math.sin(t * 0.3) * 0.5
     renderFrame()
   }
   tick()
