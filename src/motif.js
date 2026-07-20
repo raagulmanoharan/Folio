@@ -32,7 +32,7 @@ export function initMotif(canvas) {
 
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
-  camera.position.set(0, 0, 11.25)
+  camera.position.set(0, 0, 12.0)
 
   const pmrem = new THREE.PMREMGenerator(renderer)
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
@@ -70,18 +70,39 @@ export function initMotif(canvas) {
   dieBrush.material = chrome
   dieBrush.updateMatrixWorld()
   const PIP_R = 0.12 // dent radius
-  const DEP = 0.05 // dent depth (shallow)
-  const OVER = 0.12 // cutter overshoot above the face for a clean cut
+  const DEP = 0.1 // dent depth (deeper)
+  const OVER = 0.12 // cutter overshoot beyond the face for a clean cut
   const HC = DEP + OVER
-  const CTR = (OVER - DEP) / 2 // cutter centre offset beyond the face
-  const holeGeo = new THREE.CylinderGeometry(PIP_R, PIP_R, HC, 40)
+  const CH = 0.02 // very subtle chamfer on the bottom + rim edges
+  // Lathed cutter: flat bottom, a small chamfer at the bottom edge, and a small
+  // chamfer where the wall meets the face (the rim). Revolved around local +Y.
+  const prof = [
+    new THREE.Vector2(0, 0),
+    new THREE.Vector2(PIP_R - CH, 0),
+    new THREE.Vector2(PIP_R, CH),
+    new THREE.Vector2(PIP_R, DEP - CH),
+    new THREE.Vector2(PIP_R + CH, DEP + CH),
+    new THREE.Vector2(PIP_R + CH, HC),
+    new THREE.Vector2(0, HC),
+  ]
+  const holeGeo = new THREE.LatheGeometry(prof, 44)
+  const up = new THREE.Vector3(0, 1, 0)
   for (const [axis, sign, count] of FACES) {
+    const n = new THREE.Vector3(
+      axis === 'x' ? sign : 0,
+      axis === 'y' ? sign : 0,
+      axis === 'z' ? sign : 0,
+    )
+    const q = new THREE.Quaternion().setFromUnitVectors(up, n)
     for (const [u, v] of LAYOUTS[count]) {
       const hole = new Brush(holeGeo)
-      const c = sign * (H + CTR)
-      if (axis === 'z') { hole.rotation.x = Math.PI / 2; hole.position.set(u, v, c) }
-      else if (axis === 'x') { hole.rotation.z = Math.PI / 2; hole.position.set(c, u, v) }
-      else hole.position.set(u, c, v)
+      hole.quaternion.copy(q)
+      const p = new THREE.Vector3()
+      if (axis === 'z') p.set(u, v, sign * H)
+      else if (axis === 'x') p.set(sign * H, u, v)
+      else p.set(u, sign * H, v)
+      p.addScaledVector(n, -DEP) // cutter bottom sits DEP below the face
+      hole.position.copy(p)
       hole.updateMatrixWorld()
       dieBrush = evaluator.evaluate(dieBrush, hole, SUBTRACTION)
     }
@@ -92,7 +113,8 @@ export function initMotif(canvas) {
   die.add(dieBrush)
 
   // ---- Ring: a single chrome ring around the die, tumbling in all directions ----
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(1.9, 0.08, 24, 220), chrome)
+  // Bigger than the die so it sweeps up into the hero text as it turns.
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(2.28, 0.08, 24, 240), chrome)
 
   // Group both and nudge down: the balanced spot is the middle of the gap
   // between the hero text (top) and the footer (bottom), which sits below the
