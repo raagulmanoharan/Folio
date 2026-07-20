@@ -154,7 +154,6 @@ export function initMotif(canvas) {
   // to one (a tiny depth offset keeps them from z-fighting when closed, so the
   // front copy reads as a single clean ring). Solid chrome; the die is untouched.
   const RING_COPIES = 8
-  const RING_MAXANGLE = 0.18 // idle fan angle between adjacent copies
   const ringSpread = new THREE.Group()
   const ringCopies = []
   for (let i = 0; i < RING_COPIES; i++) {
@@ -206,11 +205,12 @@ export function initMotif(canvas) {
   }
   const _spinQ = new THREE.Quaternion()
   const _globeQ = new THREE.Quaternion()
-  const ease = (p) => 1 - Math.pow(1 - p, 3) // easeOutCubic
-  const smooth = (a, b, x) => {
-    const t = Math.min(1, Math.max(0, (x - a) / (b - a)))
-    return t * t * (3 - 2 * t)
+  // smootherstep: zero velocity AND acceleration at both ends → no jitter
+  const easeIO = (p) => {
+    const t = Math.min(1, Math.max(0, p))
+    return t * t * t * (t * (t * 6 - 15) + 10)
   }
+  const smooth = (a, b, x) => easeIO((x - a) / (b - a))
 
   function startSequence(now) {
     seq.ringFrom.copy(ringSpread.quaternion)
@@ -414,16 +414,6 @@ export function initMotif(canvas) {
     )
   }
 
-  // Spread amount 0..1. Mostly 0 (closed). A slow, rare "gate" from two low
-  // incommensurate sines only occasionally allows an opening; within a gate the
-  // fan breathes open and closed with the ring's swing, then merges back — so it
-  // fans only now and then as the ring revolves, like it's caught by gravity.
-  function spreadPulse(tt) {
-    const gate = Math.pow(Math.max(0, Math.sin(tt * 0.16) * Math.sin(tt * 0.11 + 1.0)), 1.8)
-    const breathe = Math.max(0, Math.sin(tt * 0.7))
-    return gate * breathe
-  }
-
   // Fan the ring copies open by `angle` around the shared diameter (local X),
   // pinched at the two points where the ring crosses that axis. A tiny depth
   // offset keeps them from z-fighting when the fan is closed.
@@ -462,13 +452,14 @@ export function initMotif(canvas) {
       const tau = t - seq.start
       // ---- Ring globe: fan open + spin one full turn, then merge back ----
       if (tau < T_FAN + T_MERGE) {
-        const spinAngle = 2 * Math.PI * ease(Math.min(1, tau / T_FAN))
+        // ease-in-out on the spin so it accelerates and decelerates smoothly
+        const spinAngle = 2 * Math.PI * easeIO(Math.min(1, tau / T_FAN))
         _globeQ.setFromAxisAngle(WORLD_Y, spinAngle).multiply(Q_GLOBE)
         // ease from the auto pose into the spinning globe over the first slice
-        ringSpread.quaternion.copy(seq.ringFrom).slerp(_globeQ, smooth(0, 0.28 * T_FAN, tau))
+        ringSpread.quaternion.copy(seq.ringFrom).slerp(_globeQ, smooth(0, 0.3 * T_FAN, tau))
         const angle = tau < T_FAN
-          ? GLOBE_ANGLE * ease(tau / T_FAN)
-          : GLOBE_ANGLE * (1 - smooth(0, T_MERGE, tau - T_FAN))
+          ? GLOBE_ANGLE * easeIO(tau / T_FAN)
+          : GLOBE_ANGLE * (1 - easeIO((tau - T_FAN) / T_MERGE))
         layoutRing(angle)
       } else {
         ringSpread.quaternion.copy(Q_GLOBE) // single face-on ring, held
@@ -476,9 +467,11 @@ export function initMotif(canvas) {
       }
       // ---- Die: spins the whole time (the globe drives it), still turning as
       // the ring closes, and comes to a halt on its face shortly after ----
-      const p = Math.min(1, tau / T_DIE)
-      die.quaternion.copy(seq.dieFrom).slerp(seq.dieTarget, ease(p))
-      _spinQ.setFromAxisAngle(seq.dieAxis, DIE_SPINS * Math.PI * 2 * (1 - p))
+      // Slerp and spin-decay share one eased value so the angular velocity is
+      // smooth (ease-in-out) rather than jittery.
+      const s = easeIO(Math.min(1, tau / T_DIE))
+      die.quaternion.copy(seq.dieFrom).slerp(seq.dieTarget, s)
+      _spinQ.setFromAxisAngle(seq.dieAxis, DIE_SPINS * Math.PI * 2 * (1 - s))
       die.quaternion.multiply(_spinQ)
       if (tau >= T_DIE) {
         die.quaternion.copy(seq.dieTarget)
@@ -490,12 +483,12 @@ export function initMotif(canvas) {
       layoutRing(0)
       die.quaternion.copy(seq.dieTarget)
     } else {
-      // ---- Auto swing ----
+      // ---- Auto swing: a single clean ring tumbling (no idle fan) ----
       die.rotation.x = t * 0.7
       die.rotation.y = t * 0.9
       die.rotation.z = t * 0.35
       ringPose(t, ringSpread.rotation)
-      layoutRing(RING_MAXANGLE * spreadPulse(t))
+      layoutRing(0)
     }
 
     // ease the studio environment toward the device tilt so the reflection reacts
