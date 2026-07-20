@@ -153,8 +153,8 @@ export function initMotif(canvas) {
   // pulse opens the fan into a few clearly-separated rings then closes it back
   // to one (a tiny depth offset keeps them from z-fighting when closed, so the
   // front copy reads as a single clean ring). Solid chrome; the die is untouched.
-  const RING_COPIES = 4
-  const RING_MAXANGLE = 0.34 // fan angle between adjacent copies — leaves a clear gap
+  const RING_COPIES = 8
+  const RING_MAXANGLE = 0.18 // idle fan angle between adjacent copies
   const ringSpread = new THREE.Group()
   const ringCopies = []
   for (let i = 0; i < RING_COPIES; i++) {
@@ -193,7 +193,7 @@ export function initMotif(canvas) {
   const T_FAN = 0.9 // ring fans open + spins one full turn (globe)
   const T_MERGE = 0.5 // globe merges back to a single ring
   const T_DIE = 1.9 // die spins the whole time, halting after the globe merges
-  const GLOBE_ANGLE = 0.5 // fan spread while it's a globe
+  const GLOBE_ANGLE = 0.42 // fan spread while it's a globe (8 copies → ~170° of longitudes)
   const DIE_SPINS = 5 // whole turns the die spins before it settles
 
   const seq = {
