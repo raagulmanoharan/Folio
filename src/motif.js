@@ -187,12 +187,20 @@ export function initMotif(canvas) {
         varying vec2 vUv;
         void main() {
           vec4 base = texture2D(baseTexture, vUv);
-          vec4 glow = texture2D(bloomTexture, vUv);
+          // Y2K chromatic split: sample the glow's R/B channels at a slight
+          // radial offset so the bloom fringes into red/cyan toward the edges.
+          vec2 dir = vUv - 0.5;
+          float ca = 0.008;
+          vec3 glow = vec3(
+            texture2D(bloomTexture, vUv + dir * ca).r,
+            texture2D(bloomTexture, vUv).g,
+            texture2D(bloomTexture, vUv - dir * ca).b
+          );
           // UnrealBloomPass writes alpha 1 everywhere, so drive the halo alpha
           // from the glow's brightness instead — transparent where there's no
           // glow, so the page shows through and the halo spills onto it.
-          float halo = clamp(dot(glow.rgb, vec3(0.2126, 0.7152, 0.0722)), 0.0, 1.0);
-          vec4 color = vec4(base.rgb + glow.rgb, clamp(base.a + halo, 0.0, 1.0));
+          float halo = clamp(dot(glow, vec3(0.2126, 0.7152, 0.0722)), 0.0, 1.0);
+          vec4 color = vec4(base.rgb + glow, clamp(base.a + halo, 0.0, 1.0));
           // Fade the whole frame out near the canvas edges so the glow never
           // reveals a hard rectangular container edge (premultiplied: scale
           // rgb + alpha together). Horizontal has room; vertical is tighter.
