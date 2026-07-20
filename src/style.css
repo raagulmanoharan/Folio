@@ -25,7 +25,7 @@
   --hairline: rgba(255, 255, 255, 0.12);
   --header-h: 43px;  /* matches reference: 22px row + 10px top/bottom padding */
   --gutter: 20px;    /* reference edge padding at all widths */
-  --peek: clamp(52px, 8vh, 84px); /* how much of Selected Work peeks above the fold */
+  --peek: clamp(84px, 11vh, 128px); /* sliver of the first work item that peeks */
   --font: 'Neue Montreal', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
@@ -120,25 +120,44 @@ main {
 }
 
 .hero {
-  /* leave room so the Selected Work header peeks above the fold */
+  /* full hero + motif; only a sliver of the first work item peeks below */
   height: calc(100svh - var(--header-h) - var(--peek));
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: clamp(28px, 5vh, 60px) clamp(16px, 2.5vw, 40px) 0;
-  gap: clamp(12px, 2vh, 24px);
+  align-items: stretch;
+  padding: clamp(24px, 4vh, 56px) var(--gutter) 0;
+  gap: clamp(10px, 1.5vh, 20px);
   overflow: hidden;
 }
 
 .hero-statement {
+  align-self: center;
   max-width: 22em;
-  margin: 0 auto;
+  margin: 0;
   text-align: center;
   font-weight: 400;
   font-size: clamp(1.8rem, 4.4vw, 3.4rem);
   line-height: 1.12;
   letter-spacing: -0.2px;
   text-wrap: balance;
+}
+
+/* Hero footer: Selected Work label (left) + social links (right) */
+.hero-footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: clamp(12px, 2vh, 20px);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.work-eyebrow {
+  color: var(--fg);
+  text-decoration: none;
 }
 
 /* ---------- Hero 3D motif ---------- */
@@ -174,18 +193,6 @@ main {
 }
 
 /* ---------- Selected Work (reference layout) ---------- */
-.work-head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding: clamp(16px, 2.4vh, 24px) var(--gutter);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.1px;
-  text-transform: uppercase;
-  color: var(--fg);
-}
-
 .social {
   list-style: none;
   margin: 0;
