@@ -1,15 +1,30 @@
-/* Neue Montreal-style neo-grotesque. Inter is the closest freely available
-   match; swap in a licensed Neue Montreal @font-face here for an exact match. */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+/* Neue Montreal (Pangram Pangram) — commercial typeface.
+   Self-hosting these files publicly requires a webfont license you own.
+   To fall back to a free face, delete the @font-face blocks and set
+   --font to 'Inter', system-ui, sans-serif. */
+@font-face {
+  font-family: 'Neue Montreal';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/NeueMontreal-Medium.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Neue Montreal';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/NeueMontreal-Regular.otf') format('opentype');
+}
 
 :root {
-  --bg: #000000;
-  --fg: #ededed;
-  --fg-dim: #8a8a8a;
+  --bg: #161616;         /* content ground — matches reference (not pure black) */
+  --fg: #ededed;         /* header links */
+  --fg-center: #e5e5e5;  /* center wordmark */
   --hairline: rgba(255, 255, 255, 0.12);
   --header-h: 52px;
   --gutter: clamp(20px, 4vw, 48px);
-  --font: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font: 'Neue Montreal', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
 * {
@@ -40,7 +55,6 @@ body {
   align-items: center;
   background: var(--bg);
   border-bottom: 1px solid var(--hairline);
-  /* headroom reveal/hide */
   transform: translateY(0);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
@@ -50,7 +64,6 @@ body {
   transform: translateY(-100%);
 }
 
-/* small filled dot mark, top-left corner */
 .header-mark {
   position: absolute;
   left: var(--gutter);
@@ -72,7 +85,7 @@ body {
 .header-link {
   font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.1px;
   text-transform: uppercase;
   text-decoration: none;
   color: var(--fg);
@@ -83,12 +96,18 @@ body {
   opacity: 0.6;
 }
 
+.header-link:focus-visible {
+  outline: 1px solid var(--fg);
+  outline-offset: 3px;
+}
+
 .header-link--left {
   justify-self: start;
 }
 
 .header-link--center {
   justify-self: center;
+  color: var(--fg-center);
 }
 
 .header-link--right {
@@ -108,13 +127,23 @@ main {
 }
 
 .hero-statement {
-  max-width: 22ch;
+  max-width: 24ch;
   margin: 0 auto;
   text-align: center;
   font-weight: 400;
   font-size: clamp(1.8rem, 4.4vw, 3.4rem);
   line-height: 1.12;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.2px;
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header {
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 @media (max-width: 640px) {
