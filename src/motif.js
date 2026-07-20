@@ -321,6 +321,12 @@ export function initMotif(canvas) {
   // ---- Live webcam environment (auto-requested on load) ----
   const CAM_LAYER = 1
   let cubeCamera = null
+  // Touch devices (phones/tablets) skip the webcam entirely — no camera prompt,
+  // no per-frame cube render — and just use the studio-lit chrome fallback.
+  const coarse = window.matchMedia('(pointer: coarse)').matches
+  // Reflection cube kept modest; smaller on constrained/high-DPR screens so it
+  // stays cheap without visibly degrading the reflection.
+  const CUBE_SIZE = window.innerWidth < 900 || window.devicePixelRatio > 2 ? 160 : 256
   async function tryWebcam() {
     if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) return
     try {
@@ -352,7 +358,7 @@ export function initMotif(canvas) {
       dome.layers.set(CAM_LAYER)
       scene.add(dome)
 
-      const cubeRT = new THREE.WebGLCubeRenderTarget(256, { type: THREE.HalfFloatType })
+      const cubeRT = new THREE.WebGLCubeRenderTarget(CUBE_SIZE, { type: THREE.HalfFloatType })
       cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT)
       cubeCamera.layers.set(CAM_LAYER)
 
@@ -363,7 +369,7 @@ export function initMotif(canvas) {
       // denied or unavailable — studio reflections remain
     }
   }
-  tryWebcam()
+  if (!coarse) tryWebcam() // desktop only — phones use the studio fallback
 
   function renderFrame() {
     if (cubeCamera) cubeCamera.update(renderer, scene)

@@ -191,8 +191,13 @@ main {
 }
 
 @media (max-width: 640px) {
-  .header-link--center {
-    font-size: 11px;
+  /* tighten the header so the three items keep a clear gap on narrow screens */
+  .header-link {
+    font-size: 10px;
+    letter-spacing: 0;
+  }
+  .header-inner {
+    padding: 0 16px;
   }
   .hero-statement {
     max-width: none;
