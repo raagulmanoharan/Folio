@@ -64,16 +64,6 @@ body {
   transform: translateY(-100%);
 }
 
-.header-mark {
-  position: absolute;
-  left: var(--gutter);
-  top: 10px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--fg);
-}
-
 .header-inner {
   width: 100%;
   display: grid;
