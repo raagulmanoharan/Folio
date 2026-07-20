@@ -8,7 +8,7 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
 import { Evaluator, Brush, SUBTRACTION } from 'three-bvh-csg'
 
-// A chrome die tumbling inside three gimbal-mounted chrome rings, with a Y2K glow.
+// A chrome die tumbling inside a single chrome ring, with a Y2K bloom glow.
 // Reflects a studio environment by default; if the visitor grants camera
 // access on load, a bright dome + the live feed become the environment, so
 // the die reflects a lit room with the visitor's face in it.
@@ -23,7 +23,7 @@ export function initMotif(canvas) {
   }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = 0.62
+  renderer.toneMappingExposure = 0.52
   renderer.outputColorSpace = THREE.SRGBColorSpace
 
   // Fully transparent canvas: the page ground shows through, and the bloom
@@ -32,7 +32,7 @@ export function initMotif(canvas) {
 
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
-  camera.position.set(0, 0, 10.5)
+  camera.position.set(0, 0, 12.5)
 
   const pmrem = new THREE.PMREMGenerator(renderer)
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
@@ -94,24 +94,9 @@ export function initMotif(canvas) {
   die.add(dieBrush)
   scene.add(die)
 
-  // ---- Rings: three chrome rings in a gimbal, the die at the shared centre ----
-  // Nested torus rings, each mounted on a perpendicular axis (like a gyroscope)
-  // so the die sits inside the innermost/centre ring.
-  const ringGroup = new THREE.Group()
-  const RINGS = [
-    { r: 2.2, rot: [0, 0, 0], axis: 'x' },          // outer
-    { r: 1.9, rot: [Math.PI / 2, 0, 0], axis: 'y' }, // middle
-    { r: 1.6, rot: [0, Math.PI / 2, 0], axis: 'z' }, // inner (holds the die)
-  ]
-  const rings = RINGS.map(({ r, rot, axis }) => {
-    const pivot = new THREE.Group()
-    pivot.rotation.set(rot[0], rot[1], rot[2])
-    const mesh = new THREE.Mesh(new THREE.TorusGeometry(r, 0.08, 24, 200), chrome)
-    pivot.add(mesh)
-    ringGroup.add(pivot)
-    return { mesh, axis }
-  })
-  scene.add(ringGroup)
+  // ---- Ring: a single chrome ring around the die, tumbling in all directions ----
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(1.9, 0.08, 24, 220), chrome)
+  scene.add(ring)
 
   // ---- Bloom (Y2K glow + flare), kept fully transparent ----
   // Selective-bloom setup: one composer renders the scene and extracts the
@@ -119,7 +104,7 @@ export function initMotif(canvas) {
   // base keeps its alpha, so the page shows through and the halo spills onto
   // the page (additive over the premultiplied canvas) instead of a dark box.
   const renderPass = new RenderPass(scene, camera)
-  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.4, 0.9)
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.28, 0.4, 0.9)
 
   const bloomComposer = new EffectComposer(renderer)
   bloomComposer.renderToScreen = false
@@ -149,7 +134,14 @@ export function initMotif(canvas) {
           // from the glow's brightness instead — transparent where there's no
           // glow, so the page shows through and the halo spills onto it.
           float halo = clamp(dot(glow.rgb, vec3(0.2126, 0.7152, 0.0722)), 0.0, 1.0);
-          gl_FragColor = vec4(base.rgb + glow.rgb, clamp(base.a + halo, 0.0, 1.0));
+          vec4 color = vec4(base.rgb + glow.rgb, clamp(base.a + halo, 0.0, 1.0));
+          // Fade the whole frame out near the canvas edges so the glow never
+          // reveals a hard rectangular container edge (premultiplied: scale
+          // rgb + alpha together). Horizontal has room; vertical is tighter.
+          float mx = min(vUv.x, 1.0 - vUv.x);
+          float my = min(vUv.y, 1.0 - vUv.y);
+          float edge = smoothstep(0.0, 0.2, mx) * smoothstep(0.0, 0.11, my);
+          gl_FragColor = color * edge;
         }`,
     }),
     'baseTexture',
@@ -232,7 +224,7 @@ export function initMotif(canvas) {
 
   if (reduced) {
     die.rotation.set(0.5, 0.7, 0.1)
-    ringGroup.rotation.set(0.2, 0.3, 0)
+    ring.rotation.set(0.6, 0.3, 0.2)
     renderFrame()
     if (navigator.mediaDevices) {
       ;(function loop() {
@@ -255,18 +247,12 @@ export function initMotif(canvas) {
     die.rotation.x = t * 0.7
     die.rotation.y = t * 0.9
     die.rotation.z = t * 0.35
-    // Ring cage turns opposite the die; each ring gets a steady spin PLUS a
-    // wobble on a second axis, all at incommensurate frequencies so the whole
-    // gyroscope drifts and tumbles unpredictably instead of looping.
-    ringGroup.rotation.y = t * -0.3 + Math.sin(t * 0.29) * 0.4
-    ringGroup.rotation.x = Math.sin(t * 0.23) * 0.4
-    ringGroup.rotation.z = Math.sin(t * 0.17) * 0.3
-    rings[0].mesh.rotation.x = t * 0.5 + Math.sin(t * 0.91) * 0.5
-    rings[0].mesh.rotation.y = Math.sin(t * 0.37) * 0.6
-    rings[1].mesh.rotation.y = t * 0.6 + Math.sin(t * 0.73) * 0.5
-    rings[1].mesh.rotation.z = Math.sin(t * 0.53) * 0.5
-    rings[2].mesh.rotation.z = t * 0.7 + Math.sin(t * 1.13) * 0.4
-    rings[2].mesh.rotation.x = Math.sin(t * 0.41) * 0.6
+    // The ring tumbles in all directions — a steady spin on every axis
+    // (opposite the die) plus a wobble at incommensurate frequencies so the
+    // motion drifts unpredictably instead of looping.
+    ring.rotation.x = t * -0.5 + Math.sin(t * 0.83) * 0.4
+    ring.rotation.y = t * -0.4 + Math.sin(t * 0.67) * 0.4
+    ring.rotation.z = t * -0.6 + Math.sin(t * 1.09) * 0.3
     renderFrame()
   }
   tick()
