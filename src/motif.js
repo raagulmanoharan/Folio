@@ -24,7 +24,7 @@ export function initMotif(canvas) {
 
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
-  camera.position.set(0, 0, 9.5)
+  camera.position.set(0, 0, 7.6)
 
   const pmrem = new THREE.PMREMGenerator(renderer)
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture

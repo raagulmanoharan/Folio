@@ -145,9 +145,9 @@ main {
 /* Hero footer: Selected Work label (left) + social links (right) */
 .hero-footer {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end; /* Selected Work sits flush with the bottom social link */
   justify-content: space-between;
-  padding-bottom: clamp(12px, 2vh, 20px);
+  padding-bottom: clamp(14px, 2.2vh, 22px);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.1px;
