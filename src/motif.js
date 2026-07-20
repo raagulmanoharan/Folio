@@ -371,6 +371,34 @@ export function initMotif(canvas) {
   }
   if (!coarse) tryWebcam() // desktop only — phones use the studio fallback
 
+  // ---- Device tilt → reflection reacts (phones) ----
+  // Rotate the studio environment with the phone's orientation, so the chrome's
+  // reflection shifts as you tilt the device. Cheap: just a shader rotation.
+  let tiltX = 0
+  let tiltY = 0
+  function setupTilt() {
+    const DOE = window.DeviceOrientationEvent
+    if (!DOE || !scene.environmentRotation) return
+    const onTilt = (e) => {
+      const g = e.gamma || 0 // left/right tilt, −90..90
+      const b = e.beta || 0 // front/back tilt, −180..180
+      tiltY = THREE.MathUtils.clamp(g / 90, -1, 1) * 0.7
+      tiltX = THREE.MathUtils.clamp((b - 50) / 80, -1, 1) * 0.4 // ~50° neutral hold
+    }
+    const add = () => window.addEventListener('deviceorientation', onTilt, true)
+    if (typeof DOE.requestPermission === 'function') {
+      // iOS needs a user gesture to grant orientation access
+      const req = () => {
+        canvas.removeEventListener('pointerdown', req)
+        DOE.requestPermission().then((s) => s === 'granted' && add()).catch(() => {})
+      }
+      canvas.addEventListener('pointerdown', req)
+    } else {
+      add()
+    }
+  }
+  if (coarse) setupTilt()
+
   function renderFrame() {
     if (cubeCamera) cubeCamera.update(renderer, scene)
     bloomComposer.render()
@@ -468,6 +496,12 @@ export function initMotif(canvas) {
       die.rotation.z = t * 0.35
       ringPose(t, ringSpread.rotation)
       layoutRing(RING_MAXANGLE * spreadPulse(t))
+    }
+
+    // ease the studio environment toward the device tilt so the reflection reacts
+    if (scene.environmentRotation) {
+      scene.environmentRotation.y += (tiltY - scene.environmentRotation.y) * 0.08
+      scene.environmentRotation.x += (tiltX - scene.environmentRotation.x) * 0.08
     }
 
     renderFrame()
