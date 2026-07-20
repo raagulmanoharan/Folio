@@ -6,10 +6,25 @@
     <title>Folio</title>
   </head>
   <body>
+    <!-- Sticky "headroom" header: hides on scroll down, reveals on scroll up -->
+    <header class="site-header" data-header>
+      <span class="header-mark" aria-hidden="true"></span>
+      <nav class="header-inner">
+        <a class="header-link header-link--left" href="#work">( Index )</a>
+        <a class="header-link header-link--center" href="/">Folio Office&trade;</a>
+        <a class="header-link header-link--right" href="#info">( Info )</a>
+      </nav>
+    </header>
+
     <main>
-      <h1>Folio</h1>
-      <p>Edit <code>src/main.js</code> and save — this page hot-reloads instantly.</p>
+      <section class="hero">
+        <h1 class="hero-statement">
+          Designer &amp; developer working across the web &mdash; building
+          clean, considered interfaces for people who care about the details.
+        </h1>
+      </section>
     </main>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
