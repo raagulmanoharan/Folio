@@ -120,17 +120,20 @@ main {
 }
 
 .hero {
-  /* full hero + motif; only a sliver of the first work item peeks below */
+  /* the motif fills the whole hero as a full-bleed backdrop; the statement and
+     footer sit on top of it. Only a sliver of the first work item peeks below. */
+  position: relative;
   height: calc(100svh - var(--header-h) - var(--peek));
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  padding: clamp(24px, 4vh, 56px) var(--gutter) 0;
-  gap: clamp(10px, 1.5vh, 20px);
+  justify-content: space-between;
+  padding: clamp(24px, 4vh, 56px) var(--gutter) clamp(14px, 2.2vh, 22px);
   overflow: hidden;
 }
 
 .hero-statement {
+  position: relative;
+  z-index: 2;
   align-self: center;
   max-width: 22em;
   margin: 0;
@@ -145,10 +148,11 @@ main {
 
 /* Hero footer: Selected Work label (left) + social links (right) */
 .hero-footer {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: flex-end; /* Selected Work sits flush with the bottom social link */
   justify-content: space-between;
-  padding-bottom: clamp(14px, 2.2vh, 22px);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.1px;
@@ -161,12 +165,14 @@ main {
   text-decoration: none;
 }
 
-/* ---------- Hero 3D motif ---------- */
+/* ---------- Hero 3D motif (full-bleed backdrop behind the hero content) ---------- */
 .hero-motif {
-  position: relative;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   width: 100%;
-  flex: 1 1 auto;
-  min-height: 300px;
+  height: 100%;
+  pointer-events: none;
 }
 
 .hero-motif canvas {
