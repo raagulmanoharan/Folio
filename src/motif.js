@@ -190,11 +190,11 @@ export function initMotif(canvas) {
     FACE_QUAT[v] = new THREE.Quaternion().setFromEuler(new THREE.Euler(ex, ey, ez))
   }
 
-  const T_FAN = 1.0 // ring fans open + spins one full turn (globe)
-  const T_MERGE = 0.45 // globe merges back to a single ring
-  const T_DIE = 0.9 // die spins fast and locks
+  const T_FAN = 0.9 // ring fans open + spins one full turn (globe)
+  const T_MERGE = 0.5 // globe merges back to a single ring
+  const T_DIE = 1.9 // die spins the whole time, halting after the globe merges
   const GLOBE_ANGLE = 0.5 // fan spread while it's a globe
-  const DIE_SPINS = 3
+  const DIE_SPINS = 5 // whole turns the die spins before it settles
 
   const seq = {
     mode: 'auto', // 'auto' | 'seq' | 'locked'
@@ -203,7 +203,6 @@ export function initMotif(canvas) {
     dieFrom: new THREE.Quaternion(),
     dieTarget: new THREE.Quaternion(),
     dieAxis: new THREE.Vector3(),
-    dieCaptured: false,
   }
   const _spinQ = new THREE.Quaternion()
   const _globeQ = new THREE.Quaternion()
@@ -215,12 +214,12 @@ export function initMotif(canvas) {
 
   function startSequence(now) {
     seq.ringFrom.copy(ringSpread.quaternion)
+    seq.dieFrom.copy(die.quaternion) // die starts spinning right away
     const value = 1 + Math.floor(Math.random() * 6)
     seq.dieTarget.copy(FACE_QUAT[value])
     _spinQ.setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.floor(Math.random() * 4) * (Math.PI / 2))
     seq.dieTarget.premultiply(_spinQ)
     seq.dieAxis.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize()
-    seq.dieCaptured = false
     seq.start = now
     seq.mode = 'seq'
   }
@@ -427,8 +426,8 @@ export function initMotif(canvas) {
 
     if (seq.mode === 'seq') {
       const tau = t - seq.start
+      // ---- Ring globe: fan open + spin one full turn, then merge back ----
       if (tau < T_FAN + T_MERGE) {
-        // ---- Globe: fan open and spin one full turn, then merge back ----
         const spinAngle = 2 * Math.PI * ease(Math.min(1, tau / T_FAN))
         _globeQ.setFromAxisAngle(WORLD_Y, spinAngle).multiply(Q_GLOBE)
         // ease from the auto pose into the spinning globe over the first slice
@@ -437,26 +436,19 @@ export function initMotif(canvas) {
           ? GLOBE_ANGLE * ease(tau / T_FAN)
           : GLOBE_ANGLE * (1 - smooth(0, T_MERGE, tau - T_FAN))
         layoutRing(angle)
-        // die keeps tumbling until it's its turn
-        die.rotation.x = t * 0.7
-        die.rotation.y = t * 0.9
-        die.rotation.z = t * 0.35
       } else {
-        // ---- Die: spin fast and lock a face; ring holds as a single ring ----
-        ringSpread.quaternion.copy(Q_GLOBE)
+        ringSpread.quaternion.copy(Q_GLOBE) // single face-on ring, held
         layoutRing(0)
-        if (!seq.dieCaptured) {
-          seq.dieFrom.copy(die.quaternion)
-          seq.dieCaptured = true
-        }
-        const p = Math.min(1, (tau - T_FAN - T_MERGE) / T_DIE)
-        die.quaternion.copy(seq.dieFrom).slerp(seq.dieTarget, ease(p))
-        _spinQ.setFromAxisAngle(seq.dieAxis, DIE_SPINS * Math.PI * 2 * (1 - p))
-        die.quaternion.multiply(_spinQ)
-        if (p >= 1) {
-          die.quaternion.copy(seq.dieTarget)
-          seq.mode = 'locked'
-        }
+      }
+      // ---- Die: spins the whole time (the globe drives it), still turning as
+      // the ring closes, and comes to a halt on its face shortly after ----
+      const p = Math.min(1, tau / T_DIE)
+      die.quaternion.copy(seq.dieFrom).slerp(seq.dieTarget, ease(p))
+      _spinQ.setFromAxisAngle(seq.dieAxis, DIE_SPINS * Math.PI * 2 * (1 - p))
+      die.quaternion.multiply(_spinQ)
+      if (tau >= T_DIE) {
+        die.quaternion.copy(seq.dieTarget)
+        seq.mode = 'locked'
       }
     } else if (seq.mode === 'locked') {
       // hold the result: die on its face, ring a single vertical-pinch ring
