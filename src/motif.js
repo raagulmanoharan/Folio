@@ -171,6 +171,61 @@ export function initMotif(canvas) {
   motif.position.y = -0.45
   scene.add(motif)
 
+  // ---- Click to roll the die ----
+  // Clicking the die spins it fast in 3D, then decelerates and locks a random
+  // face toward the camera (like rolling a real die). It stays on that face
+  // until the next click; the ring keeps moving throughout.
+  const VIEW = new THREE.Vector3(0, 0, 1) // face that ends up pointing at us
+  const FACE_NORMAL = {
+    1: new THREE.Vector3(0, 0, 1),
+    6: new THREE.Vector3(0, 0, -1),
+    2: new THREE.Vector3(1, 0, 0),
+    5: new THREE.Vector3(-1, 0, 0),
+    3: new THREE.Vector3(0, 1, 0),
+    4: new THREE.Vector3(0, -1, 0),
+  }
+  const ROLL_DUR = 1.15 // seconds
+  const ROLL_SPINS = 4 // extra whole turns that decay away
+  const roll = {
+    active: false,
+    locked: false,
+    start: 0,
+    from: new THREE.Quaternion(),
+    target: new THREE.Quaternion(),
+    axis: new THREE.Vector3(),
+    value: 1,
+  }
+  const _spinQ = new THREE.Quaternion()
+  function startRoll(now) {
+    roll.value = 1 + Math.floor(Math.random() * 6)
+    roll.from.copy(die.quaternion)
+    // orientation that brings the chosen face's normal to the camera, plus a
+    // random twist about the view axis so the number lands at a random angle
+    roll.target.setFromUnitVectors(FACE_NORMAL[roll.value], VIEW)
+    // snap the in-plane twist to a quarter turn so the face settles square/upright
+    _spinQ.setFromAxisAngle(VIEW, Math.floor(Math.random() * 4) * (Math.PI / 2))
+    roll.target.premultiply(_spinQ)
+    roll.axis.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize()
+    roll.start = now
+    roll.active = true
+    roll.locked = false
+  }
+
+  const raycaster = new THREE.Raycaster()
+  const ndc = new THREE.Vector2()
+  if (!reduced) {
+    canvas.style.pointerEvents = 'auto'
+    canvas.addEventListener('pointerdown', (ev) => {
+      const r = canvas.getBoundingClientRect()
+      ndc.x = ((ev.clientX - r.left) / r.width) * 2 - 1
+      ndc.y = -((ev.clientY - r.top) / r.height) * 2 + 1
+      raycaster.setFromCamera(ndc, camera)
+      if (raycaster.intersectObject(dieBrush, false).length) {
+        startRoll(clock.getElapsedTime())
+      }
+    })
+  }
+
   // ---- Bloom (Y2K glow + flare), kept fully transparent ----
   // Selective-bloom setup: one composer renders the scene and extracts the
   // glow; the final composer adds that glow back onto the base render. The
@@ -353,10 +408,24 @@ export function initMotif(canvas) {
     requestAnimationFrame(tick)
     if (!visible) return
     const t = clock.getElapsedTime()
-    // die tumbles freely on all three axes
-    die.rotation.x = t * 0.7
-    die.rotation.y = t * 0.9
-    die.rotation.z = t * 0.35
+    if (roll.active) {
+      // spin fast, decelerate, and settle onto the chosen face
+      const p = Math.min(1, (t - roll.start) / ROLL_DUR)
+      const e = 1 - Math.pow(1 - p, 3) // easeOutCubic → smooth lock
+      die.quaternion.copy(roll.from).slerp(roll.target, e)
+      _spinQ.setFromAxisAngle(roll.axis, ROLL_SPINS * Math.PI * 2 * (1 - p))
+      die.quaternion.multiply(_spinQ)
+      if (p >= 1) {
+        roll.active = false
+        roll.locked = true
+        die.quaternion.copy(roll.target)
+      }
+    } else if (!roll.locked) {
+      // idle tumble until the first click; after a roll the die holds its face
+      die.rotation.x = t * 0.7
+      die.rotation.y = t * 0.9
+      die.rotation.z = t * 0.35
+    }
     // The ring tumbles in all directions — a steady spin on every axis
     // (opposite the die) plus a wobble at incommensurate frequencies so the
     // motion drifts unpredictably instead of looping.
