@@ -175,10 +175,9 @@ main {
   opacity: 1;
 }
 
-/* Over text/links: invert against the content and grow. */
+/* Over text/links: invert against the content (same size, no grow). */
 .cursor.is-invert {
   mix-blend-mode: difference;
-  --cs: 2.6;
 }
 
 /* Only take over the pointer on devices that actually have one. */
