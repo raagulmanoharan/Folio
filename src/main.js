@@ -87,41 +87,67 @@ if (drawer && backdrop && openBtn) {
   drawer.addEventListener('mouseleave', () => drawer.classList.remove('show-close'))
 }
 
-/* ---------- Case study overlay (expand a work thumbnail into a reader) ---------- */
-const caseModal = document.querySelector('[data-case]')
-if (caseModal) {
-  const openers = document.querySelectorAll('[data-case-open]')
-  const closeEls = caseModal.querySelectorAll('[data-case-close]')
-  let lastFocused = null
+/* ---------- Case study (expands inline, in place, below the work item) ---------- */
+const caseInline = document.querySelector('[data-case]')
+if (caseInline) {
+  const toggles = document.querySelectorAll('[data-case-open]')
+  const closers = caseInline.querySelectorAll('[data-case-close]')
+  const hint = document.querySelector('[data-case-hint]')
+  const featured = document.querySelector('.work-item--featured')
+  const headerEl = document.querySelector('[data-header]')
+
+  const scrollToEl = (el) => {
+    if (!el) return
+    const offset = (headerEl?.offsetHeight || 43) + 8
+    const y = el.getBoundingClientRect().top + window.scrollY - offset
+    window.scrollTo({ top: y, behavior: reducedMotion ? 'auto' : 'smooth' })
+  }
+
+  const reveal = caseInline.querySelector('.case-inline__reveal')
+  const DUR = reducedMotion ? 20 : 560
+  let settleTimer
+
+  const setState = (open) => {
+    caseInline.classList.toggle('is-open', open)
+    toggles.forEach((t) => t.setAttribute('aria-expanded', String(open)))
+    if (hint) {
+      hint.innerHTML = open
+        ? 'Hide case study <span aria-hidden="true">&#8593;</span>'
+        : 'Read the case study <span aria-hidden="true">&#8595;</span>'
+    }
+  }
 
   const openCase = () => {
-    lastFocused = document.activeElement
-    caseModal.classList.add('is-open')
-    caseModal.setAttribute('aria-hidden', 'false')
-    document.documentElement.classList.add('is-locked')
-    caseModal.scrollTop = 0
-    // move focus into the dialog for keyboard + screen-reader users
-    caseModal.querySelector('[data-case-close]')?.focus()
+    setState(true)
+    clearTimeout(settleTimer)
+    // animate to the measured content height, then release to `none` so the
+    // panel can grow if images finish loading or the viewport reflows
+    reveal.style.maxHeight = `${reveal.scrollHeight}px`
+    settleTimer = setTimeout(() => {
+      if (caseInline.classList.contains('is-open')) reveal.style.maxHeight = 'none'
+    }, DUR)
+    scrollToEl(caseInline)
   }
   const closeCase = () => {
-    caseModal.classList.remove('is-open')
-    caseModal.setAttribute('aria-hidden', 'true')
-    document.documentElement.classList.remove('is-locked')
-    lastFocused?.focus?.()
-  }
-
-  openers.forEach((el) => {
-    el.addEventListener('click', openCase)
-    el.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        openCase()
-      }
+    setState(false)
+    clearTimeout(settleTimer)
+    // from `none`/auto back to a fixed height, then to 0 so it animates
+    reveal.style.maxHeight = `${reveal.scrollHeight}px`
+    // force a reflow so the browser registers the fixed start height
+    void reveal.offsetHeight
+    requestAnimationFrame(() => {
+      reveal.style.maxHeight = '0px'
     })
-  })
-  closeEls.forEach((el) => el.addEventListener('click', closeCase))
+    // return the reader to its trigger so the viewport isn't left in whitespace
+    scrollToEl(featured)
+  }
+  const toggleCase = () =>
+    caseInline.classList.contains('is-open') ? closeCase() : openCase()
+
+  toggles.forEach((el) => el.addEventListener('click', toggleCase))
+  closers.forEach((el) => el.addEventListener('click', closeCase))
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && caseModal.classList.contains('is-open')) closeCase()
+    if (e.key === 'Escape' && caseInline.classList.contains('is-open')) closeCase()
   })
 }
 

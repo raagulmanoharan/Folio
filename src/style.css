@@ -580,53 +580,34 @@ main {
   }
 }
 
-/* ---------- Case study reader (expands from a work thumbnail) ---------- */
-.case-study {
-  position: fixed;
-  inset: 0;
-  z-index: 300;
-  background: var(--bg);
-  color: var(--fg);
-  overflow-y: auto;
-  overflow-x: hidden;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(14px);
-  pointer-events: none;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.5s;
-  -webkit-overflow-scrolling: touch;
+/* ---------- Case study (expands inline, in place, below the work item) ---------- */
+.case-inline {
+  border-bottom: 1px solid var(--hairline); /* keeps the work-list rhythm when open */
 }
 
-.case-study.is-open {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-  pointer-events: auto;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s;
-}
-
-html.is-locked,
-html.is-locked body {
+/* Collapsible height: max-height is driven in JS (measured), so it animates
+   to the exact content height and back to 0 smoothly. */
+.case-inline__reveal {
+  max-height: 0;
   overflow: hidden;
+  transition: max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.case-topbar {
+/* A slim bar with a collapse control; sticks under the header while reading */
+.case-bar {
   position: sticky;
-  top: 0;
-  z-index: 2;
+  top: var(--header-h);
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--header-h);
-  padding: 0 var(--gutter);
-  background: rgba(22, 22, 22, 0.82);
+  padding: 12px var(--gutter);
+  background: rgba(22, 22, 22, 0.85);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--hairline);
 }
 
-.case-topbar__label {
+.case-bar__label {
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.1px;
@@ -634,41 +615,35 @@ html.is-locked body {
   color: var(--fg-dim);
 }
 
-.case-close {
-  position: relative;
-  width: 22px;
-  height: 22px;
-  padding: 0;
-  border: 0;
+.case-bar__close,
+.case-collapse {
+  appearance: none;
   background: none;
+  border: 0;
+  padding: 0;
   cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  color: var(--fg);
+  transition: opacity 0.2s ease;
 }
-
-.case-close span {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 1.5px;
-  background: var(--fg);
+.case-bar__close:hover,
+.case-collapse:hover {
+  opacity: 0.6;
 }
-
-.case-close span:first-child {
-  transform: rotate(45deg);
-}
-.case-close span:last-child {
-  transform: rotate(-45deg);
-}
-
-.case-close:focus-visible {
+.case-bar__close:focus-visible,
+.case-collapse:focus-visible {
   outline: 1px solid var(--fg);
-  outline-offset: 4px;
+  outline-offset: 3px;
 }
 
 .case-inner {
   max-width: 860px;
   margin: 0 auto;
-  padding: clamp(40px, 8vh, 88px) var(--gutter) clamp(80px, 14vh, 140px);
+  padding: clamp(28px, 4vh, 48px) var(--gutter) clamp(48px, 7vh, 80px);
 }
 
 /* Header block */
@@ -684,8 +659,8 @@ html.is-locked body {
 .case-title {
   margin: 0;
   font-weight: 400;
-  font-size: clamp(2.1rem, 6vw, 3.9rem);
-  line-height: 1.02;
+  font-size: clamp(1.9rem, 5vw, 3.2rem);
+  line-height: 1.04;
   letter-spacing: -0.5px;
   text-wrap: balance;
 }
@@ -916,9 +891,8 @@ html.is-locked body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .case-study {
-    transition: opacity 0.2s ease, visibility 0s;
-    transform: none;
+  .case-inline__reveal {
+    transition: max-height 0.001s linear;
   }
   .work-shot--open img,
   .work-shot__hint {

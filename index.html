@@ -86,7 +86,7 @@
             class="work-shot work-shot--open"
             type="button"
             data-case-open
-            aria-haspopup="dialog"
+            aria-expanded="false"
             aria-controls="case-jarwiz"
           >
             <img
@@ -96,9 +96,285 @@
               width="3200"
               height="1520"
             />
-            <span class="work-shot__hint">Read the case study <span aria-hidden="true">&#8599;</span></span>
+            <span class="work-shot__hint" data-case-hint>Read the case study <span aria-hidden="true">&#8595;</span></span>
           </button>
         </article>
+
+        <!-- Case study: expands inline, in place, below the Jarwiz work item -->
+        <div class="case-inline" id="case-jarwiz" data-case>
+          <div class="case-inline__reveal">
+            <div class="case-inline__inner">
+              <div class="case-bar">
+                <span class="case-bar__label">Jarwiz &mdash; Case Study</span>
+                <button class="case-bar__close" type="button" data-case-close>
+                  Close <span aria-hidden="true">&#8593;</span>
+                </button>
+              </div>
+              <article class="case-inner">
+                <header class="case-head">
+                  <p class="case-eyebrow">Jarwiz &middot; Founder &amp; Designer &middot; 2025&ndash;26</p>
+                  <h3 class="case-title" id="case-jarwiz-title">
+                    An infinite canvas where AI is a collaborator, not a chatbot
+                    in a sidebar.
+                  </h3>
+                  <p class="case-lede">
+                    Hand it a goal and it researches the live web, runs real
+                    thinking frameworks, and lays the answer out as a board of
+                    cards you can move, refine, and connect.
+                  </p>
+                  <dl class="case-meta">
+                    <div>
+                      <dt>Role</dt>
+                      <dd>Founder &mdash; product, UX &amp; design system, built end to end</dd>
+                    </div>
+                    <div>
+                      <dt>Timeline</dt>
+                      <dd>2025&ndash;26, ongoing</dd>
+                    </div>
+                    <div>
+                      <dt>Stack</dt>
+                      <dd>tldraw canvas, React, a thin agent server, Claude (Opus&nbsp;4.8)</dd>
+                    </div>
+                    <div>
+                      <dt>Links</dt>
+                      <dd>
+                        <a href="https://github.com/raagulmanoharan/Jarwiz-V3">Repository</a>,
+                        <a href="https://raagulmanoharan.github.io/Jarwiz-V3/">live&nbsp;demo</a>
+                      </dd>
+                    </div>
+                  </dl>
+                </header>
+
+                <figure class="case-figure case-figure--hero">
+                  <img
+                    src="/work/jarwiz-hero.png"
+                    alt="A complete Jarwiz board: a SWOT analysis laid out as four cards, a TOWS strategic-moves table, a strategic verdict, and the agent flagging a tension between two cards."
+                    loading="lazy"
+                    width="2800"
+                    height="1800"
+                  />
+                  <figcaption>
+                    A finished board &mdash; a researched SWOT, a TOWS strategy table, and a
+                    strategic verdict, with the agent flagging a tension between two cards.
+                  </figcaption>
+                </figure>
+
+                <section class="case-section">
+                  <p class="case-section__label">Overview</p>
+                  <h4 class="case-h">Get back a board, not a wall of text.</h4>
+                  <p class="case-p">
+                    Jarwiz starts from one frustration: today&rsquo;s AI tools trap the
+                    most powerful thinking aid ever built inside a chat box. You describe
+                    a goal, and what comes back is a transcript you still have to read,
+                    structure, and remember. Jarwiz points that same intelligence at an
+                    <b>infinite canvas</b> instead &mdash; you hand it a goal, and it
+                    researches, reasons, and lays the answer out as a board of cards you
+                    can rearrange and build on. It&rsquo;s built for the founders,
+                    product managers, and strategists doing real thinking work, is
+                    <b>open source</b>, and runs in the browser.
+                  </p>
+                </section>
+
+                <section class="case-section">
+                  <p class="case-section__label">The problem</p>
+                  <h4 class="case-h">People think spatially. Chat doesn&rsquo;t.</h4>
+                  <p class="case-p">
+                    We chunk ideas, spread them out, move them around, and discover
+                    correlations spatially &mdash; which is why whiteboards, sticky
+                    notes, and mood boards outlive every generation of productivity
+                    software. Chat-shaped AI ignores this. You get back a wall of text
+                    with no structure, no provenance, and no spatial memory, and the
+                    organising work &mdash; the actual thinking &mdash; is still yours to
+                    do. For the people this is built for, generation was never the hard
+                    part; making sense of what you already have is.
+                  </p>
+                  <blockquote class="case-quote">
+                    The chat box was the command line of AI. Jarwiz is the GUI moment.
+                  </blockquote>
+                </section>
+
+                <section class="case-section">
+                  <p class="case-section__label">The thesis</p>
+                  <h4 class="case-h">Presence is the product.</h4>
+                  <p class="case-p">
+                    The core bet is that the felt sense of a capable teammate on the
+                    board with you &mdash; moving, working, leaving artifacts &mdash; is
+                    the thing worth protecting above everything else. Its companion bet:
+                    <b>the board is the memory</b>. Every artifact is a card, every card
+                    remembers where it came from, and the graph of cards becomes the
+                    record of how you thought. The reframe that follows from both:
+                  </p>
+                  <blockquote class="case-quote">
+                    The unit of collaboration is not a message; it&rsquo;s a card on the
+                    canvas.
+                  </blockquote>
+                </section>
+
+                <section class="case-section">
+                  <p class="case-section__label">How it works</p>
+                  <h4 class="case-h">Agents work on the board, in view.</h4>
+                  <p class="case-p">
+                    Everything on the canvas &mdash; sticky notes, shapes, connectors,
+                    and Jarwiz&rsquo;s richer cards for links, docs, tables, diagrams,
+                    PDFs, and video &mdash; is selectable, connectable, askable, and
+                    becomes context for the AI. When an agent acts, you see it: a named
+                    cursor glides to where it&rsquo;s working, cards stream in word by
+                    word, and an honest status chip says what&rsquo;s happening
+                    (&ldquo;reading theverge.com&hellip;&rdquo;,
+                    &ldquo;drafting&hellip;&rdquo;) &mdash; never a fake progress bar.
+                  </p>
+                  <p class="case-p">
+                    Agents act in exactly two ways, so the canvas never feels
+                    unpredictable: <b>summoned</b> (select something and ask), or
+                    <b>offered</b> (when the next step is obvious, a dismissible
+                    &ldquo;Summarise this?&rdquo; chip raises its hand). The rule is
+                    consent over magic &mdash; proactive output never lands on the board
+                    without your tap.
+                  </p>
+                  <figure class="case-figure">
+                    <img
+                      src="/work/jarwiz-canvas.png"
+                      alt="A dense Jarwiz board with web research source cards, a feature matrix, a pricing table, a recommendation doc, research notes, a whiteboard photo, and a decision flowchart, connected by provenance arrows."
+                      loading="lazy"
+                      width="2400"
+                      height="1260"
+                    />
+                    <figcaption>
+                      One board, many artifact types &mdash; research sources, a
+                      comparison table, a recommendation, and a decision flow, each wired
+                      back to where it came from.
+                    </figcaption>
+                  </figure>
+                </section>
+
+                <section class="case-section">
+                  <p class="case-section__label">The engine</p>
+                  <h4 class="case-h">Thinking Machines run real frameworks.</h4>
+                  <p class="case-p">
+                    Point Jarwiz at a subject and it runs a genuine framework against the
+                    live web, then fans the result out as a board rather than a summary.
+                    The catalogue is the strategist&rsquo;s toolkit made one-tap:
+                  </p>
+                  <ul class="case-list">
+                    <li><b>SWOT</b> &mdash; a researched grid, with an optional TOWS strategy table and a strategic verdict.</li>
+                    <li><b>Effort&ndash;Impact</b> &mdash; ideas scored into quick wins, big bets, fill-ins, and time sinks.</li>
+                    <li><b>Competitive analysis, risk, pros &amp; cons</b> &mdash; web-researched comparisons against real players.</li>
+                    <li><b>5 Whys &amp; personas</b> &mdash; a problem traced to its root, or a researched persona with goals and frustrations.</li>
+                  </ul>
+                  <p class="case-p">
+                    Beyond the frameworks: cluster a pile of loose stickies into named
+                    themes; scan a board for tensions, blind spots, or a devil&rsquo;s
+                    advocate; and <b>Autopilot</b> &mdash; press Tab in a doc and an agent
+                    picks up your pen and keeps writing in place, or fills a table cell
+                    by cell while you watch.
+                  </p>
+                  <div class="case-grid">
+                    <figure class="case-figure">
+                      <img src="/work/jarwiz-dashboard.png" alt="A generated dashboard card with KPI tiles and regional revenue charts." loading="lazy" width="1638" height="1176" />
+                    </figure>
+                    <figure class="case-figure">
+                      <img src="/work/jarwiz-diagram.png" alt="A generated flowchart card of a new-signup flow." loading="lazy" width="1404" height="1422" />
+                    </figure>
+                    <figure class="case-figure case-figure--doc">
+                      <img src="/work/jarwiz-doc.png" alt="A research doc card summarising market size with a cited source." loading="lazy" width="1392" height="582" />
+                    </figure>
+                    <figure class="case-figure">
+                      <img src="/work/jarwiz-prototype.png" alt="An interactive mobile prototype card of a focus-timer app screen." loading="lazy" width="1008" height="1680" />
+                    </figure>
+                  </div>
+                </section>
+
+                <section class="case-section">
+                  <p class="case-section__label">Design decisions</p>
+                  <h4 class="case-h">Every call defended the thesis.</h4>
+                  <ul class="case-list">
+                    <li><b>Board, not chat.</b> I removed Jarwiz&rsquo;s own chat panel &mdash; shipping a chat box diluted the thesis into the canvas-plus-chat category every competitor occupies. One composer; every answer lands as an artifact with provenance.</li>
+                    <li><b>The agent&rsquo;s hands are canvas actions.</b> Each move is an event applied to the canvas store, so cursors and streaming presence fall out of the protocol for free rather than being a bolted-on effect.</li>
+                    <li><b>Consent over magic.</b> Proactive means offering, never doing &mdash; keep or discard on arrival, stop mid-stream, undo on any cascade.</li>
+                    <li><b>Provenance is the edge, not a button.</b> The drawn arrows between a card and its sources already are the lineage; a second UI for the same fact was redundant chrome, so it went.</li>
+                    <li><b>Demo mode is first-class.</b> The whole app works with no API key &mdash; a scripted mock drives the same events as the real agent loop, so every flow is always demoable.</li>
+                  </ul>
+                </section>
+
+                <section class="case-section">
+                  <p class="case-section__label">Design system</p>
+                  <h4 class="case-h">Editorial Warmth, tokenised end to end.</h4>
+                  <p class="case-p">
+                    One system, no raw values in components. A soft serif (Fraunces) is
+                    the &ldquo;thinking&rdquo; voice, paired with a humanist sans (Inter)
+                    for tooling, set on warm paper with ink that&rsquo;s never pure
+                    black. Every agent carries an identity hue &mdash; researcher blue,
+                    summariser amber, brainstormer pink, writer green &mdash; and motion
+                    is choreographed and honest: cursors glide, cards <i>arrive rather
+                    than pop</i>, and under reduced-motion every travel collapses to a
+                    quiet fade so presence stays legible.
+                  </p>
+                  <blockquote class="case-quote">
+                    Colour only ever means provenance &mdash; never decoration.
+                  </blockquote>
+                </section>
+
+                <section class="case-section">
+                  <p class="case-section__label">Architecture</p>
+                  <h4 class="case-h">Local-first, with the canvas as the agent&rsquo;s hands.</h4>
+                  <p class="case-p">
+                    A monorepo in three parts. The <b>canvas</b> (tldraw + React) holds
+                    the whole product and saves to the browser &mdash; no accounts, no
+                    cloud sync. A <b>thin agent server</b> holds the API keys and streams
+                    typed events; the client applies each event to the canvas, which is
+                    precisely why the canvas <i>is</i> the agent&rsquo;s hands. A
+                    <b>shared package</b> is the single source of truth for the wire
+                    protocol and every agent&rsquo;s identity colour, so components stay
+                    hue-agnostic and the system can&rsquo;t drift.
+                  </p>
+                </section>
+
+                <section class="case-section">
+                  <p class="case-section__label">Process</p>
+                  <h4 class="case-h">What I cut mattered more than what I added.</h4>
+                  <p class="case-p">
+                    Jarwiz was designed and built end to end by one designer, one feature
+                    at a time &mdash; one branch, one PR, one screenshot of the visible
+                    change. A five-persona study moved adoption from
+                    <b>5.9 to 7.5 out of 10</b> once the AI&rsquo;s output was good enough
+                    to judge, and told me the same thing five times: the thinking
+                    environment and the AI are genuinely good; the gap to daily use is
+                    <i>finishing</i> &mdash; export &mdash; not more features.
+                  </p>
+                  <p class="case-p">
+                    A later positioning audit was blunter. After a restyle quietly
+                    collapsed the visible agents into a single identity, the most
+                    prominent AI element had drifted back into being a chat panel. Naming
+                    that failure in writing is what reset the plan:
+                  </p>
+                  <blockquote class="case-quote">
+                    A canvas with an AI chat panel is exactly the category where
+                    differentiation goes to die.
+                  </blockquote>
+                </section>
+
+                <section class="case-section">
+                  <p class="case-section__label">Outcome</p>
+                  <h4 class="case-h">Open source, and honest about what&rsquo;s next.</h4>
+                  <p class="case-p">
+                    Jarwiz is MIT-licensed, runs entirely in the browser, and is
+                    demoable with no key. The golden path &mdash; research, summarise,
+                    brainstorm, write, all on one board &mdash; works end to end,
+                    validated by the persona study and a repeatable eval harness. The
+                    next step is the one the research surfaced first: a clean way out
+                    (export) before any more capability. Keeping that honest, in public,
+                    is part of the design.
+                  </p>
+                  <div class="case-cta">
+                    <a href="https://github.com/raagulmanoharan/Jarwiz-V3">View the repository &#8599;</a>
+                    <a href="https://raagulmanoharan.github.io/Jarwiz-V3/">Try the live demo &#8599;</a>
+                    <button class="case-collapse" type="button" data-case-close>Collapse case study <span aria-hidden="true">&#8593;</span></button>
+                  </div>
+                </section>
+              </article>
+            </div>
+          </div>
+        </div>
 
         <article class="work-item">
           <div class="work-main">
@@ -166,286 +442,6 @@
         </article>
       </section>
     </main>
-
-    <!-- Case study reader: expands when the Jarwiz thumbnail is clicked -->
-    <div
-      class="case-study"
-      id="case-jarwiz"
-      data-case
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="case-jarwiz-title"
-      aria-hidden="true"
-    >
-      <div class="case-topbar">
-        <span class="case-topbar__label">Case Study</span>
-        <button class="case-close" type="button" data-case-close aria-label="Close case study">
-          <span></span><span></span>
-        </button>
-      </div>
-
-      <article class="case-inner">
-        <header class="case-head">
-          <p class="case-eyebrow">Jarwiz &middot; Founder &amp; Designer &middot; 2025&ndash;26</p>
-          <h1 class="case-title" id="case-jarwiz-title">
-            An infinite canvas where AI is a collaborator, not a chatbot in a
-            sidebar.
-          </h1>
-          <p class="case-lede">
-            Hand it a goal and it researches the live web, runs real thinking
-            frameworks, and lays the answer out as a board of cards you can
-            move, refine, and connect.
-          </p>
-          <dl class="case-meta">
-            <div>
-              <dt>Role</dt>
-              <dd>Founder &mdash; product, UX &amp; design system, built end to end</dd>
-            </div>
-            <div>
-              <dt>Timeline</dt>
-              <dd>2025&ndash;26, ongoing</dd>
-            </div>
-            <div>
-              <dt>Stack</dt>
-              <dd>tldraw canvas, React, a thin agent server, Claude (Opus&nbsp;4.8)</dd>
-            </div>
-            <div>
-              <dt>Links</dt>
-              <dd>
-                <a href="https://github.com/raagulmanoharan/Jarwiz-V3">Repository</a>,
-                <a href="https://raagulmanoharan.github.io/Jarwiz-V3/">live&nbsp;demo</a>
-              </dd>
-            </div>
-          </dl>
-        </header>
-
-        <figure class="case-figure case-figure--hero">
-          <img
-            src="/work/jarwiz-hero.png"
-            alt="A complete Jarwiz board: a SWOT analysis laid out as four cards, a TOWS strategic-moves table, a strategic verdict, and the agent flagging a tension between two cards."
-            loading="lazy"
-            width="2800"
-            height="1800"
-          />
-          <figcaption>
-            A finished board &mdash; a researched SWOT, a TOWS strategy table, and a
-            strategic verdict, with the agent flagging a tension between two cards.
-          </figcaption>
-        </figure>
-
-        <section class="case-section">
-          <p class="case-section__label">Overview</p>
-          <h2 class="case-h">Get back a board, not a wall of text.</h2>
-          <p class="case-p">
-            Jarwiz starts from one frustration: today&rsquo;s AI tools trap the
-            most powerful thinking aid ever built inside a chat box. You describe
-            a goal, and what comes back is a transcript you still have to read,
-            structure, and remember. Jarwiz points that same intelligence at an
-            <b>infinite canvas</b> instead &mdash; you hand it a goal, and it
-            researches, reasons, and lays the answer out as a board of cards you
-            can rearrange and build on. It&rsquo;s built for the founders,
-            product managers, and strategists doing real thinking work, is
-            <b>open source</b>, and runs in the browser.
-          </p>
-        </section>
-
-        <section class="case-section">
-          <p class="case-section__label">The problem</p>
-          <h2 class="case-h">People think spatially. Chat doesn&rsquo;t.</h2>
-          <p class="case-p">
-            We chunk ideas, spread them out, move them around, and discover
-            correlations spatially &mdash; which is why whiteboards, sticky
-            notes, and mood boards outlive every generation of productivity
-            software. Chat-shaped AI ignores this. You get back a wall of text
-            with no structure, no provenance, and no spatial memory, and the
-            organising work &mdash; the actual thinking &mdash; is still yours to
-            do. For the people this is built for, generation was never the hard
-            part; making sense of what you already have is.
-          </p>
-          <blockquote class="case-quote">
-            The chat box was the command line of AI. Jarwiz is the GUI moment.
-          </blockquote>
-        </section>
-
-        <section class="case-section">
-          <p class="case-section__label">The thesis</p>
-          <h2 class="case-h">Presence is the product.</h2>
-          <p class="case-p">
-            The core bet is that the felt sense of a capable teammate on the
-            board with you &mdash; moving, working, leaving artifacts &mdash; is
-            the thing worth protecting above everything else. Its companion bet:
-            <b>the board is the memory</b>. Every artifact is a card, every card
-            remembers where it came from, and the graph of cards becomes the
-            record of how you thought. The reframe that follows from both:
-          </p>
-          <blockquote class="case-quote">
-            The unit of collaboration is not a message; it&rsquo;s a card on the
-            canvas.
-          </blockquote>
-        </section>
-
-        <section class="case-section">
-          <p class="case-section__label">How it works</p>
-          <h2 class="case-h">Agents work on the board, in view.</h2>
-          <p class="case-p">
-            Everything on the canvas &mdash; sticky notes, shapes, connectors,
-            and Jarwiz&rsquo;s richer cards for links, docs, tables, diagrams,
-            PDFs, and video &mdash; is selectable, connectable, askable, and
-            becomes context for the AI. When an agent acts, you see it: a named
-            cursor glides to where it&rsquo;s working, cards stream in word by
-            word, and an honest status chip says what&rsquo;s happening
-            (&ldquo;reading theverge.com&hellip;&rdquo;,
-            &ldquo;drafting&hellip;&rdquo;) &mdash; never a fake progress bar.
-          </p>
-          <p class="case-p">
-            Agents act in exactly two ways, so the canvas never feels
-            unpredictable: <b>summoned</b> (select something and ask), or
-            <b>offered</b> (when the next step is obvious, a dismissible
-            &ldquo;Summarise this?&rdquo; chip raises its hand). The rule is
-            consent over magic &mdash; proactive output never lands on the board
-            without your tap.
-          </p>
-          <figure class="case-figure">
-            <img
-              src="/work/jarwiz-canvas.png"
-              alt="A dense Jarwiz board with web research source cards, a feature matrix, a pricing table, a recommendation doc, research notes, a whiteboard photo, and a decision flowchart, connected by provenance arrows."
-              loading="lazy"
-              width="2400"
-              height="1260"
-            />
-            <figcaption>
-              One board, many artifact types &mdash; research sources, a
-              comparison table, a recommendation, and a decision flow, each wired
-              back to where it came from.
-            </figcaption>
-          </figure>
-        </section>
-
-        <section class="case-section">
-          <p class="case-section__label">The engine</p>
-          <h2 class="case-h">Thinking Machines run real frameworks.</h2>
-          <p class="case-p">
-            Point Jarwiz at a subject and it runs a genuine framework against the
-            live web, then fans the result out as a board rather than a summary.
-            The catalogue is the strategist&rsquo;s toolkit made one-tap:
-          </p>
-          <ul class="case-list">
-            <li><b>SWOT</b> &mdash; a researched grid, with an optional TOWS strategy table and a strategic verdict.</li>
-            <li><b>Effort&ndash;Impact</b> &mdash; ideas scored into quick wins, big bets, fill-ins, and time sinks.</li>
-            <li><b>Competitive analysis, risk, pros &amp; cons</b> &mdash; web-researched comparisons against real players.</li>
-            <li><b>5 Whys &amp; personas</b> &mdash; a problem traced to its root, or a researched persona with goals and frustrations.</li>
-          </ul>
-          <p class="case-p">
-            Beyond the frameworks: cluster a pile of loose stickies into named
-            themes; scan a board for tensions, blind spots, or a devil&rsquo;s
-            advocate; and <b>Autopilot</b> &mdash; press Tab in a doc and an agent
-            picks up your pen and keeps writing in place, or fills a table cell
-            by cell while you watch.
-          </p>
-          <div class="case-grid">
-            <figure class="case-figure">
-              <img src="/work/jarwiz-dashboard.png" alt="A generated dashboard card with KPI tiles and regional revenue charts." loading="lazy" width="1638" height="1176" />
-            </figure>
-            <figure class="case-figure">
-              <img src="/work/jarwiz-diagram.png" alt="A generated flowchart card of a new-signup flow." loading="lazy" width="1404" height="1422" />
-            </figure>
-            <figure class="case-figure case-figure--doc">
-              <img src="/work/jarwiz-doc.png" alt="A research doc card summarising market size with a cited source." loading="lazy" width="1392" height="582" />
-            </figure>
-            <figure class="case-figure">
-              <img src="/work/jarwiz-prototype.png" alt="An interactive mobile prototype card of a focus-timer app screen." loading="lazy" width="1008" height="1680" />
-            </figure>
-          </div>
-        </section>
-
-        <section class="case-section">
-          <p class="case-section__label">Design decisions</p>
-          <h2 class="case-h">Every call defended the thesis.</h2>
-          <ul class="case-list">
-            <li><b>Board, not chat.</b> I removed Jarwiz&rsquo;s own chat panel &mdash; shipping a chat box diluted the thesis into the canvas-plus-chat category every competitor occupies. One composer; every answer lands as an artifact with provenance.</li>
-            <li><b>The agent&rsquo;s hands are canvas actions.</b> Each move is an event applied to the canvas store, so cursors and streaming presence fall out of the protocol for free rather than being a bolted-on effect.</li>
-            <li><b>Consent over magic.</b> Proactive means offering, never doing &mdash; keep or discard on arrival, stop mid-stream, undo on any cascade.</li>
-            <li><b>Provenance is the edge, not a button.</b> The drawn arrows between a card and its sources already are the lineage; a second UI for the same fact was redundant chrome, so it went.</li>
-            <li><b>Demo mode is first-class.</b> The whole app works with no API key &mdash; a scripted mock drives the same events as the real agent loop, so every flow is always demoable.</li>
-          </ul>
-        </section>
-
-        <section class="case-section">
-          <p class="case-section__label">Design system</p>
-          <h2 class="case-h">Editorial Warmth, tokenised end to end.</h2>
-          <p class="case-p">
-            One system, no raw values in components. A soft serif (Fraunces) is
-            the &ldquo;thinking&rdquo; voice, paired with a humanist sans (Inter)
-            for tooling, set on warm paper with ink that&rsquo;s never pure
-            black. Every agent carries an identity hue &mdash; researcher blue,
-            summariser amber, brainstormer pink, writer green &mdash; and motion
-            is choreographed and honest: cursors glide, cards <i>arrive rather
-            than pop</i>, and under reduced-motion every travel collapses to a
-            quiet fade so presence stays legible.
-          </p>
-          <blockquote class="case-quote">
-            Colour only ever means provenance &mdash; never decoration.
-          </blockquote>
-        </section>
-
-        <section class="case-section">
-          <p class="case-section__label">Architecture</p>
-          <h2 class="case-h">Local-first, with the canvas as the agent&rsquo;s hands.</h2>
-          <p class="case-p">
-            A monorepo in three parts. The <b>canvas</b> (tldraw + React) holds
-            the whole product and saves to the browser &mdash; no accounts, no
-            cloud sync. A <b>thin agent server</b> holds the API keys and streams
-            typed events; the client applies each event to the canvas, which is
-            precisely why the canvas <i>is</i> the agent&rsquo;s hands. A
-            <b>shared package</b> is the single source of truth for the wire
-            protocol and every agent&rsquo;s identity colour, so components stay
-            hue-agnostic and the system can&rsquo;t drift.
-          </p>
-        </section>
-
-        <section class="case-section">
-          <p class="case-section__label">Process</p>
-          <h2 class="case-h">What I cut mattered more than what I added.</h2>
-          <p class="case-p">
-            Jarwiz was designed and built end to end by one designer, one feature
-            at a time &mdash; one branch, one PR, one screenshot of the visible
-            change. A five-persona study moved adoption from
-            <b>5.9 to 7.5 out of 10</b> once the AI&rsquo;s output was good enough
-            to judge, and told me the same thing five times: the thinking
-            environment and the AI are genuinely good; the gap to daily use is
-            <i>finishing</i> &mdash; export &mdash; not more features.
-          </p>
-          <p class="case-p">
-            A later positioning audit was blunter. After a restyle quietly
-            collapsed the visible agents into a single identity, the most
-            prominent AI element had drifted back into being a chat panel. Naming
-            that failure in writing is what reset the plan:
-          </p>
-          <blockquote class="case-quote">
-            A canvas with an AI chat panel is exactly the category where
-            differentiation goes to die.
-          </blockquote>
-        </section>
-
-        <section class="case-section">
-          <p class="case-section__label">Outcome</p>
-          <h2 class="case-h">Open source, and honest about what&rsquo;s next.</h2>
-          <p class="case-p">
-            Jarwiz is MIT-licensed, runs entirely in the browser, and is
-            demoable with no key. The golden path &mdash; research, summarise,
-            brainstorm, write, all on one board &mdash; works end to end,
-            validated by the persona study and a repeatable eval harness. The
-            next step is the one the research surfaced first: a clean way out
-            (export) before any more capability. Keeping that honest, in public,
-            is part of the design.
-          </p>
-          <div class="case-cta">
-            <a href="https://github.com/raagulmanoharan/Jarwiz-V3">View the repository &#8599;</a>
-            <a href="https://raagulmanoharan.github.io/Jarwiz-V3/">Try the live demo &#8599;</a>
-          </div>
-        </section>
-      </article>
-    </div>
 
     <script type="module" src="/src/main.js"></script>
   </body>
