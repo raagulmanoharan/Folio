@@ -118,14 +118,17 @@ main {
 }
 
 .hero {
-  min-height: calc(100vh - var(--header-h));
+  height: calc(100vh - var(--header-h));
   display: flex;
-  align-items: flex-start;
-  padding: clamp(48px, 12vh, 140px) var(--gutter) 0;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(32px, 6vh, 72px) clamp(16px, 2.5vw, 40px) 0;
+  gap: clamp(12px, 2vh, 28px);
+  overflow: hidden;
 }
 
 .hero-statement {
-  max-width: 24ch;
+  max-width: 22em;
   margin: 0 auto;
   text-align: center;
   font-weight: 400;
@@ -133,6 +136,52 @@ main {
   line-height: 1.12;
   letter-spacing: -0.2px;
   text-wrap: balance;
+}
+
+/* ---------- Hero 3D motif ---------- */
+.hero-motif {
+  position: relative;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 300px;
+}
+
+.hero-motif canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.motif-camera {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(16px, 3vh, 32px);
+  transform: translateX(-50%);
+  appearance: none;
+  background: none;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 8px 16px;
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.motif-camera:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.motif-camera:disabled {
+  opacity: 0.55;
+}
+
+.motif-camera.is-live {
+  border-color: #df0001;
+  color: #ffffff;
 }
 
 @media (prefers-reduced-motion: reduce) {
