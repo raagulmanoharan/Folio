@@ -312,6 +312,43 @@ main {
   background: var(--fg);
 }
 
+/* Featured work: a lead board banner + a row of card thumbnails, each
+   spanning the full work-item width */
+.work-shot {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--hairline);
+  background: #0f0f0f;
+}
+
+.work-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Lead banner: full width, shown at its natural (wide) aspect */
+.work-shot--lead {
+  grid-column: 1 / -1;
+  margin-top: clamp(28px, 4vh, 44px);
+}
+
+/* Card row: uniform thumbnails cropped to a common aspect so they align */
+.work-shots {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 1.4vw, 20px);
+  margin-top: clamp(12px, 1.4vw, 20px);
+}
+
+.work-shots .work-shot img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: top center;
+}
+
 @media (max-width: 720px) {
   .work-item {
     grid-template-columns: 1fr auto;
@@ -321,6 +358,9 @@ main {
   }
   .work-media {
     display: none;
+  }
+  .work-shots {
+    grid-template-columns: 1fr;
   }
 }
 
