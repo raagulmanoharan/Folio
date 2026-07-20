@@ -24,7 +24,7 @@ export function initMotif(canvas) {
 
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
-  camera.position.set(0, 0, 7.6)
+  camera.position.set(0, 0, 8.8)
 
   const pmrem = new THREE.PMREMGenerator(renderer)
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
@@ -108,43 +108,22 @@ export function initMotif(canvas) {
       const videoTexture = new THREE.VideoTexture(video)
       videoTexture.colorSpace = THREE.SRGBColorSpace
 
-      // Bright studio-gradient dome so the die reflects a lit environment
-      // (not black) — visible only to the CubeCamera.
-      const gc = document.createElement('canvas')
-      gc.width = 8
-      gc.height = 256
-      const gx = gc.getContext('2d')
-      const grd = gx.createLinearGradient(0, 0, 0, 256)
-      grd.addColorStop(0.0, '#ededed')
-      grd.addColorStop(0.5, '#8f8f8f')
-      grd.addColorStop(1.0, '#2a2a2a')
-      gx.fillStyle = grd
-      gx.fillRect(0, 0, 8, 256)
-      const gradTex = new THREE.CanvasTexture(gc)
-      gradTex.colorSpace = THREE.SRGBColorSpace
+      // The live feed wraps the whole environment (a video dome); only the
+      // CubeCamera sees it, so the die reflects it like a chrome object in a
+      // video-lit room. (Restored from PR #18 — the reflection that read well.)
       const dome = new THREE.Mesh(
-        new THREE.SphereGeometry(40, 32, 32),
-        new THREE.MeshBasicMaterial({ map: gradTex, side: THREE.BackSide }),
+        new THREE.SphereGeometry(20, 48, 48),
+        new THREE.MeshBasicMaterial({ map: videoTexture, side: THREE.BackSide }),
       )
       dome.layers.set(CAM_LAYER)
       scene.add(dome)
 
-      // Screen in front showing the mirrored feed — the visitor's face.
-      const screen = new THREE.Mesh(
-        new THREE.PlaneGeometry(26, 15),
-        new THREE.MeshBasicMaterial({ map: videoTexture, toneMapped: false }),
-      )
-      screen.position.set(0, 0, 12)
-      screen.rotation.y = Math.PI
-      screen.layers.set(CAM_LAYER)
-      scene.add(screen)
-
-      const cubeRT = new THREE.WebGLCubeRenderTarget(512, { type: THREE.HalfFloatType })
+      const cubeRT = new THREE.WebGLCubeRenderTarget(256, { type: THREE.HalfFloatType })
       cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT)
       cubeCamera.layers.set(CAM_LAYER)
 
       chrome.envMap = cubeRT.texture
-      chrome.envMapIntensity = 1.35
+      chrome.envMapIntensity = 1.4
       chrome.needsUpdate = true
     } catch {
       // denied or unavailable — studio reflections remain
