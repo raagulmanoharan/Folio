@@ -154,7 +154,7 @@ export function initMotif(canvas) {
   // to one (a tiny depth offset keeps them from z-fighting when closed, so the
   // front copy reads as a single clean ring). Solid chrome; the die is untouched.
   const RING_COPIES = 4
-  const RING_MAXANGLE = 0.22 // fan angle between adjacent copies at full spread
+  const RING_MAXANGLE = 0.34 // fan angle between adjacent copies — leaves a clear gap
   const ringSpread = new THREE.Group()
   const ringCopies = []
   for (let i = 0; i < RING_COPIES; i++) {
@@ -310,11 +310,14 @@ export function initMotif(canvas) {
     )
   }
 
-  // Spread amount 0..1: mostly 0 (merged), rising to spread at irregular
-  // intervals. Product of two incommensurate sines → occasional aligned lobes.
+  // Spread amount 0..1. Mostly 0 (closed). A slow, rare "gate" from two low
+  // incommensurate sines only occasionally allows an opening; within a gate the
+  // fan breathes open and closed with the ring's swing, then merges back — so it
+  // fans only now and then as the ring revolves, like it's caught by gravity.
   function spreadPulse(tt) {
-    const lobe = Math.sin(tt * 0.5) * Math.sin(tt * 0.33 + 2.0)
-    return Math.pow(Math.max(0, lobe), 1.4)
+    const gate = Math.pow(Math.max(0, Math.sin(tt * 0.16) * Math.sin(tt * 0.11 + 1.0)), 1.8)
+    const breathe = Math.max(0, Math.sin(tt * 0.7))
+    return gate * breathe
   }
 
   // Fan the ring copies open by `angle` around the shared diameter (local X),
