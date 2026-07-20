@@ -196,6 +196,11 @@ export function initMotif(canvas) {
   const T_RESUME = 1.5 // ease back into the auto swing
   const GLOBE_ANGLE = 0.42 // fan spread while it's a globe (8 copies → ~170° of longitudes)
   const DIE_SPINS = 4 // whole turns the die spins before it settles
+  // Idle "deck of cards" fan: rarely, the copies spread around the ring's
+  // diameter (like gravity briefly pulling them apart) then merge back.
+  const IDLE_FAN_ANGLE = 0.27 // per-copy spread when open — wide enough to read as distinct rings
+  const IDLE_WINDOW = 6.0 // seconds the ring stays "loose" and fans through each face-on pass
+  const idleFan = { start: -100, next: 6 } // first window ~6s in, then irregular gaps
 
   const seq = {
     mode: 'auto', // 'auto' | 'seq' | 'hold' | 'resume'
@@ -212,6 +217,7 @@ export function initMotif(canvas) {
   const _spinQ = new THREE.Quaternion()
   const _globeQ = new THREE.Quaternion()
   const _autoE = new THREE.Euler()
+  const _ringNormal = new THREE.Vector3()
   // smootherstep: zero velocity AND acceleration at both ends → no jitter
   const easeIO = (p) => {
     const t = Math.min(1, Math.max(0, p))
@@ -508,12 +514,31 @@ export function initMotif(canvas) {
       layoutRing(0)
       if (rp >= 1) seq.mode = 'auto'
     } else {
-      // ---- Auto swing: a single clean ring tumbling (no idle fan) ----
+      // ---- Auto swing: a single ring tumbling, with a rare eased fan ----
       die.rotation.x = t * 0.7
       die.rotation.y = t * 0.9
       die.rotation.z = t * 0.35
       ringPose(t, ringSpread.rotation)
-      layoutRing(0)
+      // Occasional "deck of cards" fan: for a few seconds the copies spread
+      // apart each time the ring swings through face-on ("horizontal"), then
+      // merge as it tilts edge-on — like gravity briefly pulling them open.
+      let fan = 0
+      const since = t - idleFan.start
+      if (since < IDLE_WINDOW) {
+        // plateau envelope: ramp the effect in/out over ~1.2s, full in between
+        const env = smooth(0, 1.2, since) * smooth(0, 1.2, IDLE_WINDOW - since)
+        // spread scales with how much of the ring the camera can see: fully
+        // open when it faces us or lies flat (deck reads clearly), merged to a
+        // single ring only when it's a thin vertical sliver (spread would mush)
+        _ringNormal.set(0, 0, 1).applyQuaternion(ringSpread.quaternion)
+        const open = smooth(0.35, 0.85, Math.hypot(_ringNormal.y, _ringNormal.z))
+        fan = IDLE_FAN_ANGLE * env * open
+      } else if (t >= idleFan.next) {
+        idleFan.start = t
+        // irregular gap (~12–20s) so it feels unpredictable, not metronomic
+        idleFan.next = t + IDLE_WINDOW + 12 + (Math.sin(t * 2.3) * 0.5 + 0.5) * 8
+      }
+      layoutRing(fan)
     }
 
     // ease the studio environment toward the device tilt so the reflection reacts
