@@ -192,19 +192,26 @@ export function initMotif(canvas) {
   const T_FAN = 0.9 // ring fans open + spins one full turn (globe)
   const T_MERGE = 0.5 // globe merges back to a single ring
   const T_DIE = 1.9 // die spins the whole time, halting after the globe merges
+  const T_HOLD = 1.1 // hold on the number after it stops
+  const T_RESUME = 1.5 // ease back into the auto swing
   const GLOBE_ANGLE = 0.42 // fan spread while it's a globe (8 copies → ~170° of longitudes)
-  const DIE_SPINS = 5 // whole turns the die spins before it settles
+  const DIE_SPINS = 4 // whole turns the die spins before it settles
 
   const seq = {
-    mode: 'auto', // 'auto' | 'seq' | 'locked'
+    mode: 'auto', // 'auto' | 'seq' | 'hold' | 'resume'
     start: 0,
+    holdStart: 0,
+    resumeStart: 0,
     ringFrom: new THREE.Quaternion(),
     dieFrom: new THREE.Quaternion(),
     dieTarget: new THREE.Quaternion(),
     dieAxis: new THREE.Vector3(),
+    ringResume: new THREE.Quaternion(),
+    dieResume: new THREE.Quaternion(),
   }
   const _spinQ = new THREE.Quaternion()
   const _globeQ = new THREE.Quaternion()
+  const _autoE = new THREE.Euler()
   // smootherstep: zero velocity AND acceleration at both ends → no jitter
   const easeIO = (p) => {
     const t = Math.min(1, Math.max(0, p))
@@ -224,6 +231,13 @@ export function initMotif(canvas) {
     seq.mode = 'seq'
   }
 
+  function startResume(now) {
+    seq.ringResume.copy(ringSpread.quaternion)
+    seq.dieResume.copy(die.quaternion)
+    seq.resumeStart = now
+    seq.mode = 'resume'
+  }
+
   const raycaster = new THREE.Raycaster()
   const ndc = new THREE.Vector2()
   if (!reduced) {
@@ -235,8 +249,8 @@ export function initMotif(canvas) {
       raycaster.setFromCamera(ndc, camera)
       if (raycaster.intersectObject(dieBrush, false).length) {
         startSequence(clock.getElapsedTime()) // hit the die → run the sequence
-      } else {
-        seq.mode = 'auto' // clicked outside → resume auto swing
+      } else if (seq.mode !== 'auto' && seq.mode !== 'resume') {
+        startResume(clock.getElapsedTime()) // clicked outside → ease back to auto
       }
     })
   }
@@ -475,13 +489,24 @@ export function initMotif(canvas) {
       die.quaternion.multiply(_spinQ)
       if (tau >= T_DIE) {
         die.quaternion.copy(seq.dieTarget)
-        seq.mode = 'locked'
+        seq.mode = 'hold'
+        seq.holdStart = t
       }
-    } else if (seq.mode === 'locked') {
-      // hold the result: die on its face, ring a single vertical-pinch ring
+    } else if (seq.mode === 'hold') {
+      // hold the number briefly, then start easing back to the auto swing
       ringSpread.quaternion.copy(Q_GLOBE)
       layoutRing(0)
       die.quaternion.copy(seq.dieTarget)
+      if (t - seq.holdStart >= T_HOLD) startResume(t)
+    } else if (seq.mode === 'resume') {
+      // blend from the held pose back into the (moving) auto pose, eased
+      const rp = easeIO((t - seq.resumeStart) / T_RESUME)
+      _autoE.set(t * 0.7, t * 0.9, t * 0.35)
+      die.quaternion.copy(seq.dieResume).slerp(_globeQ.setFromEuler(_autoE), rp)
+      ringPose(t, _autoE)
+      ringSpread.quaternion.copy(seq.ringResume).slerp(_globeQ.setFromEuler(_autoE), rp)
+      layoutRing(0)
+      if (rp >= 1) seq.mode = 'auto'
     } else {
       // ---- Auto swing: a single clean ring tumbling (no idle fan) ----
       die.rotation.x = t * 0.7
