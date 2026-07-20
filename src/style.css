@@ -73,6 +73,7 @@ body {
 }
 
 .header-link {
+  font-family: var(--font);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.1px;
@@ -80,6 +81,13 @@ body {
   text-decoration: none;
   color: var(--fg);
   transition: opacity 0.2s ease;
+  /* button reset (right link is a <button>) */
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  line-height: normal;
 }
 
 .header-link:hover {
@@ -141,6 +149,185 @@ main {
     font-size: 11px;
   }
   .hero-statement {
+    max-width: none;
+  }
+}
+
+/* ---------- Custom cursor ---------- */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  /* translate is driven per-frame via a CSS var; scale handles hover growth */
+  transform: translate(var(--cx, -50px), var(--cy, -50px)) translate(-50%, -50%) scale(var(--cs, 1));
+  transition: opacity 0.25s ease;
+  will-change: transform;
+}
+
+.cursor.is-visible {
+  opacity: 1;
+}
+
+/* Over text/links: invert against the content and grow. */
+.cursor.is-invert {
+  mix-blend-mode: difference;
+  --cs: 2.6;
+}
+
+/* Only take over the pointer on devices that actually have one. */
+@media (pointer: fine) {
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    display: none;
+  }
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: auto;
+  }
+}
+
+/* ---------- Side drawer ---------- */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: #000000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer-backdrop.is-open {
+  opacity: 0.55;
+  pointer-events: auto;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 50vw;
+  max-width: 720px;
+  z-index: 200;
+  background: #df0001; /* reference overlay red */
+  color: #ffffff;
+  transform: translateX(100%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px 24px; /* reference: 20px top/left, ~30px right text gap */
+  overflow-y: auto;
+}
+
+.drawer.is-open {
+  transform: translateX(0);
+}
+
+.drawer-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.drawer-close span {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: #ffffff;
+}
+
+.drawer-close span:first-child {
+  transform: rotate(45deg);
+}
+
+.drawer-close span:last-child {
+  transform: rotate(-45deg);
+}
+
+.drawer-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3em;
+}
+
+.drawer-intro p {
+  margin: 0;
+  font-size: 27px; /* reference intro size */
+  line-height: 1.16;
+  letter-spacing: -0.2px;
+}
+
+.drawer-list {
+  margin-top: auto;
+  padding-top: 48px;
+}
+
+.drawer-list h2 {
+  margin: 0 0 18px;
+  font-size: 27px; /* reference section heading size */
+  font-weight: 500;
+  letter-spacing: -0.2px;
+}
+
+.drawer-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.drawer-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  font-size: 18px; /* reference list item size */
+}
+
+.drawer-list li:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.drawer-list a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.drawer-list a:hover {
+  opacity: 0.65;
+}
+
+.drawer-list span {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+@media (max-width: 720px) {
+  .drawer {
+    width: 100vw;
     max-width: none;
   }
 }
