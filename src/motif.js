@@ -14,18 +14,17 @@ export function initMotif(canvas) {
 
   let renderer
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
   } catch {
     return
   }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-  renderer.setClearColor(0x161616, 1) // matches the page ground
+  renderer.setClearColor(0x000000, 0) // transparent — page background shows through
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.05
   renderer.outputColorSpace = THREE.SRGBColorSpace
 
-  const scene = new THREE.Scene()
-  scene.background = new THREE.Color(0x161616) // keep the ground dark under bloom
+  const scene = new THREE.Scene() // transparent — the page ground shows through
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
   camera.position.set(0, 0, 8.5)
 
@@ -96,8 +95,8 @@ export function initMotif(canvas) {
   })
   const composer = new EffectComposer(renderer, rt)
   composer.addPass(new RenderPass(scene, camera))
-  // Subtle Y2K glow: only the hottest highlights (>1) bloom.
-  const bloom = new UnrealBloomPass(sizeV.clone(), 0.45, 0.35, 1.0)
+  // Subtle Y2K glow: only the hottest highlights (>1) bloom, kept very low.
+  const bloom = new UnrealBloomPass(sizeV.clone(), 0.09, 0.35, 1.0)
   composer.addPass(bloom)
   composer.addPass(new OutputPass()) // applies tone mapping + sRGB correctly
 
