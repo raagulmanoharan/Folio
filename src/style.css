@@ -22,8 +22,8 @@
   --fg: #ededed;         /* header links */
   --fg-center: #e5e5e5;  /* center wordmark */
   --hairline: rgba(255, 255, 255, 0.12);
-  --header-h: 52px;
-  --gutter: clamp(20px, 4vw, 48px);
+  --header-h: 43px;  /* matches reference: 22px row + 10px top/bottom padding */
+  --gutter: 20px;    /* reference edge padding at all widths */
   --font: 'Neue Montreal', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
@@ -62,16 +62,6 @@ body {
 
 .site-header.is-hidden {
   transform: translateY(-100%);
-}
-
-.header-mark {
-  position: absolute;
-  left: var(--gutter);
-  top: 10px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--fg);
 }
 
 .header-inner {
