@@ -21,9 +21,11 @@
   --bg: #161616;         /* content ground — matches reference (not pure black) */
   --fg: #ededed;         /* header links */
   --fg-center: #e5e5e5;  /* center wordmark */
+  --fg-dim: #8a8a8a;     /* secondary text */
   --hairline: rgba(255, 255, 255, 0.12);
   --header-h: 43px;  /* matches reference: 22px row + 10px top/bottom padding */
   --gutter: 20px;    /* reference edge padding at all widths */
+  --peek: clamp(52px, 8vh, 84px); /* how much of Selected Work peeks above the fold */
   --font: 'Neue Montreal', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
@@ -118,12 +120,13 @@ main {
 }
 
 .hero {
-  height: calc(100vh - var(--header-h));
+  /* leave room so the Selected Work header peeks above the fold */
+  height: calc(100svh - var(--header-h) - var(--peek));
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: clamp(32px, 6vh, 72px) clamp(16px, 2.5vw, 40px) 0;
-  gap: clamp(12px, 2vh, 28px);
+  padding: clamp(28px, 5vh, 60px) clamp(16px, 2.5vw, 40px) 0;
+  gap: clamp(12px, 2vh, 24px);
   overflow: hidden;
 }
 
@@ -168,6 +171,56 @@ main {
   .hero-statement {
     max-width: none;
   }
+}
+
+/* ---------- Selected Work ---------- */
+.work {
+  border-top: 1px solid var(--hairline);
+}
+
+.work-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(16px, 2.4vh, 26px) var(--gutter);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.work-arrow {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.work-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.work-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(16px, 2.2vh, 26px) var(--gutter);
+  border-top: 1px solid var(--hairline);
+}
+
+.work-title {
+  font-size: clamp(1.3rem, 2.4vw, 2rem);
+  letter-spacing: -0.2px;
+}
+
+.work-meta {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1px;
+  color: var(--fg-dim);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 /* ---------- Custom cursor ---------- */
