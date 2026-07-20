@@ -152,38 +152,6 @@ main {
   height: 100%;
 }
 
-.motif-camera {
-  position: absolute;
-  left: 50%;
-  bottom: clamp(16px, 3vh, 32px);
-  transform: translateX(-50%);
-  appearance: none;
-  background: none;
-  border: 1px solid var(--hairline);
-  border-radius: 999px;
-  padding: 8px 16px;
-  color: var(--fg);
-  font-family: var(--font);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.1px;
-  text-transform: uppercase;
-  transition: opacity 0.2s ease, border-color 0.2s ease;
-}
-
-.motif-camera:hover {
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.motif-camera:disabled {
-  opacity: 0.55;
-}
-
-.motif-camera.is-live {
-  border-color: #df0001;
-  color: #ffffff;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .site-header {
     transition: none;
