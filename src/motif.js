@@ -61,24 +61,27 @@ export function initMotif(canvas) {
     ['x', 1, 2], ['x', -1, 5],
     ['y', 1, 3], ['y', -1, 4],
   ]
-  // The pips are the same chrome as the body — just geometry. The cutter sphere
-  // sits mostly OUTSIDE the face so only a shallow spherical cap is removed,
-  // leaving small circular dents (not deep hemispheres that shade like moons).
+  // Pips are the same chrome as the body — just geometry. A cylinder cutter
+  // (not a sphere) makes flat-bottomed circular punches, so each pip reads as a
+  // clean flat dent rather than a spherical bowl that catches a busy reflection.
   const evaluator = new Evaluator()
   evaluator.useGroups = false
   let dieBrush = new Brush(new RoundedBoxGeometry(DIE, DIE, DIE, 6, 0.18))
   dieBrush.material = chrome
   dieBrush.updateMatrixWorld()
-  const PIP_R = 0.15 // cutter radius
-  const CAP = 0.1 // how far the cutter sits beyond the face → shallow dent
-  const holeGeo = new THREE.SphereGeometry(PIP_R, 28, 28)
+  const PIP_R = 0.12 // dent radius
+  const DEP = 0.05 // dent depth (shallow)
+  const OVER = 0.12 // cutter overshoot above the face for a clean cut
+  const HC = DEP + OVER
+  const CTR = (OVER - DEP) / 2 // cutter centre offset beyond the face
+  const holeGeo = new THREE.CylinderGeometry(PIP_R, PIP_R, HC, 40)
   for (const [axis, sign, count] of FACES) {
     for (const [u, v] of LAYOUTS[count]) {
       const hole = new Brush(holeGeo)
-      const d = sign * (H + CAP)
-      if (axis === 'z') hole.position.set(u, v, d)
-      else if (axis === 'x') hole.position.set(d, u, v)
-      else hole.position.set(u, d, v)
+      const c = sign * (H + CTR)
+      if (axis === 'z') { hole.rotation.x = Math.PI / 2; hole.position.set(u, v, c) }
+      else if (axis === 'x') { hole.rotation.z = Math.PI / 2; hole.position.set(c, u, v) }
+      else hole.position.set(u, c, v)
       hole.updateMatrixWorld()
       dieBrush = evaluator.evaluate(dieBrush, hole, SUBTRACTION)
     }
@@ -87,11 +90,18 @@ export function initMotif(canvas) {
   dieBrush.geometry.computeVertexNormals()
   const die = new THREE.Group()
   die.add(dieBrush)
-  scene.add(die)
 
   // ---- Ring: a single chrome ring around the die, tumbling in all directions ----
   const ring = new THREE.Mesh(new THREE.TorusGeometry(1.9, 0.08, 24, 220), chrome)
-  scene.add(ring)
+
+  // Group both and nudge down: the balanced spot is the middle of the gap
+  // between the hero text (top) and the footer (bottom), which sits below the
+  // geometric centre — otherwise there's too much empty space at the bottom.
+  const motif = new THREE.Group()
+  motif.add(die)
+  motif.add(ring)
+  motif.position.y = -0.45
+  scene.add(motif)
 
   // ---- Bloom (Y2K glow + flare), kept fully transparent ----
   // Selective-bloom setup: one composer renders the scene and extracts the
