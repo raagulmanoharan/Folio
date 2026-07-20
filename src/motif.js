@@ -1,8 +1,10 @@
 import * as THREE from 'three'
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 
-// A spinning chrome object. By default it reflects a studio environment;
-// if the visitor grants camera access it reflects their live webcam feed.
+// A spinning chrome object. By default it reflects a studio environment.
+// If the visitor grants camera access, the live webcam feed becomes the
+// object's surrounding environment (rendered to a live cubemap), so the
+// chrome reflects it like a real reflective probe.
 export function initMotif(canvas, cameraButton) {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -21,10 +23,9 @@ export function initMotif(canvas, cameraButton) {
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
   camera.position.set(0, 0, 8.5)
 
-  // Studio IBL — the default reflections, and the fallback if no webcam.
+  // Studio IBL — the default reflections and the fallback if no webcam.
   const pmrem = new THREE.PMREMGenerator(renderer)
-  const studioEnv = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
-  scene.environment = studioEnv
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
 
   const chrome = new THREE.MeshStandardMaterial({
     color: 0xffffff,
@@ -37,14 +38,13 @@ export function initMotif(canvas, cameraButton) {
     new THREE.TorusKnotGeometry(0.82, 0.26, 260, 40, 2, 3),
     chrome,
   )
-  scene.add(knot)
+  scene.add(knot) // stays on layer 0
 
-  // Two rim lights give the chrome sharp specular highlights independent of
-  // the environment — so it never reads as flat/dark, even on a dim webcam.
-  const keyLight = new THREE.DirectionalLight(0xffffff, 2.5)
+  // Rim lights keep sharp speculars on the chrome regardless of environment.
+  const keyLight = new THREE.DirectionalLight(0xffffff, 2.2)
   keyLight.position.set(3, 4, 5)
   scene.add(keyLight)
-  const fillLight = new THREE.DirectionalLight(0xffffff, 1.4)
+  const fillLight = new THREE.DirectionalLight(0xffffff, 1.2)
   fillLight.position.set(-4, -2, 2)
   scene.add(fillLight)
 
@@ -59,9 +59,14 @@ export function initMotif(canvas, cameraButton) {
   resize()
   window.addEventListener('resize', resize)
 
-  // ---- Live webcam reflection (opt-in) ----
-  let videoTexture = null
+  // ---- Live webcam environment (opt-in) ----
+  // The video is drawn on an inward-facing dome placed on layer 1, which the
+  // main camera never renders. A CubeCamera (also layer 1) captures that dome
+  // into a live cubemap each frame; the chrome uses it as its environment.
+  const CAM_LAYER = 1
+  let cubeCamera = null
   const hasCamera = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+
   if (cameraButton && hasCamera) {
     cameraButton.addEventListener('click', async () => {
       cameraButton.disabled = true
@@ -77,15 +82,24 @@ export function initMotif(canvas, cameraButton) {
         video.srcObject = stream
         await video.play()
 
-        videoTexture = new THREE.VideoTexture(video)
+        const videoTexture = new THREE.VideoTexture(video)
         videoTexture.colorSpace = THREE.SRGBColorSpace
-        videoTexture.mapping = THREE.EquirectangularReflectionMapping
-        chrome.envMap = videoTexture
-        // Webcam feeds are LDR and dim once tone-mapped, so lift the
-        // reflection: stronger env intensity + a brighter exposure.
-        chrome.envMapIntensity = 3.2
+
+        // Inward dome showing the live feed — visible only to the CubeCamera.
+        const dome = new THREE.Mesh(
+          new THREE.SphereGeometry(20, 48, 48),
+          new THREE.MeshBasicMaterial({ map: videoTexture, side: THREE.BackSide }),
+        )
+        dome.layers.set(CAM_LAYER)
+        scene.add(dome)
+
+        const cubeRT = new THREE.WebGLCubeRenderTarget(256, { type: THREE.HalfFloatType })
+        cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT)
+        cubeCamera.layers.set(CAM_LAYER)
+
+        chrome.envMap = cubeRT.texture
+        chrome.envMapIntensity = 1.35
         chrome.needsUpdate = true
-        renderer.toneMappingExposure = 1.5
 
         cameraButton.textContent = 'Reflection: live'
         cameraButton.classList.add('is-live')
@@ -98,12 +112,18 @@ export function initMotif(canvas, cameraButton) {
     cameraButton.hidden = true
   }
 
+  function renderFrame() {
+    if (cubeCamera) cubeCamera.update(renderer, scene)
+    renderer.render(scene, camera)
+  }
+
   if (reduced) {
     knot.rotation.set(0.4, 0.6, 0)
-    const renderStatic = () => renderer.render(scene, camera)
-    renderStatic()
-    // keep webcam reflection updating if enabled, but no spin
-    if (videoTexture) requestAnimationFrame(function loop() { renderStatic(); requestAnimationFrame(loop) })
+    // Still refresh so a live reflection updates, but no spin.
+    ;(function loop() {
+      requestAnimationFrame(loop)
+      renderFrame()
+    })()
     return
   }
 
@@ -117,7 +137,7 @@ export function initMotif(canvas, cameraButton) {
     const t = clock.getElapsedTime()
     knot.rotation.y = t * 0.45
     knot.rotation.x = Math.sin(t * 0.3) * 0.2
-    renderer.render(scene, camera)
+    renderFrame()
   }
   tick()
 }
