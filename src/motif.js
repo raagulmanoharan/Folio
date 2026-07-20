@@ -145,14 +145,31 @@ export function initMotif(canvas) {
 
   // ---- Ring: a single chrome ring around the die, tumbling in all directions ----
   // Bigger than the die so it sweeps up into the hero text as it turns.
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(2.28, 0.08, 24, 240), chrome)
+  const ringGeo = new THREE.TorusGeometry(2.28, 0.08, 24, 240)
+  const ring = new THREE.Mesh(ringGeo, chrome)
 
-  // Group both and nudge down: the balanced spot is the middle of the gap
+  // Ghost rings: faded copies of the ring at its recent poses, so it leaves
+  // trailing echoes (looks like several rings) as it moves. Only the ring
+  // trails — the die stays clean.
+  const GHOSTS = 7
+  const GHOST_LAG = 0.05 // seconds between echoes
+  const ghosts = []
+  for (let i = 0; i < GHOSTS; i++) {
+    const gm = chrome.clone()
+    gm.transparent = true
+    gm.depthWrite = false
+    gm.opacity = 0.26 * (1 - i / GHOSTS) // nearer echoes brighter
+    const g = new THREE.Mesh(ringGeo, gm)
+    ghosts.push({ mesh: g, mat: gm })
+  }
+
+  // Group all and nudge down: the balanced spot is the middle of the gap
   // between the hero text (top) and the footer (bottom), which sits below the
   // geometric centre — otherwise there's too much empty space at the bottom.
   const motif = new THREE.Group()
   motif.add(die)
   motif.add(ring)
+  for (const { mesh } of ghosts) motif.add(mesh)
   motif.position.y = -0.45
   scene.add(motif)
 
@@ -271,9 +288,11 @@ export function initMotif(canvas) {
       cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT)
       cubeCamera.layers.set(CAM_LAYER)
 
-      chrome.envMap = cubeRT.texture
-      chrome.envMapIntensity = 1.05
-      chrome.needsUpdate = true
+      for (const m of [chrome, ...ghosts.map((g) => g.mat)]) {
+        m.envMap = cubeRT.texture
+        m.envMapIntensity = 1.05
+        m.needsUpdate = true
+      }
     } catch {
       // denied or unavailable — studio reflections remain
     }
@@ -286,9 +305,19 @@ export function initMotif(canvas) {
     finalComposer.render()
   }
 
+  // The ring's pose as a function of time, so ghosts can sample past poses.
+  function ringPose(tt, e) {
+    e.set(
+      tt * -0.5 + Math.sin(tt * 0.83) * 0.4,
+      tt * -0.4 + Math.sin(tt * 0.67) * 0.4,
+      tt * -0.6 + Math.sin(tt * 1.09) * 0.3,
+    )
+  }
+
   if (reduced) {
     die.rotation.set(0.5, 0.7, 0.1)
     ring.rotation.set(0.6, 0.3, 0.2)
+    for (const { mesh } of ghosts) mesh.visible = false // no trails when still
     renderFrame()
     if (navigator.mediaDevices) {
       ;(function loop() {
@@ -314,9 +343,11 @@ export function initMotif(canvas) {
     // The ring tumbles in all directions — a steady spin on every axis
     // (opposite the die) plus a wobble at incommensurate frequencies so the
     // motion drifts unpredictably instead of looping.
-    ring.rotation.x = t * -0.5 + Math.sin(t * 0.83) * 0.4
-    ring.rotation.y = t * -0.4 + Math.sin(t * 0.67) * 0.4
-    ring.rotation.z = t * -0.6 + Math.sin(t * 1.09) * 0.3
+    ringPose(t, ring.rotation)
+    // Ghost rings sample the ring's recent poses → trailing echoes.
+    for (let i = 0; i < ghosts.length; i++) {
+      ringPose(t - (i + 1) * GHOST_LAG, ghosts[i].mesh.rotation)
+    }
     renderFrame()
   }
   tick()
