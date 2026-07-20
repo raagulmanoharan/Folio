@@ -193,6 +193,11 @@ export function initMotif(canvas) {
 
       const videoTexture = new THREE.VideoTexture(video)
       videoTexture.colorSpace = THREE.SRGBColorSpace
+      // Tile the feed across the dome so the mirror reflects many smaller
+      // copies instead of one magnified patch — reflections read as a busy
+      // environment rather than a super-zoomed close-up of the face.
+      videoTexture.wrapS = videoTexture.wrapT = THREE.RepeatWrapping
+      videoTexture.repeat.set(4, 3)
 
       // The live feed wraps the whole environment (a video dome); only the
       // CubeCamera sees it, so the die reflects it like a chrome object in a
@@ -250,13 +255,18 @@ export function initMotif(canvas) {
     die.rotation.x = t * 0.7
     die.rotation.y = t * 0.9
     die.rotation.z = t * 0.35
-    // the ring cage turns as a whole in the OPPOSITE direction to the die,
-    // while each ring also spins on its own gimbal axis (gyroscope motion)
-    ringGroup.rotation.y = t * -0.35
-    ringGroup.rotation.x = Math.sin(t * 0.25) * 0.3
-    rings[0].mesh.rotation.x = t * 0.5
-    rings[1].mesh.rotation.y = t * 0.6
-    rings[2].mesh.rotation.z = t * 0.7
+    // Ring cage turns opposite the die; each ring gets a steady spin PLUS a
+    // wobble on a second axis, all at incommensurate frequencies so the whole
+    // gyroscope drifts and tumbles unpredictably instead of looping.
+    ringGroup.rotation.y = t * -0.3 + Math.sin(t * 0.29) * 0.4
+    ringGroup.rotation.x = Math.sin(t * 0.23) * 0.4
+    ringGroup.rotation.z = Math.sin(t * 0.17) * 0.3
+    rings[0].mesh.rotation.x = t * 0.5 + Math.sin(t * 0.91) * 0.5
+    rings[0].mesh.rotation.y = Math.sin(t * 0.37) * 0.6
+    rings[1].mesh.rotation.y = t * 0.6 + Math.sin(t * 0.73) * 0.5
+    rings[1].mesh.rotation.z = Math.sin(t * 0.53) * 0.5
+    rings[2].mesh.rotation.z = t * 0.7 + Math.sin(t * 1.13) * 0.4
+    rings[2].mesh.rotation.x = Math.sin(t * 0.41) * 0.6
     renderFrame()
   }
   tick()
