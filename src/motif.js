@@ -146,21 +146,19 @@ export function initMotif(canvas) {
   // ---- Ring: a single chrome ring around the die, tumbling in all directions ----
   // Bigger than the die so it sweeps up into the hero text as it turns.
   const ringGeo = new THREE.TorusGeometry(2.28, 0.08, 24, 240)
-  const ring = new THREE.Mesh(ringGeo, chrome)
 
-  // Ghost rings: faded copies of the ring at its recent poses, so it leaves
-  // trailing echoes (looks like several rings) as it moves. Only the ring
-  // trails — the die stays clean.
-  const GHOSTS = 7
-  const GHOST_LAG = 0.05 // seconds between echoes
-  const ghosts = []
-  for (let i = 0; i < GHOSTS; i++) {
-    const gm = chrome.clone()
-    gm.transparent = true
-    gm.depthWrite = false
-    gm.opacity = 0.26 * (1 - i / GHOSTS) // nearer echoes brighter
-    const g = new THREE.Mesh(ringGeo, gm)
-    ghosts.push({ mesh: g, mat: gm })
+  // A small stack of identical rings that share the ring's pose, offset along
+  // the ring's own axis. A gentle pulse spreads them into a few clearly-spaced
+  // rings (most visible when the ring is edge-on, so it "spreads up") then
+  // merges them back into one — they stack in depth, so when merged the front
+  // one reads as a single clean ring. All solid chrome; the die is untouched.
+  const RING_COPIES = 4
+  const RING_MAXGAP = 0.6 // spacing at full spread — wide enough to read apart
+  const ringSpread = new THREE.Group()
+  const ringCopies = []
+  for (let i = 0; i < RING_COPIES; i++) {
+    ringCopies.push(new THREE.Mesh(ringGeo, chrome))
+    ringSpread.add(ringCopies[i])
   }
 
   // Group all and nudge down: the balanced spot is the middle of the gap
@@ -168,8 +166,7 @@ export function initMotif(canvas) {
   // geometric centre — otherwise there's too much empty space at the bottom.
   const motif = new THREE.Group()
   motif.add(die)
-  motif.add(ring)
-  for (const { mesh } of ghosts) motif.add(mesh)
+  motif.add(ringSpread)
   motif.position.y = -0.45
   scene.add(motif)
 
@@ -288,11 +285,9 @@ export function initMotif(canvas) {
       cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT)
       cubeCamera.layers.set(CAM_LAYER)
 
-      for (const m of [chrome, ...ghosts.map((g) => g.mat)]) {
-        m.envMap = cubeRT.texture
-        m.envMapIntensity = 1.05
-        m.needsUpdate = true
-      }
+      chrome.envMap = cubeRT.texture
+      chrome.envMapIntensity = 1.05
+      chrome.needsUpdate = true
     } catch {
       // denied or unavailable — studio reflections remain
     }
@@ -305,7 +300,7 @@ export function initMotif(canvas) {
     finalComposer.render()
   }
 
-  // The ring's pose as a function of time, so ghosts can sample past poses.
+  // The ring's tumble pose as a function of time.
   function ringPose(tt, e) {
     e.set(
       tt * -0.5 + Math.sin(tt * 0.83) * 0.4,
@@ -314,10 +309,24 @@ export function initMotif(canvas) {
     )
   }
 
+  // Spread amount 0..1: mostly 0 (merged), rising to spread at irregular
+  // intervals. Product of two incommensurate sines → occasional aligned lobes.
+  function spreadPulse(tt) {
+    const lobe = Math.sin(tt * 0.5) * Math.sin(tt * 0.33 + 2.0)
+    return Math.pow(Math.max(0, lobe), 1.4)
+  }
+
+  // Position the ring copies along the ring's local axis for a given spread.
+  function layoutRing(gap) {
+    for (let i = 0; i < RING_COPIES; i++) {
+      ringCopies[i].position.z = (i - (RING_COPIES - 1) / 2) * gap
+    }
+  }
+
   if (reduced) {
     die.rotation.set(0.5, 0.7, 0.1)
-    ring.rotation.set(0.6, 0.3, 0.2)
-    for (const { mesh } of ghosts) mesh.visible = false // no trails when still
+    ringSpread.rotation.set(0.6, 0.3, 0.2)
+    layoutRing(0.004) // merged into one when still
     renderFrame()
     if (navigator.mediaDevices) {
       ;(function loop() {
@@ -343,11 +352,9 @@ export function initMotif(canvas) {
     // The ring tumbles in all directions — a steady spin on every axis
     // (opposite the die) plus a wobble at incommensurate frequencies so the
     // motion drifts unpredictably instead of looping.
-    ringPose(t, ring.rotation)
-    // Ghost rings sample the ring's recent poses → trailing echoes.
-    for (let i = 0; i < ghosts.length; i++) {
-      ringPose(t - (i + 1) * GHOST_LAG, ghosts[i].mesh.rotation)
-    }
+    ringPose(t, ringSpread.rotation)
+    // The copies spread apart and merge back with a gentle pulse.
+    layoutRing(RING_MAXGAP * spreadPulse(t) + 0.003)
     renderFrame()
   }
   tick()
