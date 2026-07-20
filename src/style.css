@@ -270,6 +270,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 1.3em;
+  padding-right: 44px; /* clear the close button on the first line */
 }
 
 .drawer-intro p {
