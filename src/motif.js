@@ -44,12 +44,12 @@ export function initMotif(canvas) {
     envMapIntensity: 0.75,
   })
 
-  // The carved pip cavities read slightly rougher than the mirror body, so the
-  // depressions catch a softer, more diffuse highlight instead of a sharp one.
+  // The carved pip cavities are a brushed-metal finish — rough enough that
+  // they read as matte satin dots instead of little fisheye mirrors.
   const pipRough = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     metalness: 1.0,
-    roughness: 0.28,
+    roughness: 0.6,
     envMapIntensity: 0.75,
   })
 
