@@ -5,7 +5,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 // If the visitor grants camera access, the live webcam feed becomes the
 // object's surrounding environment (rendered to a live cubemap), so the
 // chrome reflects it like a real reflective probe.
-export function initMotif(canvas, cameraButton) {
+export function initMotif(canvas) {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   let renderer
@@ -65,52 +65,46 @@ export function initMotif(canvas, cameraButton) {
   // into a live cubemap each frame; the chrome uses it as its environment.
   const CAM_LAYER = 1
   let cubeCamera = null
-  const hasCamera = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
 
-  if (cameraButton && hasCamera) {
-    cameraButton.addEventListener('click', async () => {
-      cameraButton.disabled = true
-      cameraButton.textContent = 'Requesting camera…'
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user' },
-          audio: false,
-        })
-        const video = document.createElement('video')
-        video.setAttribute('playsinline', '')
-        video.muted = true
-        video.srcObject = stream
-        await video.play()
+  // Ask for the camera as soon as the page loads. If granted, the live feed
+  // becomes the object's environment; if denied/unavailable, it silently
+  // keeps the studio reflections.
+  async function tryWebcam() {
+    if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) return
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user' },
+        audio: false,
+      })
+      const video = document.createElement('video')
+      video.setAttribute('playsinline', '')
+      video.muted = true
+      video.srcObject = stream
+      await video.play()
 
-        const videoTexture = new THREE.VideoTexture(video)
-        videoTexture.colorSpace = THREE.SRGBColorSpace
+      const videoTexture = new THREE.VideoTexture(video)
+      videoTexture.colorSpace = THREE.SRGBColorSpace
 
-        // Inward dome showing the live feed — visible only to the CubeCamera.
-        const dome = new THREE.Mesh(
-          new THREE.SphereGeometry(20, 48, 48),
-          new THREE.MeshBasicMaterial({ map: videoTexture, side: THREE.BackSide }),
-        )
-        dome.layers.set(CAM_LAYER)
-        scene.add(dome)
+      // Inward dome showing the live feed — visible only to the CubeCamera.
+      const dome = new THREE.Mesh(
+        new THREE.SphereGeometry(20, 48, 48),
+        new THREE.MeshBasicMaterial({ map: videoTexture, side: THREE.BackSide }),
+      )
+      dome.layers.set(CAM_LAYER)
+      scene.add(dome)
 
-        const cubeRT = new THREE.WebGLCubeRenderTarget(256, { type: THREE.HalfFloatType })
-        cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT)
-        cubeCamera.layers.set(CAM_LAYER)
+      const cubeRT = new THREE.WebGLCubeRenderTarget(256, { type: THREE.HalfFloatType })
+      cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT)
+      cubeCamera.layers.set(CAM_LAYER)
 
-        chrome.envMap = cubeRT.texture
-        chrome.envMapIntensity = 1.35
-        chrome.needsUpdate = true
-
-        cameraButton.textContent = 'Reflection: live'
-        cameraButton.classList.add('is-live')
-      } catch {
-        cameraButton.disabled = false
-        cameraButton.textContent = 'Camera unavailable'
-      }
-    })
-  } else if (cameraButton) {
-    cameraButton.hidden = true
+      chrome.envMap = cubeRT.texture
+      chrome.envMapIntensity = 1.35
+      chrome.needsUpdate = true
+    } catch {
+      // denied or unavailable — studio reflections remain
+    }
   }
+  tryWebcam()
 
   function renderFrame() {
     if (cubeCamera) cubeCamera.update(renderer, scene)

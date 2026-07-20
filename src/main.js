@@ -3,9 +3,8 @@ import './style.css'
 /* ---------- 3D hero motif (three.js, code-split) ---------- */
 const motifCanvas = document.querySelector('[data-motif]')
 if (motifCanvas) {
-  const cameraButton = document.querySelector('[data-motif-camera]')
   import('./motif.js')
-    .then((m) => m.initMotif(motifCanvas, cameraButton))
+    .then((m) => m.initMotif(motifCanvas))
     .catch(() => {})
 }
 
