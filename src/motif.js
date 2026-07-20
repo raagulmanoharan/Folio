@@ -1,9 +1,14 @@
 import * as THREE from 'three'
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
+import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js'
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
 import { Evaluator, Brush, SUBTRACTION } from 'three-bvh-csg'
 
-// A chrome die tumbling inside a spinning hoop, on a transparent canvas.
+// A chrome die tumbling inside a spinning Möbius ribbon, with a Y2K bloom glow.
 // Reflects a studio environment by default; if the visitor grants camera
 // access on load, a bright dome + the live feed become the environment, so
 // the die reflects a lit room with the visitor's face in it.
@@ -17,10 +22,16 @@ export function initMotif(canvas) {
     return
   }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-  renderer.setClearColor(0x000000, 0) // transparent — page ground shows through
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.05
   renderer.outputColorSpace = THREE.SRGBColorSpace
+
+  // The bloom composer writes an opaque frame, so instead of a transparent
+  // canvas we clear to a colour that — once ACES tone-mapping runs in the
+  // OutputPass — lands exactly on the page ground (#161616). That keeps the
+  // motif box seamless with the page while the glow stays intact.
+  const GROUND = 0x050505
+  renderer.setClearColor(GROUND, 1)
 
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
@@ -36,9 +47,18 @@ export function initMotif(canvas) {
     envMapIntensity: 1.15,
   })
 
+  // The carved pip cavities read slightly rougher than the mirror body, so the
+  // depressions catch a softer, more diffuse highlight instead of a sharp one.
+  const pipRough = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    metalness: 1.0,
+    roughness: 0.28,
+    envMapIntensity: 1.15,
+  })
+
   // ---- Die (chrome, with pip depressions carved via CSG) ----
-  const DIE = 1.5
-  const o = 0.32
+  const DIE = 1.7
+  const o = 0.36
   const H = DIE / 2
   const LAYOUTS = {
     1: [[0, 0]],
@@ -53,14 +73,17 @@ export function initMotif(canvas) {
     ['x', 1, 2], ['x', -1, 5],
     ['y', 1, 3], ['y', -1, 4],
   ]
+  // useGroups keeps the carved cavity faces on their own material index, so the
+  // pips can take the rougher finish while the body stays a mirror.
   const evaluator = new Evaluator()
-  evaluator.useGroups = false
-  let dieBrush = new Brush(new RoundedBoxGeometry(DIE, DIE, DIE, 6, 0.16))
+  evaluator.useGroups = true
+  let dieBrush = new Brush(new RoundedBoxGeometry(DIE, DIE, DIE, 6, 0.18))
+  dieBrush.material = chrome
   dieBrush.updateMatrixWorld()
-  const holeGeo = new THREE.SphereGeometry(0.14, 24, 24)
+  const holeGeo = new THREE.SphereGeometry(0.16, 24, 24)
   for (const [axis, sign, count] of FACES) {
     for (const [u, v] of LAYOUTS[count]) {
-      const hole = new Brush(holeGeo)
+      const hole = new Brush(holeGeo, pipRough)
       if (axis === 'z') hole.position.set(u, v, sign * H)
       else if (axis === 'x') hole.position.set(sign * H, u, v)
       else hole.position.set(u, sign * H, v)
@@ -68,21 +91,50 @@ export function initMotif(canvas) {
       dieBrush = evaluator.evaluate(dieBrush, hole, SUBTRACTION)
     }
   }
-  dieBrush.material = chrome
+  dieBrush.material = [chrome, pipRough]
   dieBrush.geometry.computeVertexNormals()
   const die = new THREE.Group()
   die.add(dieBrush)
   scene.add(die)
 
-  // ---- Hoop ----
-  const hoop = new THREE.Mesh(new THREE.TorusGeometry(1.9, 0.1, 32, 180), chrome)
+  // ---- Hoop (a Möbius ribbon — a chrome band with a single half-twist) ----
+  const HOOP_R = 1.95      // ring radius
+  const HOOP_W = 0.34      // half-width of the ribbon
+  function mobius(u, v, target) {
+    const a = u * Math.PI * 2          // around the ring
+    const t = (v - 0.5) * 2 * HOOP_W   // across the ribbon, −W..W
+    const half = a / 2                 // the single half-twist
+    const r = HOOP_R + t * Math.cos(half)
+    target.set(r * Math.cos(a), r * Math.sin(a), t * Math.sin(half))
+  }
+  const hoopMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    metalness: 1.0,
+    roughness: 0.06,
+    envMapIntensity: 1.15,
+    side: THREE.DoubleSide, // a ribbon shows both faces
+  })
+  const hoop = new THREE.Mesh(new ParametricGeometry(mobius, 260, 6), hoopMat)
+  hoop.geometry.computeVertexNormals()
   scene.add(hoop)
+
+  // ---- Bloom (Y2K glow + flare on the brightest chrome highlights) ----
+  // The composer output is opaque; the tuned GROUND clear (above) keeps the
+  // motif box seamless with the page ground while the glow stays intact.
+  const composer = new EffectComposer(renderer)
+  const renderPass = new RenderPass(scene, camera)
+  composer.addPass(renderPass)
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.55, 0.5, 0.82)
+  composer.addPass(bloom)
+  composer.addPass(new OutputPass())
 
   function resize() {
     const w = canvas.clientWidth
     const h = canvas.clientHeight
     if (!w || !h) return
     renderer.setSize(w, h, false)
+    composer.setSize(w, h)
+    bloom.setSize(w, h)
     camera.aspect = w / h
     camera.updateProjectionMatrix()
   }
@@ -122,9 +174,11 @@ export function initMotif(canvas) {
       cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT)
       cubeCamera.layers.set(CAM_LAYER)
 
-      chrome.envMap = cubeRT.texture
-      chrome.envMapIntensity = 1.4
-      chrome.needsUpdate = true
+      for (const m of [chrome, pipRough, hoopMat]) {
+        m.envMap = cubeRT.texture
+        m.envMapIntensity = 1.4
+        m.needsUpdate = true
+      }
     } catch {
       // denied or unavailable — studio reflections remain
     }
@@ -133,7 +187,7 @@ export function initMotif(canvas) {
 
   function renderFrame() {
     if (cubeCamera) cubeCamera.update(renderer, scene)
-    renderer.render(scene, camera)
+    composer.render()
   }
 
   if (reduced) {
