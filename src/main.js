@@ -87,6 +87,44 @@ if (drawer && backdrop && openBtn) {
   drawer.addEventListener('mouseleave', () => drawer.classList.remove('show-close'))
 }
 
+/* ---------- Case study overlay (expand a work thumbnail into a reader) ---------- */
+const caseModal = document.querySelector('[data-case]')
+if (caseModal) {
+  const openers = document.querySelectorAll('[data-case-open]')
+  const closeEls = caseModal.querySelectorAll('[data-case-close]')
+  let lastFocused = null
+
+  const openCase = () => {
+    lastFocused = document.activeElement
+    caseModal.classList.add('is-open')
+    caseModal.setAttribute('aria-hidden', 'false')
+    document.documentElement.classList.add('is-locked')
+    caseModal.scrollTop = 0
+    // move focus into the dialog for keyboard + screen-reader users
+    caseModal.querySelector('[data-case-close]')?.focus()
+  }
+  const closeCase = () => {
+    caseModal.classList.remove('is-open')
+    caseModal.setAttribute('aria-hidden', 'true')
+    document.documentElement.classList.remove('is-locked')
+    lastFocused?.focus?.()
+  }
+
+  openers.forEach((el) => {
+    el.addEventListener('click', openCase)
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        openCase()
+      }
+    })
+  })
+  closeEls.forEach((el) => el.addEventListener('click', closeCase))
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && caseModal.classList.contains('is-open')) closeCase()
+  })
+}
+
 /* ---------- Header headroom ---------- */
 // "Headroom" behavior: hide the header when scrolling down, reveal on scroll up.
 const header = document.querySelector('[data-header]')
