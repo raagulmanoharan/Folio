@@ -32,7 +32,7 @@ export function initMotif(canvas) {
 
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
-  camera.position.set(0, 0, 9.0)
+  camera.position.set(0, 0, 11.25)
 
   const pmrem = new THREE.PMREMGenerator(renderer)
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
@@ -42,15 +42,6 @@ export function initMotif(canvas) {
     metalness: 1.0,
     roughness: 0.06,
     envMapIntensity: 0.75,
-  })
-
-  // The carved pip cavities are brushed gold — a warm metallic gold with a
-  // rough, textured finish so they read as matte gold dots, not mirrors.
-  const pipRough = new THREE.MeshStandardMaterial({
-    color: 0xf2b84b,
-    metalness: 1.0,
-    roughness: 0.55,
-    envMapIntensity: 0.9,
   })
 
   // ---- Die (chrome, with pip depressions carved via CSG) ----
@@ -70,25 +61,29 @@ export function initMotif(canvas) {
     ['x', 1, 2], ['x', -1, 5],
     ['y', 1, 3], ['y', -1, 4],
   ]
-  // useGroups keeps the carved cavity faces on their own material index, so the
-  // pips can take the rougher finish while the body stays a mirror.
+  // The pips are the same chrome as the body — just geometry. The cutter sphere
+  // sits mostly OUTSIDE the face so only a shallow spherical cap is removed,
+  // leaving small circular dents (not deep hemispheres that shade like moons).
   const evaluator = new Evaluator()
-  evaluator.useGroups = true
+  evaluator.useGroups = false
   let dieBrush = new Brush(new RoundedBoxGeometry(DIE, DIE, DIE, 6, 0.18))
   dieBrush.material = chrome
   dieBrush.updateMatrixWorld()
-  const holeGeo = new THREE.SphereGeometry(0.16, 24, 24)
+  const PIP_R = 0.15 // cutter radius
+  const CAP = 0.1 // how far the cutter sits beyond the face → shallow dent
+  const holeGeo = new THREE.SphereGeometry(PIP_R, 28, 28)
   for (const [axis, sign, count] of FACES) {
     for (const [u, v] of LAYOUTS[count]) {
-      const hole = new Brush(holeGeo, pipRough)
-      if (axis === 'z') hole.position.set(u, v, sign * H)
-      else if (axis === 'x') hole.position.set(sign * H, u, v)
-      else hole.position.set(u, sign * H, v)
+      const hole = new Brush(holeGeo)
+      const d = sign * (H + CAP)
+      if (axis === 'z') hole.position.set(u, v, d)
+      else if (axis === 'x') hole.position.set(d, u, v)
+      else hole.position.set(u, d, v)
       hole.updateMatrixWorld()
       dieBrush = evaluator.evaluate(dieBrush, hole, SUBTRACTION)
     }
   }
-  dieBrush.material = [chrome, pipRough]
+  dieBrush.material = chrome
   dieBrush.geometry.computeVertexNormals()
   const die = new THREE.Group()
   die.add(dieBrush)
@@ -205,11 +200,9 @@ export function initMotif(canvas) {
       cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT)
       cubeCamera.layers.set(CAM_LAYER)
 
-      for (const m of [chrome, pipRough]) {
-        m.envMap = cubeRT.texture
-        m.envMapIntensity = 1.05
-        m.needsUpdate = true
-      }
+      chrome.envMap = cubeRT.texture
+      chrome.envMapIntensity = 1.05
+      chrome.needsUpdate = true
     } catch {
       // denied or unavailable — studio reflections remain
     }
