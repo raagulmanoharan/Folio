@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
@@ -34,8 +33,40 @@ export function initMotif(canvas) {
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
   camera.position.set(0, 0, 12.0)
 
+  // Studio environment for the camera-denied fallback: a dark room with a few
+  // bright soft light panels, so the chrome reads like a lit chrome object
+  // (dark body with bright highlight streaks) rather than a flat bright blob.
   const pmrem = new THREE.PMREMGenerator(renderer)
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
+  function buildStudioEnv() {
+    const s = new THREE.Scene()
+    s.background = new THREE.Color(0x05050a)
+    // dark surrounding shell → chrome's body reflects near-black
+    s.add(new THREE.Mesh(
+      new THREE.BoxGeometry(40, 40, 40),
+      new THREE.MeshBasicMaterial({ color: 0x0b0b12, side: THREE.BackSide }),
+    ))
+    const panel = (w, h, pos, level) => {
+      const m = new THREE.Mesh(
+        new THREE.PlaneGeometry(w, h),
+        new THREE.MeshBasicMaterial({
+          color: new THREE.Color(level, level, level), // >1 = HDR highlight
+          side: THREE.DoubleSide,
+        }),
+      )
+      m.position.set(pos[0], pos[1], pos[2])
+      m.lookAt(0, 0, 0)
+      s.add(m)
+    }
+    panel(16, 10, [0, 8, 11], 5.0) // key light, upper front
+    panel(7, 15, [-12, 3, 3], 3.2) // rim, left
+    panel(7, 15, [12, 1, 4], 2.2) // rim, right
+    panel(12, 6, [0, -9, 7], 0.6) // soft low fill
+    panel(10, 10, [0, 3, -12], 1.6) // back kicker
+    const tex = pmrem.fromScene(s, 0.03).texture
+    s.traverse((o) => { o.geometry?.dispose?.(); o.material?.dispose?.() })
+    return tex
+  }
+  scene.environment = buildStudioEnv()
 
   const chrome = new THREE.MeshStandardMaterial({
     color: 0xffffff,
