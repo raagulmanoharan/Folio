@@ -32,7 +32,7 @@ export function initMotif(canvas) {
 
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
-  camera.position.set(0, 0, 12.5)
+  camera.position.set(0, 0, 9.0)
 
   const pmrem = new THREE.PMREMGenerator(renderer)
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
@@ -44,13 +44,13 @@ export function initMotif(canvas) {
     envMapIntensity: 0.75,
   })
 
-  // The carved pip cavities are a brushed-metal finish — rough enough that
-  // they read as matte satin dots instead of little fisheye mirrors.
+  // The carved pip cavities are brushed gold — a warm metallic gold with a
+  // rough, textured finish so they read as matte gold dots, not mirrors.
   const pipRough = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
+    color: 0xf2b84b,
     metalness: 1.0,
-    roughness: 0.6,
-    envMapIntensity: 0.75,
+    roughness: 0.55,
+    envMapIntensity: 0.9,
   })
 
   // ---- Die (chrome, with pip depressions carved via CSG) ----
@@ -104,7 +104,7 @@ export function initMotif(canvas) {
   // base keeps its alpha, so the page shows through and the halo spills onto
   // the page (additive over the premultiplied canvas) instead of a dark box.
   const renderPass = new RenderPass(scene, camera)
-  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.28, 0.4, 0.9)
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.28, 0.32, 0.9)
 
   const bloomComposer = new EffectComposer(renderer)
   bloomComposer.renderToScreen = false
@@ -140,7 +140,7 @@ export function initMotif(canvas) {
           // rgb + alpha together). Horizontal has room; vertical is tighter.
           float mx = min(vUv.x, 1.0 - vUv.x);
           float my = min(vUv.y, 1.0 - vUv.y);
-          float edge = smoothstep(0.0, 0.2, mx) * smoothstep(0.0, 0.11, my);
+          float edge = smoothstep(0.0, 0.14, mx) * smoothstep(0.0, 0.06, my);
           gl_FragColor = color * edge;
         }`,
     }),
