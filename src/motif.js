@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
-import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js'
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
@@ -95,25 +94,57 @@ export function initMotif(canvas) {
   die.add(dieBrush)
   scene.add(die)
 
-  // ---- Hoop (a Möbius ribbon — a chrome band with a single half-twist) ----
+  // ---- Hoop: a Möbius band with real volume (rectangular cross-section) ----
+  // A thin chrome band with a single half-twist. Giving it thickness (rather
+  // than a zero-width ribbon) means it reads as a solid with depth, and a
+  // matte-ish finish lets that depth register as it rotates.
   const HOOP_R = 1.95      // ring radius
-  const HOOP_W = 0.5       // half-width of the ribbon (a wide chrome band)
-  function mobius(u, v, target) {
-    const a = u * Math.PI * 2          // around the ring
-    const t = (v - 0.5) * 2 * HOOP_W   // across the ribbon, −W..W
-    const half = a / 2                 // the single half-twist
-    const r = HOOP_R + t * Math.cos(half)
-    target.set(r * Math.cos(a), r * Math.sin(a), t * Math.sin(half))
+  const HOOP_W = 0.3       // half-width of the band (thinner than before)
+  const HOOP_T = 0.1       // half-thickness — the volume that gives it depth
+  function mobiusBand(R, halfW, halfT, seg) {
+    const pos = []
+    const idx = []
+    // rectangular cross-section, corners walked around the perimeter
+    const corners = [
+      [halfW, halfT], [-halfW, halfT], [-halfW, -halfT], [halfW, -halfT],
+    ]
+    const nC = corners.length
+    for (let i = 0; i <= seg; i++) {
+      const a = (i / seg) * Math.PI * 2 // around the ring
+      const half = a / 2                // the single half-twist of the frame
+      const ca = Math.cos(a), sa = Math.sin(a)
+      const ch = Math.cos(half), sh = Math.sin(half)
+      // cross-section axes: width twists between radial and z; thickness is
+      // perpendicular to it in the same plane
+      const wx = ch * ca, wy = ch * sa, wz = sh
+      const nx = -sh * ca, ny = -sh * sa, nz = ch
+      const cx = R * ca, cy = R * sa
+      for (let c = 0; c < nC; c++) {
+        const [wv, tv] = corners[c]
+        pos.push(cx + wx * wv + nx * tv, cy + wy * wv + ny * tv, wz * wv + nz * tv)
+      }
+    }
+    for (let i = 0; i < seg; i++) {
+      for (let c = 0; c < nC; c++) {
+        const d = (c + 1) % nC
+        const a0 = i * nC + c, b0 = i * nC + d
+        const a1 = (i + 1) * nC + c, b1 = (i + 1) * nC + d
+        idx.push(a0, a1, b1, a0, b1, b0)
+      }
+    }
+    const g = new THREE.BufferGeometry()
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+    g.setIndex(idx)
+    g.computeVertexNormals()
+    return g
   }
   const hoopMat = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     metalness: 1.0,
-    roughness: 0.06,
+    roughness: 0.2, // 20% rough so the band's form and depth read
     envMapIntensity: 0.75,
-    side: THREE.DoubleSide, // a ribbon shows both faces
   })
-  const hoop = new THREE.Mesh(new ParametricGeometry(mobius, 260, 6), hoopMat)
-  hoop.geometry.computeVertexNormals()
+  const hoop = new THREE.Mesh(mobiusBand(HOOP_R, HOOP_W, HOOP_T, 320), hoopMat)
   scene.add(hoop)
 
   // ---- Bloom (Y2K glow + flare), kept fully transparent ----
@@ -253,9 +284,9 @@ export function initMotif(canvas) {
     die.rotation.x = t * 0.7
     die.rotation.y = t * 0.9
     die.rotation.z = t * 0.35
-    // hoop spins facing the camera (its Möbius twist sweeps around, ring stays
-    // a full circle framing the die) and rocks in 3D so it also rotates in space
-    hoop.rotation.z = t * 0.5
+    // hoop spins facing the camera in the OPPOSITE direction to the die (its
+    // Möbius twist sweeps around, ring frames the die) and rocks in 3D
+    hoop.rotation.z = t * -0.5
     hoop.rotation.x = Math.sin(t * 0.4) * 0.5
     hoop.rotation.y = Math.sin(t * 0.3) * 0.5
     renderFrame()
