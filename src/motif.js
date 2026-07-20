@@ -153,8 +153,8 @@ export function initMotif(canvas) {
   // pulse opens the fan into a few clearly-separated rings then closes it back
   // to one (a tiny depth offset keeps them from z-fighting when closed, so the
   // front copy reads as a single clean ring). Solid chrome; the die is untouched.
-  const RING_COPIES = 4
-  const RING_MAXANGLE = 0.34 // fan angle between adjacent copies — leaves a clear gap
+  const RING_COPIES = 8
+  const RING_MAXANGLE = 0.18 // idle fan angle between adjacent copies
   const ringSpread = new THREE.Group()
   const ringCopies = []
   for (let i = 0; i < RING_COPIES; i++) {
@@ -170,6 +170,76 @@ export function initMotif(canvas) {
   motif.add(ringSpread)
   motif.position.y = -0.45
   scene.add(motif)
+
+  // ---- Click interaction: globe spin → merge → die roll ----
+  // Click the die and: (1) the ring snaps its pinch points to top & bottom, fans
+  // open and spins one full turn — a globe of longitude rings; (2) the globe
+  // merges back to a single ring; (3) the die spins fast and locks a random face
+  // square to the camera (no pitch/roll). Click outside → resume the auto swing.
+  const WORLD_Y = new THREE.Vector3(0, 1, 0)
+  // Globe rest pose: face-on to the camera with the fan pinch axis vertical, so
+  // the two pinch points sit at the top and bottom.
+  const Q_GLOBE = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI / 2)
+  // Exact axis-aligned orientations that bring each face square to the camera.
+  const FACE_QUAT = {}
+  for (const [v, ex, ey, ez] of [
+    [1, 0, 0, 0], [6, Math.PI, 0, 0],
+    [2, 0, -Math.PI / 2, 0], [5, 0, Math.PI / 2, 0],
+    [3, Math.PI / 2, 0, 0], [4, -Math.PI / 2, 0, 0],
+  ]) {
+    FACE_QUAT[v] = new THREE.Quaternion().setFromEuler(new THREE.Euler(ex, ey, ez))
+  }
+
+  const T_FAN = 0.9 // ring fans open + spins one full turn (globe)
+  const T_MERGE = 0.5 // globe merges back to a single ring
+  const T_DIE = 1.9 // die spins the whole time, halting after the globe merges
+  const GLOBE_ANGLE = 0.42 // fan spread while it's a globe (8 copies → ~170° of longitudes)
+  const DIE_SPINS = 5 // whole turns the die spins before it settles
+
+  const seq = {
+    mode: 'auto', // 'auto' | 'seq' | 'locked'
+    start: 0,
+    ringFrom: new THREE.Quaternion(),
+    dieFrom: new THREE.Quaternion(),
+    dieTarget: new THREE.Quaternion(),
+    dieAxis: new THREE.Vector3(),
+  }
+  const _spinQ = new THREE.Quaternion()
+  const _globeQ = new THREE.Quaternion()
+  const ease = (p) => 1 - Math.pow(1 - p, 3) // easeOutCubic
+  const smooth = (a, b, x) => {
+    const t = Math.min(1, Math.max(0, (x - a) / (b - a)))
+    return t * t * (3 - 2 * t)
+  }
+
+  function startSequence(now) {
+    seq.ringFrom.copy(ringSpread.quaternion)
+    seq.dieFrom.copy(die.quaternion) // die starts spinning right away
+    const value = 1 + Math.floor(Math.random() * 6)
+    seq.dieTarget.copy(FACE_QUAT[value])
+    _spinQ.setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.floor(Math.random() * 4) * (Math.PI / 2))
+    seq.dieTarget.premultiply(_spinQ)
+    seq.dieAxis.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize()
+    seq.start = now
+    seq.mode = 'seq'
+  }
+
+  const raycaster = new THREE.Raycaster()
+  const ndc = new THREE.Vector2()
+  if (!reduced) {
+    canvas.style.pointerEvents = 'auto'
+    canvas.addEventListener('pointerdown', (ev) => {
+      const r = canvas.getBoundingClientRect()
+      ndc.x = ((ev.clientX - r.left) / r.width) * 2 - 1
+      ndc.y = -((ev.clientY - r.top) / r.height) * 2 + 1
+      raycaster.setFromCamera(ndc, camera)
+      if (raycaster.intersectObject(dieBrush, false).length) {
+        startSequence(clock.getElapsedTime()) // hit the die → run the sequence
+      } else {
+        seq.mode = 'auto' // clicked outside → resume auto swing
+      }
+    })
+  }
 
   // ---- Bloom (Y2K glow + flare), kept fully transparent ----
   // Selective-bloom setup: one composer renders the scene and extracts the
@@ -353,16 +423,47 @@ export function initMotif(canvas) {
     requestAnimationFrame(tick)
     if (!visible) return
     const t = clock.getElapsedTime()
-    // die tumbles freely on all three axes
-    die.rotation.x = t * 0.7
-    die.rotation.y = t * 0.9
-    die.rotation.z = t * 0.35
-    // The ring tumbles in all directions — a steady spin on every axis
-    // (opposite the die) plus a wobble at incommensurate frequencies so the
-    // motion drifts unpredictably instead of looping.
-    ringPose(t, ringSpread.rotation)
-    // The bundle fans open and closes back with a gentle pulse.
-    layoutRing(RING_MAXANGLE * spreadPulse(t))
+
+    if (seq.mode === 'seq') {
+      const tau = t - seq.start
+      // ---- Ring globe: fan open + spin one full turn, then merge back ----
+      if (tau < T_FAN + T_MERGE) {
+        const spinAngle = 2 * Math.PI * ease(Math.min(1, tau / T_FAN))
+        _globeQ.setFromAxisAngle(WORLD_Y, spinAngle).multiply(Q_GLOBE)
+        // ease from the auto pose into the spinning globe over the first slice
+        ringSpread.quaternion.copy(seq.ringFrom).slerp(_globeQ, smooth(0, 0.28 * T_FAN, tau))
+        const angle = tau < T_FAN
+          ? GLOBE_ANGLE * ease(tau / T_FAN)
+          : GLOBE_ANGLE * (1 - smooth(0, T_MERGE, tau - T_FAN))
+        layoutRing(angle)
+      } else {
+        ringSpread.quaternion.copy(Q_GLOBE) // single face-on ring, held
+        layoutRing(0)
+      }
+      // ---- Die: spins the whole time (the globe drives it), still turning as
+      // the ring closes, and comes to a halt on its face shortly after ----
+      const p = Math.min(1, tau / T_DIE)
+      die.quaternion.copy(seq.dieFrom).slerp(seq.dieTarget, ease(p))
+      _spinQ.setFromAxisAngle(seq.dieAxis, DIE_SPINS * Math.PI * 2 * (1 - p))
+      die.quaternion.multiply(_spinQ)
+      if (tau >= T_DIE) {
+        die.quaternion.copy(seq.dieTarget)
+        seq.mode = 'locked'
+      }
+    } else if (seq.mode === 'locked') {
+      // hold the result: die on its face, ring a single vertical-pinch ring
+      ringSpread.quaternion.copy(Q_GLOBE)
+      layoutRing(0)
+      die.quaternion.copy(seq.dieTarget)
+    } else {
+      // ---- Auto swing ----
+      die.rotation.x = t * 0.7
+      die.rotation.y = t * 0.9
+      die.rotation.z = t * 0.35
+      ringPose(t, ringSpread.rotation)
+      layoutRing(RING_MAXANGLE * spreadPulse(t))
+    }
+
     renderFrame()
   }
   tick()
