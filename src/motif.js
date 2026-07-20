@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
@@ -34,8 +33,40 @@ export function initMotif(canvas) {
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100)
   camera.position.set(0, 0, 12.0)
 
+  // Studio environment for the camera-denied fallback: a dark room with a few
+  // bright soft light panels, so the chrome reads like a lit chrome object
+  // (dark body with bright highlight streaks) rather than a flat bright blob.
   const pmrem = new THREE.PMREMGenerator(renderer)
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
+  function buildStudioEnv() {
+    const s = new THREE.Scene()
+    s.background = new THREE.Color(0x05050a)
+    // dark surrounding shell → chrome's body reflects near-black
+    s.add(new THREE.Mesh(
+      new THREE.BoxGeometry(40, 40, 40),
+      new THREE.MeshBasicMaterial({ color: 0x0b0b12, side: THREE.BackSide }),
+    ))
+    const panel = (w, h, pos, level) => {
+      const m = new THREE.Mesh(
+        new THREE.PlaneGeometry(w, h),
+        new THREE.MeshBasicMaterial({
+          color: new THREE.Color(level, level, level), // >1 = HDR highlight
+          side: THREE.DoubleSide,
+        }),
+      )
+      m.position.set(pos[0], pos[1], pos[2])
+      m.lookAt(0, 0, 0)
+      s.add(m)
+    }
+    panel(16, 10, [0, 8, 11], 5.0) // key light, upper front
+    panel(7, 15, [-12, 3, 3], 3.2) // rim, left
+    panel(7, 15, [12, 1, 4], 2.2) // rim, right
+    panel(12, 6, [0, -9, 7], 0.6) // soft low fill
+    panel(10, 10, [0, 3, -12], 1.6) // back kicker
+    const tex = pmrem.fromScene(s, 0.03).texture
+    s.traverse((o) => { o.geometry?.dispose?.(); o.material?.dispose?.() })
+    return tex
+  }
+  scene.environment = buildStudioEnv()
 
   const chrome = new THREE.MeshStandardMaterial({
     color: 0xffffff,
@@ -114,14 +145,29 @@ export function initMotif(canvas) {
 
   // ---- Ring: a single chrome ring around the die, tumbling in all directions ----
   // Bigger than the die so it sweeps up into the hero text as it turns.
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(2.28, 0.08, 24, 240), chrome)
+  const ringGeo = new THREE.TorusGeometry(2.28, 0.08, 24, 240)
 
-  // Group both and nudge down: the balanced spot is the middle of the gap
+  // A small bundle of identical rings that share the ring's pose. They're
+  // pinched at two opposite points on a diameter (the local X axis) and fan
+  // open around it — like fanning a deck of cards held at one edge. A gentle
+  // pulse opens the fan into a few clearly-separated rings then closes it back
+  // to one (a tiny depth offset keeps them from z-fighting when closed, so the
+  // front copy reads as a single clean ring). Solid chrome; the die is untouched.
+  const RING_COPIES = 4
+  const RING_MAXANGLE = 0.34 // fan angle between adjacent copies — leaves a clear gap
+  const ringSpread = new THREE.Group()
+  const ringCopies = []
+  for (let i = 0; i < RING_COPIES; i++) {
+    ringCopies.push(new THREE.Mesh(ringGeo, chrome))
+    ringSpread.add(ringCopies[i])
+  }
+
+  // Group all and nudge down: the balanced spot is the middle of the gap
   // between the hero text (top) and the footer (bottom), which sits below the
   // geometric centre — otherwise there's too much empty space at the bottom.
   const motif = new THREE.Group()
   motif.add(die)
-  motif.add(ring)
+  motif.add(ringSpread)
   motif.position.y = -0.45
   scene.add(motif)
 
@@ -156,12 +202,20 @@ export function initMotif(canvas) {
         varying vec2 vUv;
         void main() {
           vec4 base = texture2D(baseTexture, vUv);
-          vec4 glow = texture2D(bloomTexture, vUv);
+          // Y2K chromatic split: sample the glow's R/B channels at a slight
+          // radial offset so the bloom fringes into red/cyan toward the edges.
+          vec2 dir = vUv - 0.5;
+          float ca = 0.008;
+          vec3 glow = vec3(
+            texture2D(bloomTexture, vUv + dir * ca).r,
+            texture2D(bloomTexture, vUv).g,
+            texture2D(bloomTexture, vUv - dir * ca).b
+          );
           // UnrealBloomPass writes alpha 1 everywhere, so drive the halo alpha
           // from the glow's brightness instead — transparent where there's no
           // glow, so the page shows through and the halo spills onto it.
-          float halo = clamp(dot(glow.rgb, vec3(0.2126, 0.7152, 0.0722)), 0.0, 1.0);
-          vec4 color = vec4(base.rgb + glow.rgb, clamp(base.a + halo, 0.0, 1.0));
+          float halo = clamp(dot(glow, vec3(0.2126, 0.7152, 0.0722)), 0.0, 1.0);
+          vec4 color = vec4(base.rgb + glow, clamp(base.a + halo, 0.0, 1.0));
           // Fade the whole frame out near the canvas edges so the glow never
           // reveals a hard rectangular container edge (premultiplied: scale
           // rgb + alpha together). Horizontal has room; vertical is tighter.
@@ -247,9 +301,40 @@ export function initMotif(canvas) {
     finalComposer.render()
   }
 
+  // The ring's tumble pose as a function of time.
+  function ringPose(tt, e) {
+    e.set(
+      tt * -0.5 + Math.sin(tt * 0.83) * 0.4,
+      tt * -0.4 + Math.sin(tt * 0.67) * 0.4,
+      tt * -0.6 + Math.sin(tt * 1.09) * 0.3,
+    )
+  }
+
+  // Spread amount 0..1. Mostly 0 (closed). A slow, rare "gate" from two low
+  // incommensurate sines only occasionally allows an opening; within a gate the
+  // fan breathes open and closed with the ring's swing, then merges back — so it
+  // fans only now and then as the ring revolves, like it's caught by gravity.
+  function spreadPulse(tt) {
+    const gate = Math.pow(Math.max(0, Math.sin(tt * 0.16) * Math.sin(tt * 0.11 + 1.0)), 1.8)
+    const breathe = Math.max(0, Math.sin(tt * 0.7))
+    return gate * breathe
+  }
+
+  // Fan the ring copies open by `angle` around the shared diameter (local X),
+  // pinched at the two points where the ring crosses that axis. A tiny depth
+  // offset keeps them from z-fighting when the fan is closed.
+  function layoutRing(angle) {
+    const c = (RING_COPIES - 1) / 2
+    for (let i = 0; i < RING_COPIES; i++) {
+      ringCopies[i].rotation.x = (i - c) * angle
+      ringCopies[i].position.z = (i - c) * 0.004
+    }
+  }
+
   if (reduced) {
     die.rotation.set(0.5, 0.7, 0.1)
-    ring.rotation.set(0.6, 0.3, 0.2)
+    ringSpread.rotation.set(0.6, 0.3, 0.2)
+    layoutRing(0) // closed to one ring when still
     renderFrame()
     if (navigator.mediaDevices) {
       ;(function loop() {
@@ -275,9 +360,9 @@ export function initMotif(canvas) {
     // The ring tumbles in all directions — a steady spin on every axis
     // (opposite the die) plus a wobble at incommensurate frequencies so the
     // motion drifts unpredictably instead of looping.
-    ring.rotation.x = t * -0.5 + Math.sin(t * 0.83) * 0.4
-    ring.rotation.y = t * -0.4 + Math.sin(t * 0.67) * 0.4
-    ring.rotation.z = t * -0.6 + Math.sin(t * 1.09) * 0.3
+    ringPose(t, ringSpread.rotation)
+    // The bundle fans open and closes back with a gentle pulse.
+    layoutRing(RING_MAXANGLE * spreadPulse(t))
     renderFrame()
   }
   tick()
