@@ -147,13 +147,14 @@ export function initMotif(canvas) {
   // Bigger than the die so it sweeps up into the hero text as it turns.
   const ringGeo = new THREE.TorusGeometry(2.28, 0.08, 24, 240)
 
-  // A small stack of identical rings that share the ring's pose, offset along
-  // the ring's own axis. A gentle pulse spreads them into a few clearly-spaced
-  // rings (most visible when the ring is edge-on, so it "spreads up") then
-  // merges them back into one — they stack in depth, so when merged the front
-  // one reads as a single clean ring. All solid chrome; the die is untouched.
+  // A small bundle of identical rings that share the ring's pose. They're
+  // pinched at two opposite points on a diameter (the local X axis) and fan
+  // open around it — like fanning a deck of cards held at one edge. A gentle
+  // pulse opens the fan into a few clearly-separated rings then closes it back
+  // to one (a tiny depth offset keeps them from z-fighting when closed, so the
+  // front copy reads as a single clean ring). Solid chrome; the die is untouched.
   const RING_COPIES = 4
-  const RING_MAXGAP = 0.6 // spacing at full spread — wide enough to read apart
+  const RING_MAXANGLE = 0.22 // fan angle between adjacent copies at full spread
   const ringSpread = new THREE.Group()
   const ringCopies = []
   for (let i = 0; i < RING_COPIES; i++) {
@@ -316,17 +317,21 @@ export function initMotif(canvas) {
     return Math.pow(Math.max(0, lobe), 1.4)
   }
 
-  // Position the ring copies along the ring's local axis for a given spread.
-  function layoutRing(gap) {
+  // Fan the ring copies open by `angle` around the shared diameter (local X),
+  // pinched at the two points where the ring crosses that axis. A tiny depth
+  // offset keeps them from z-fighting when the fan is closed.
+  function layoutRing(angle) {
+    const c = (RING_COPIES - 1) / 2
     for (let i = 0; i < RING_COPIES; i++) {
-      ringCopies[i].position.z = (i - (RING_COPIES - 1) / 2) * gap
+      ringCopies[i].rotation.x = (i - c) * angle
+      ringCopies[i].position.z = (i - c) * 0.004
     }
   }
 
   if (reduced) {
     die.rotation.set(0.5, 0.7, 0.1)
     ringSpread.rotation.set(0.6, 0.3, 0.2)
-    layoutRing(0.004) // merged into one when still
+    layoutRing(0) // closed to one ring when still
     renderFrame()
     if (navigator.mediaDevices) {
       ;(function loop() {
@@ -353,8 +358,8 @@ export function initMotif(canvas) {
     // (opposite the die) plus a wobble at incommensurate frequencies so the
     // motion drifts unpredictably instead of looping.
     ringPose(t, ringSpread.rotation)
-    // The copies spread apart and merge back with a gentle pulse.
-    layoutRing(RING_MAXGAP * spreadPulse(t) + 0.003)
+    // The bundle fans open and closes back with a gentle pulse.
+    layoutRing(RING_MAXANGLE * spreadPulse(t))
     renderFrame()
   }
   tick()
