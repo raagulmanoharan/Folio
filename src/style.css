@@ -698,6 +698,114 @@ main {
   }
 }
 
+/* ---------- Gallery drawer (photographs & experiments) ---------- */
+/* Mirrors the Info drawer, but slides down from the top and is yellow. */
+.gallery-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: #000000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.45, 0, 0.55, 1);
+}
+
+.gallery-backdrop.is-open {
+  opacity: 0.85;
+  pointer-events: auto;
+}
+
+.gallery {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 62vh;
+  max-height: 720px;
+  z-index: 200;
+  background: #f4c400; /* companion to the red Info drawer */
+  color: #141414;
+  transform: translateY(-100%);
+  transition: transform 0.6s cubic-bezier(0.45, 0, 0.55, 1);
+  will-change: transform;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px 24px;
+  overflow-y: auto;
+}
+
+.gallery.is-open {
+  transform: translateY(0);
+}
+
+.gallery-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  background: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Reveal only when the cursor is near the top-right corner (or via keyboard). */
+.gallery.show-close .gallery-close,
+.gallery-close:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gallery-close span {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: #141414;
+}
+
+.gallery-close span:first-child {
+  transform: rotate(45deg);
+}
+
+.gallery-close span:last-child {
+  transform: rotate(-45deg);
+}
+
+.gallery-body {
+  margin-top: auto;
+  padding-right: 44px; /* clear the close button */
+}
+
+.gallery-eyebrow {
+  margin: 0 0 14px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  color: rgba(20, 20, 20, 0.6);
+}
+
+.gallery-title {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.6px;
+}
+
+.gallery-note {
+  margin: 18px 0 0;
+  max-width: 42ch;
+  font-size: 18px;
+  line-height: 1.4;
+  color: rgba(20, 20, 20, 0.72);
+}
+
 /* ---------- Case study (the work item itself expands into it, in place) ---------- */
 .case-inline {
   grid-column: 1 / -1;

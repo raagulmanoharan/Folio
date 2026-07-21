@@ -17,7 +17,7 @@
     <header class="site-header" data-header>
       <nav class="header-inner">
         <button class="header-link header-link--left" type="button" data-reflections-open aria-controls="reflections-panel" aria-expanded="false">( Reflections )</button>
-        <a class="header-link header-link--center" href="/"><span class="wordmark-full">Raagul Manoharan</span><span class="wordmark-short">RM</span></a>
+        <button class="header-link header-link--center" type="button" data-gallery-open aria-controls="gallery-drawer" aria-expanded="false"><span class="wordmark-full">Raagul Manoharan</span><span class="wordmark-short">RM</span></button>
         <button class="header-link header-link--right" type="button" data-drawer-open aria-controls="info-drawer" aria-expanded="false">( Info )</button>
       </nav>
     </header>
@@ -42,6 +42,19 @@
             <li><a href="#">Freshworks &mdash; Product Designer</a><span>2018</span></li>
           </ul>
         </div>
+      </div>
+    </aside>
+
+    <!-- Gallery drawer (slides down from the top when the wordmark is clicked) -->
+    <div class="gallery-backdrop" data-gallery-backdrop></div>
+    <aside class="gallery" id="gallery-drawer" data-gallery aria-hidden="true" aria-label="Photographs and experiments">
+      <button class="gallery-close" type="button" data-gallery-close aria-label="Close">
+        <span></span><span></span>
+      </button>
+      <div class="gallery-body">
+        <p class="gallery-eyebrow">Off the clock</p>
+        <h2 class="gallery-title">Photographs &amp; experiments</h2>
+        <p class="gallery-note">A corner for photographs and the odd experiment. Filling this in soon.</p>
       </div>
     </aside>
 

@@ -87,6 +87,42 @@ if (drawer && backdrop && openBtn) {
   drawer.addEventListener('mouseleave', () => drawer.classList.remove('show-close'))
 }
 
+/* ---------- Gallery drawer (opens from the top) ---------- */
+const gallery = document.querySelector('[data-gallery]')
+const galleryBackdrop = document.querySelector('[data-gallery-backdrop]')
+const galleryOpenBtn = document.querySelector('[data-gallery-open]')
+
+if (gallery && galleryBackdrop && galleryOpenBtn) {
+  const openGallery = () => {
+    gallery.classList.add('is-open')
+    galleryBackdrop.classList.add('is-open')
+    gallery.setAttribute('aria-hidden', 'false')
+    galleryOpenBtn.setAttribute('aria-expanded', 'true')
+  }
+  const closeGallery = () => {
+    gallery.classList.remove('is-open')
+    galleryBackdrop.classList.remove('is-open')
+    gallery.setAttribute('aria-hidden', 'true')
+    galleryOpenBtn.setAttribute('aria-expanded', 'false')
+  }
+
+  galleryOpenBtn.addEventListener('click', openGallery)
+  galleryBackdrop.addEventListener('click', closeGallery)
+  gallery.querySelector('[data-gallery-close]').addEventListener('click', closeGallery)
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && gallery.classList.contains('is-open')) closeGallery()
+  })
+
+  // Reveal the close button only when the cursor is near the top-right corner.
+  const CORNER = 140
+  gallery.addEventListener('mousemove', (e) => {
+    const r = gallery.getBoundingClientRect()
+    const near = e.clientX > r.right - CORNER && e.clientY < r.top + CORNER
+    gallery.classList.toggle('show-close', near)
+  })
+  gallery.addEventListener('mouseleave', () => gallery.classList.remove('show-close'))
+}
+
 /* ---------- Reflections (full-screen writing panel) ---------- */
 const reflections = document.querySelector('[data-reflections]')
 const reflectionsOpenBtn = document.querySelector('[data-reflections-open]')
