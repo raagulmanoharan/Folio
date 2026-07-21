@@ -743,8 +743,8 @@ main {
 /* Meta facts */
 .case-meta {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 20px 28px;
+  grid-template-columns: repeat(4, 1fr); /* four equal columns, full width */
+  gap: 20px clamp(28px, 4vw, 56px);
   margin: clamp(34px, 5vh, 52px) 0 0;
   padding: clamp(24px, 3vh, 32px) 0 0;
   border-top: 1px solid var(--hairline);
@@ -803,7 +803,6 @@ main {
 .case-section > .case-figure,
 .case-section > .case-grid {
   float: right;
-  clear: right;
   width: 46%;
   margin: 0.4em 0 1.4em 4%;
 }
@@ -885,6 +884,7 @@ main {
   font-size: clamp(1rem, 1.5vw, 1.05rem);
   line-height: 1.5;
   color: #cfcfcf;
+  text-wrap: pretty;
 }
 .case-list li:last-child {
   border-bottom: 1px solid var(--hairline);
@@ -964,11 +964,9 @@ main {
   object-position: left center;
 }
 
-/* Closing CTA */
+/* Closing CTA — no divider before the links */
 .case-cta {
-  margin-top: clamp(48px, 8vh, 88px);
-  padding-top: clamp(28px, 4vh, 40px);
-  border-top: 1px solid var(--hairline);
+  margin-top: clamp(36px, 6vh, 64px);
   display: flex;
   flex-wrap: wrap;
   gap: 14px 28px;
@@ -992,6 +990,9 @@ main {
 @media (max-width: 640px) {
   .case-grid {
     grid-template-columns: 1fr;
+  }
+  .case-meta {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
