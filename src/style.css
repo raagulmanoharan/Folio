@@ -1075,7 +1075,7 @@ html.is-locked body {
 }
 
 .mh-caption {
-  margin-top: clamp(22px, 3.5vh, 34px);
+  margin-top: clamp(6px, 1.2vh, 14px);
   font-family: var(--font);
   font-weight: 500;
   text-transform: uppercase;
