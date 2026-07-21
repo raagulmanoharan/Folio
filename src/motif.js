@@ -378,21 +378,43 @@ export function initMotif(canvas) {
       dome.layers.set(CAM_LAYER)
       scene.add(dome)
 
+      // The live feed is low-dynamic-range (capped at white) and its brightness
+      // rides on the visitor's room light, so on its own it either goes dark and
+      // flat or, in a bright room, blows out — and the Y2K glow, which needs
+      // reflections above the bloom threshold, never lands reliably. Hang the
+      // same HDR light panels the studio uses *inside* the webcam environment,
+      // on the reflection-only layer, so they never show as rectangles in the
+      // hero but the die always catches bright highlight streaks that bloom —
+      // independent of the room. The live video still fills the darker body of
+      // the reflection, so the visitor's face reads in the chrome.
+      const camPanel = (w, h, pos, level) => {
+        const m = new THREE.Mesh(
+          new THREE.PlaneGeometry(w, h),
+          new THREE.MeshBasicMaterial({
+            color: new THREE.Color(level, level, level), // >1 = HDR highlight
+            side: THREE.DoubleSide,
+          }),
+        )
+        m.position.set(pos[0], pos[1], pos[2])
+        m.lookAt(0, -0.45, 0) // aim at the die (motif is nudged down 0.45)
+        m.layers.set(CAM_LAYER) // reflection-only: the main camera never sees it
+        scene.add(m)
+      }
+      camPanel(10, 6, [0, 6, 9], 5.0) // key streak, upper front
+      camPanel(5, 11, [-10, 2, 3], 3.0) // rim, left
+      camPanel(5, 11, [10, 1, 4], 2.2) // rim, right
+      camPanel(8, 8, [0, 2, -11], 1.4) // back kicker
+
       const cubeRT = new THREE.WebGLCubeRenderTarget(CUBE_SIZE, { type: THREE.HalfFloatType })
       cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT)
       cubeCamera.layers.set(CAM_LAYER)
 
       chrome.envMap = cubeRT.texture
-      chrome.envMapIntensity = 1.15 // a touch brighter than the studio (1.05) so mid-tone video still glows
+      chrome.envMapIntensity = 1.0 // video mid-tones read without washing out
       chrome.needsUpdate = true
-
-      // The webcam environment is mid-tone, so the chrome's highlights never
-      // clear the studio bloom threshold (0.9) and the glow — plus the flare and
-      // chromatic split that derive from it — flattens out. Nudge the threshold
-      // down and the strength up just enough for the Y2K glow to survive under
-      // camera light, without blowing out.
-      bloom.threshold = 0.66
-      bloom.strength = 0.33
+      // Bloom stays at the studio values (threshold 0.9 / strength 0.28): the HDR
+      // panels above drive the glow now, not the room, so it can't blow out or
+      // flatten with the visitor's lighting.
     } catch {
       // denied or unavailable — studio reflections remain
     }
