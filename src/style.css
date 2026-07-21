@@ -27,6 +27,9 @@
   --gutter: 20px;    /* reference edge padding at all widths */
   --peek: clamp(84px, 11vh, 128px); /* sliver of the first work item that peeks */
   --font: 'Neue Montreal', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Fraunces: the reflective/serif voice — mastheads and the agents' writing */
+  --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --agent: #d8c6a6; /* warm tint that marks the agents' voice against the mono UI */
 }
 
 * {
@@ -985,14 +988,29 @@ html.is-locked body {
 }
 
 .reflections-intro {
-  margin: 0 0 clamp(40px, 7vh, 80px);
-  max-width: 20ch;
+  margin: 0 0 clamp(16px, 2.5vh, 26px);
+  max-width: 16ch;
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
   font-weight: 400;
-  font-size: clamp(1.5rem, 4vw, 2.6rem);
-  line-height: 1.14;
+  font-size: clamp(2rem, 5.4vw, 3.6rem);
+  line-height: 1.06;
   letter-spacing: -0.4px;
   color: var(--fg);
   text-wrap: balance;
+}
+
+.reflections-intro em {
+  font-style: italic;
+}
+
+/* Frames the two voices on the page */
+.reflections-note {
+  margin: 0 0 clamp(44px, 7vh, 80px);
+  max-width: 44ch;
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  line-height: 1.55;
+  color: var(--fg-dim);
 }
 
 .reflections-list {
@@ -1131,12 +1149,40 @@ html.is-locked body {
   color: var(--fg-dim);
 }
 
+/* Author byline in the meta line: mine reads in the UI grey; the agents get
+   their warm accent + mark. */
+.reflections-byline {
+  color: var(--fg);
+}
+
+.reflections-byline--agent {
+  color: var(--agent);
+}
+
+.reflections-byline__mark {
+  margin-right: 2px;
+}
+
 .reflections-title {
   font-size: clamp(1.5rem, 3.4vw, 2.3rem);
   font-weight: 400;
   line-height: 1.08;
   letter-spacing: -0.3px;
   text-wrap: balance;
+}
+
+/* The agents write in the flourishing serif italic — a visibly different hand,
+   so their words are never mistaken for mine. */
+.reflections-title--agent {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.7rem, 3.9vw, 2.7rem);
+  line-height: 1.02;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #ece2d1;
 }
 
 .reflections-dek {
