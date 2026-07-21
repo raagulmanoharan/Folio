@@ -392,7 +392,6 @@ main {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  border: 1px solid var(--hairline);
   background: #0f0f0f;
   scrollbar-width: none;
 }
