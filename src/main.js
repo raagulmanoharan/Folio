@@ -117,7 +117,9 @@ if (gallery && galleryBackdrop && galleryOpenBtn) {
 
   galleryOpenBtn.addEventListener('click', openGallery)
   galleryBackdrop.addEventListener('click', closeGallery)
-  gallery.querySelector('[data-gallery-close]').addEventListener('click', closeGallery)
+  document
+    .querySelectorAll('[data-gallery-close]')
+    .forEach((el) => el.addEventListener('click', closeGallery))
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && gallery.classList.contains('is-open')) closeGallery()
   })

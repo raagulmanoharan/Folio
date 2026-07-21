@@ -779,31 +779,44 @@ main {
   transform: rotate(-45deg);
 }
 
-/* A persistent close in the bottom-right corner (fixed within the drawer, so it
-   stays put while the projects scroll). */
-.gallery-close--br {
+/* A persistent close pinned to the viewport's bottom-right. It lives outside the
+   transformed drawer so it stays fixed while the projects scroll, and shows only
+   while the drawer is open. */
+.gallery-close-fixed {
   position: fixed;
-  top: auto;
   bottom: 22px;
   right: 22px;
   width: 48px;
   height: 48px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
   background: #141414;
+  z-index: 210; /* above the drawer (200) */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.2s ease;
+}
+.gallery.is-open ~ .gallery-close-fixed {
   opacity: 1;
   pointer-events: auto;
-  z-index: 3;
-  transition: transform 0.2s ease, opacity 0.2s ease;
 }
-.gallery-close--br:hover {
+.gallery-close-fixed:hover {
   transform: scale(1.06);
 }
-.gallery-close--br span {
+.gallery-close-fixed span {
+  position: absolute;
   top: 50%;
   left: 31%;
   width: 38%;
   height: 1.6px;
   background: #f4c400;
+}
+.gallery-close-fixed span:first-child {
+  transform: rotate(45deg);
+}
+.gallery-close-fixed span:last-child {
+  transform: rotate(-45deg);
 }
 
 /* Two columns: the title + description lock to the bottom-left while a column
@@ -836,6 +849,11 @@ main {
   margin: 0;
   scroll-snap-align: start;
   scroll-snap-stop: always;
+}
+/* Give the last project a full-height section so it can still scroll up and lock
+   to the top (otherwise there's nothing below it to scroll against). */
+.gallery-figure:last-child {
+  min-height: calc(100vh - 44px);
 }
 /* The caption sits to the left of the media, right-aligned and top-aligned. */
 .gallery-figure__inner {

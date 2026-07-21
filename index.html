@@ -51,9 +51,6 @@
       <button class="gallery-close" type="button" data-gallery-close aria-label="Close">
         <span></span><span></span>
       </button>
-      <button class="gallery-close gallery-close--br" type="button" data-gallery-close aria-label="Close">
-        <span></span><span></span>
-      </button>
       <div class="gallery-body">
         <div class="gallery-side">
           <p class="gallery-title">
@@ -89,12 +86,11 @@
               <figcaption class="gallery-figure__cap">A VST I designed from the ground up with Fluid Innovation.</figcaption>
               <div class="gallery-figure__embed">
                 <iframe
-                  data-embed-src="https://www.youtube.com/embed/IPJFrbW7CIg?start=50"
+                  data-embed-src="https://www.youtube-nocookie.com/embed/IPJFrbW7CIg?start=50"
                   title="A VST designed with Fluid Innovation"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen
                   loading="lazy"
-                  referrerpolicy="no-referrer"
                 ></iframe>
               </div>
             </div>
@@ -102,6 +98,11 @@
         </div>
       </div>
     </aside>
+    <!-- Persistent close, kept outside the (transformed) drawer so it stays fixed
+         to the viewport's bottom-right while the projects scroll. -->
+    <button class="gallery-close-fixed" type="button" data-gallery-close aria-label="Close" aria-controls="gallery-drawer">
+      <span></span><span></span>
+    </button>
 
     <!-- Reflections: a full-screen writing panel that slides in from the right -->
     <aside class="reflections" id="reflections-panel" data-reflections aria-hidden="true" aria-label="Reflections">
