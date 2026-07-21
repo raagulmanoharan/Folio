@@ -42,6 +42,15 @@
   src: url('./fonts/PinyonScript-Regular.woff2') format('woff2');
 }
 
+/* Archivo Black (Google Fonts, OFL) — the heavy grotesque caps in the masthead. */
+@font-face {
+  font-family: 'Archivo';
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/Archivo-Black.woff2') format('woff2');
+}
+
 :root {
   --bg: #161616;         /* content ground — matches reference (not pure black) */
   --fg: #ededed;         /* header links */
@@ -56,6 +65,8 @@
      Pinyon Script: the calligraphy flourish in the Reflections masthead. */
   --font-serif: 'PT Serif', 'Times New Roman', Georgia, serif;
   --font-script: 'Pinyon Script', 'Snell Roundhand', cursive;
+  /* Archivo Black: the heavy display grotesque the masthead caps are set in. */
+  --font-display: 'Archivo', 'Neue Montreal', ui-sans-serif, sans-serif;
 }
 
 * {
@@ -1015,25 +1026,57 @@ html.is-locked body {
 
 /* Masthead: the site sans, with the accent phrase in a calligraphy script —
    loops and flourishes against the clean grotesque (best of both worlds). */
+/* Masthead — heavy grotesque caps interleaved with a roundhand script. The
+   script sits on its own staggered lines, packed tight so its loops cross into
+   the caps above and below while the words stay readable. */
 .reflections-intro {
-  margin: 0 0 clamp(44px, 7vh, 80px);
-  max-width: 15ch;
-  font-family: var(--font);
-  font-weight: 400;
-  font-size: clamp(2.1rem, 5.6vw, 3.7rem);
-  line-height: 1.28; /* extra leading so the script's loops have room */
-  letter-spacing: -0.4px;
+  margin: clamp(8px, 2vh, 28px) 0 clamp(52px, 8vh, 92px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   color: var(--fg);
-  text-wrap: balance;
 }
 
-.reflections-intro em {
+.mh-caps {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(2.5rem, 8vw, 5.2rem);
+  line-height: 0.9; /* tight leading — cap lines nearly touch */
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+
+/* Large script accent lines. Negative top/bottom margins pull the tall loops up
+   into the caps above and down into the caps below (the interlock) without the
+   word body ever landing on top of a cap letter. */
+.mh-script {
   font-family: var(--font-script);
-  font-style: normal;
   font-weight: 400;
-  font-size: 1.5em; /* scripts sit small; size it up to match the sans */
+  font-size: clamp(3.4rem, 10.5vw, 7rem);
   line-height: 0.8;
-  letter-spacing: 0;
+  margin: -0.28em 0 -0.3em;
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+.mh-script--a {
+  margin-left: 1.5em; /* stagger the script to the right */
+}
+.mh-script--b {
+  margin-left: 2.5em;
+  margin-top: -0.14em; /* drop into the gap so it clears the caps */
+}
+
+.mh-caption {
+  margin-top: clamp(22px, 3.5vh, 34px);
+  font-family: var(--font);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: clamp(0.62rem, 1.1vw, 0.75rem);
+  letter-spacing: 0.16em;
+  color: var(--fg-dim);
 }
 
 .reflections-list {
