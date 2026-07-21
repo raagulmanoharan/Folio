@@ -906,13 +906,13 @@ html.is-locked body {
 .reflections {
   position: fixed;
   top: 0;
-  right: 0;
+  left: 0; /* opens from the left (the Reflections link sits on the left) */
   height: 100%;
   width: 100vw; /* full screen, unlike the 50vw Info drawer */
   z-index: 200;
   background: var(--bg);
   color: var(--fg);
-  transform: translateX(100%);
+  transform: translateX(-100%);
   transition: transform 0.6s cubic-bezier(0.45, 0, 0.55, 1);
   will-change: transform;
   overflow-y: auto;
@@ -1067,6 +1067,14 @@ html.is-locked body {
   z-index: 1;
   padding: 14px 0 clamp(22px, 3.5vh, 40px);
   background: var(--bg);
+  /* stays put; only fades once the expand animation has settled, so it never
+     pops or jumps into place */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.reflections-item.is-settled .reflections-item__collapse {
+  opacity: 1;
 }
 
 .reflections-item__collapse::before {
