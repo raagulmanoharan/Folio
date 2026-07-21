@@ -42,13 +42,13 @@
   src: url('./fonts/PinyonScript-Regular.woff2') format('woff2');
 }
 
-/* Archivo Black (Google Fonts, OFL) — the heavy grotesque caps in the masthead. */
+/* Archivo ExtraBold (Google Fonts, OFL) — the heavy grotesque caps in the masthead. */
 @font-face {
   font-family: 'Archivo';
-  font-weight: 900;
+  font-weight: 800;
   font-style: normal;
   font-display: swap;
-  src: url('./fonts/Archivo-Black.woff2') format('woff2');
+  src: url('./fonts/Archivo-ExtraBold.woff2') format('woff2');
 }
 
 :root {
@@ -1039,34 +1039,32 @@ html.is-locked body {
 
 .mh-caps {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 800;
   text-transform: uppercase;
-  font-size: clamp(2.5rem, 8vw, 5.2rem);
-  line-height: 0.9; /* tight leading — cap lines nearly touch */
-  letter-spacing: -0.02em;
+  font-size: clamp(2.4rem, 7.6vw, 5rem);
+  line-height: 1.02; /* a touch of room so the script sits in the gap */
+  letter-spacing: -0.015em;
   position: relative;
   z-index: 1;
 }
 
-/* Large script accent lines. Negative top/bottom margins pull the tall loops up
-   into the caps above and down into the caps below (the interlock) without the
-   word body ever landing on top of a cap letter. */
+/* Script accent lines sit in the leading gap between cap rows; only their tall
+   loops reach up and down into the caps, so the words stay clearly readable. */
 .mh-script {
   font-family: var(--font-script);
   font-weight: 400;
-  font-size: clamp(3.4rem, 10.5vw, 7rem);
-  line-height: 0.8;
-  margin: -0.28em 0 -0.3em;
+  font-size: clamp(2.9rem, 8.6vw, 5.6rem);
+  line-height: 0.9;
+  margin: -0.14em 0 -0.16em;
   position: relative;
   z-index: 2;
   pointer-events: none;
 }
 .mh-script--a {
-  margin-left: 1.5em; /* stagger the script to the right */
+  margin-left: 1.4em; /* stagger the script to the right */
 }
 .mh-script--b {
-  margin-left: 2.5em;
-  margin-top: -0.14em; /* drop into the gap so it clears the caps */
+  margin-left: 2.3em;
 }
 
 .mh-caption {
