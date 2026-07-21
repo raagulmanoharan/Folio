@@ -792,10 +792,6 @@ main {
 .gallery-title .mh-row {
   font-size: clamp(1.9rem, 5.5vw, 3.8rem);
 }
-/* Tighten the roundhand accent's kerning so its letters sit closer together. */
-.gallery-title .mh-script {
-  letter-spacing: -0.03em;
-}
 
 .gallery-note {
   margin: 22px 0 0;
