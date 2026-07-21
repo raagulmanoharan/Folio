@@ -792,10 +792,9 @@ main {
 .gallery-title .mh-row {
   font-size: clamp(1.9rem, 5.5vw, 3.8rem);
 }
-/* The roundhand "Loose" carries a long trailing swash; pull the caps that
-   follow it back under the flourish so the gap reads tight. */
+/* Tighten the roundhand accent's kerning so its letters sit closer together. */
 .gallery-title .mh-script {
-  margin-right: -0.16em;
+  letter-spacing: -0.03em;
 }
 
 .gallery-note {
