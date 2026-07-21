@@ -1140,6 +1140,7 @@ html.is-locked body {
   font-size: clamp(1rem, 1.6vw, 1.1rem);
   line-height: 1.62;
   color: #cfcfcf;
+  text-wrap: pretty; /* even rag, no orphaned last-line words */
 }
 
 .reflections-item__body p:last-child {
@@ -1239,6 +1240,7 @@ html.is-locked body {
   letter-spacing: -0.2px;
   text-transform: none;
   color: var(--fg);
+  text-wrap: balance;
 }
 
 .reflections-dek {
@@ -1246,6 +1248,7 @@ html.is-locked body {
   font-size: clamp(0.95rem, 1.5vw, 1.05rem);
   line-height: 1.5;
   color: var(--fg-dim);
+  text-wrap: pretty;
 }
 
 /* An agent's whole article is set in the upright serif (title, standfirst, and
