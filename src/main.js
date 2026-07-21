@@ -87,6 +87,39 @@ if (drawer && backdrop && openBtn) {
   drawer.addEventListener('mouseleave', () => drawer.classList.remove('show-close'))
 }
 
+/* ---------- Reflections (full-screen writing panel) ---------- */
+const reflections = document.querySelector('[data-reflections]')
+const reflectionsOpenBtn = document.querySelector('[data-reflections-open]')
+
+if (reflections && reflectionsOpenBtn) {
+  let reflectionsLastFocused = null
+
+  const openReflections = () => {
+    reflectionsLastFocused = document.activeElement
+    reflections.classList.add('is-open')
+    reflections.setAttribute('aria-hidden', 'false')
+    reflectionsOpenBtn.setAttribute('aria-expanded', 'true')
+    document.documentElement.classList.add('is-locked')
+    reflections.scrollTop = 0
+    reflections.querySelector('[data-reflections-close]')?.focus()
+  }
+  const closeReflections = () => {
+    reflections.classList.remove('is-open')
+    reflections.setAttribute('aria-hidden', 'true')
+    reflectionsOpenBtn.setAttribute('aria-expanded', 'false')
+    document.documentElement.classList.remove('is-locked')
+    reflectionsLastFocused?.focus?.()
+  }
+
+  reflectionsOpenBtn.addEventListener('click', openReflections)
+  reflections
+    .querySelectorAll('[data-reflections-close]')
+    .forEach((el) => el.addEventListener('click', closeReflections))
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && reflections.classList.contains('is-open')) closeReflections()
+  })
+}
+
 /* ---------- Case study (expands inline, in place, below the work item) ---------- */
 const caseInline = document.querySelector('[data-case]')
 if (caseInline) {

@@ -13,7 +13,7 @@
     <!-- Sticky "headroom" header: hides on scroll down, reveals on scroll up -->
     <header class="site-header" data-header>
       <nav class="header-inner">
-        <a class="header-link header-link--left" href="#reflections">( Reflections )</a>
+        <button class="header-link header-link--left" type="button" data-reflections-open aria-controls="reflections-panel" aria-expanded="false">( Reflections )</button>
         <a class="header-link header-link--center" href="/"><span class="wordmark-full">Raagul Manoharan</span><span class="wordmark-short">RM</span></a>
         <button class="header-link header-link--right" type="button" data-drawer-open aria-controls="info-drawer" aria-expanded="false">( Info )</button>
       </nav>
@@ -39,6 +39,59 @@
             <li><a href="#">Freshworks &mdash; Product Designer</a><span>2018</span></li>
           </ul>
         </div>
+      </div>
+    </aside>
+
+    <!-- Reflections: a full-screen writing panel that slides in from the right -->
+    <aside class="reflections" id="reflections-panel" data-reflections aria-hidden="true" aria-label="Reflections">
+      <div class="reflections-bar">
+        <span class="reflections-bar__label">Reflections</span>
+        <button class="reflections-close" type="button" data-reflections-close aria-label="Close reflections">
+          <span></span><span></span>
+        </button>
+      </div>
+      <div class="reflections-body">
+        <p class="reflections-intro">
+          Notes on design, AI, and the craft of making things &mdash; written as I
+          work them out.
+        </p>
+        <ul class="reflections-list">
+          <li>
+            <a href="#">
+              <span class="reflections-meta"><span>2026</span> &middot; Essay</span>
+              <span class="reflections-title">The chat box was the command line of AI</span>
+              <span class="reflections-dek">The next interface for intelligence isn&rsquo;t a better prompt field &mdash; it&rsquo;s a space you can think in.</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="reflections-meta"><span>2026</span> &middot; Note</span>
+              <span class="reflections-title">Designing for consent, not magic</span>
+              <span class="reflections-dek">Proactive AI should raise its hand, never act on your behalf. A small grammar for agents that don&rsquo;t surprise you.</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="reflections-meta"><span>2025</span> &middot; Essay</span>
+              <span class="reflections-title">Presence is a feature</span>
+              <span class="reflections-dek">What makes software feel alive: visible cursors, work that streams in, and status that tells the truth.</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="reflections-meta"><span>2025</span> &middot; Note</span>
+              <span class="reflections-title">The best design decisions are deletions</span>
+              <span class="reflections-dek">On shipping less &mdash; how removing a chat panel did more for a product than any feature I added.</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="reflections-meta"><span>2024</span> &middot; Field notes</span>
+              <span class="reflections-title">Interfaces for sound</span>
+              <span class="reflections-dek">Designing synth and VST UIs: knobs, latency, and why skeuomorphism still earns its keep.</span>
+            </a>
+          </li>
+        </ul>
       </div>
     </aside>
 
