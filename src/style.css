@@ -732,6 +732,8 @@ main {
   flex-direction: column;
   padding: 20px 20px 24px;
   overflow-y: auto;
+  scroll-snap-type: y mandatory; /* each project locks into view */
+  scroll-behavior: smooth;
 }
 
 .gallery.is-open {
@@ -797,18 +799,24 @@ main {
 .gallery-stream {
   display: flex;
   flex-direction: column;
-  gap: clamp(40px, 8vh, 96px);
-  padding-bottom: clamp(24px, 6vh, 64px);
 }
 
-/* Each image fills the column to the right edge, with its caption set to the
-   left, right-aligned and top-aligned so it hugs the image's corner. */
+/* Each project is a full-height section that scroll-locks into view. */
 .gallery-figure {
   margin: 0;
+  min-height: calc(100vh - 44px);
+  display: flex;
+  align-items: center; /* centre the project block vertically in its section */
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+/* The caption sits to the left of the media, right-aligned and top-aligned. */
+.gallery-figure__inner {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   gap: clamp(16px, 2vw, 30px);
+  width: 100%;
 }
 .gallery-figure__cap {
   flex: 0 0 auto;
@@ -819,6 +827,14 @@ main {
   font-size: 13px;
   line-height: 1.45;
   color: rgba(20, 20, 20, 0.72);
+  /* revealed only once the project scrolls into view */
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.gallery-figure.is-inview .gallery-figure__cap {
+  opacity: 1;
+  transform: none;
 }
 .gallery-figure img {
   flex: 1 1 auto;
@@ -826,6 +842,20 @@ main {
   display: block;
   width: 100%;
   height: auto; /* natural aspect — never stretched */
+}
+/* Live embeds (a Figma deck, a video) sit in a 16:9 frame that fills the column */
+.gallery-figure__embed {
+  flex: 1 1 auto;
+  min-width: 0;
+  aspect-ratio: 16 / 9;
+  background: #0d0d0f;
+  overflow: hidden;
+}
+.gallery-figure__embed iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 @media (max-width: 720px) {
@@ -835,12 +865,13 @@ main {
   .gallery-side {
     position: static;
     height: auto;
-    margin-bottom: clamp(24px, 6vh, 40px);
+    min-height: calc(100vh - 44px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    scroll-snap-align: center;
   }
-  .gallery-stream {
-    gap: clamp(28px, 6vh, 48px);
-  }
-  .gallery-figure {
+  .gallery-figure__inner {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
@@ -856,6 +887,17 @@ main {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .gallery {
+    scroll-snap-type: none;
+  }
+  .gallery-figure__cap {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Title borrows the Reflections masthead lockup (heavy grotesque caps
    interlocked with a roundhand accent), in the drawer's dark ink on yellow. */
 .gallery-title {
@@ -866,6 +908,8 @@ main {
 }
 .gallery-title .mh-row {
   font-size: clamp(1.9rem, 5.5vw, 3.8rem);
+  flex-wrap: nowrap; /* keep each caps+script row on one line, e.g. "Stray Light," */
+  white-space: nowrap;
 }
 
 .gallery-note {

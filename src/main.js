@@ -93,7 +93,16 @@ const galleryBackdrop = document.querySelector('[data-gallery-backdrop]')
 const galleryOpenBtn = document.querySelector('[data-gallery-open]')
 
 if (gallery && galleryBackdrop && galleryOpenBtn) {
+  // Load the embedded experiments (a Figma deck, a video) only on first open, so
+  // a visitor who never opens the drawer never hits those external apps.
+  const loadEmbeds = () => {
+    gallery.querySelectorAll('iframe[data-embed-src]').forEach((f) => {
+      f.src = f.getAttribute('data-embed-src')
+      f.removeAttribute('data-embed-src')
+    })
+  }
   const openGallery = () => {
+    loadEmbeds()
     gallery.classList.add('is-open')
     galleryBackdrop.classList.add('is-open')
     gallery.setAttribute('aria-hidden', 'false')
@@ -121,6 +130,22 @@ if (gallery && galleryBackdrop && galleryOpenBtn) {
     gallery.classList.toggle('show-close', near)
   })
   gallery.addEventListener('mouseleave', () => gallery.classList.remove('show-close'))
+
+  // Reveal each project's caption only once it scrolls into view.
+  const figures = gallery.querySelectorAll('[data-figure]')
+  if (figures.length && 'IntersectionObserver' in window) {
+    // Observe against the viewport (not the transformed drawer, whose transform
+    // breaks a scroll-container root); the fixed drawer fills the viewport.
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => e.target.classList.toggle('is-inview', e.isIntersecting))
+      },
+      { threshold: 0.5 },
+    )
+    figures.forEach((f) => io.observe(f))
+  } else {
+    figures.forEach((f) => f.classList.add('is-inview'))
+  }
 }
 
 /* ---------- Reflections (full-screen writing panel) ---------- */
