@@ -333,6 +333,11 @@ main {
 
 /* On the featured item the repo/live-demo links and the role live inside the
    expanded case study, so hide the duplicate row in the collapsed view. */
+/* On the featured item the links and role are hidden for now. */
+.work-item--featured .work-links {
+  display: none;
+}
+
 .work-media {
   align-self: center;
   display: flex;
