@@ -251,6 +251,41 @@ if (caseInline) {
   })
 }
 
+/* ---------- Work carousel (screenshots on the right) ---------- */
+document.querySelectorAll('[data-carousel]').forEach((car) => {
+  const track = car.querySelector('[data-carousel-track]')
+  const dotsWrap = car.querySelector('[data-carousel-dots]')
+  const slides = track ? [...track.children] : []
+  if (!track || !dotsWrap || slides.length < 2) return
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button')
+    dot.type = 'button'
+    dot.setAttribute('aria-label', `Show screenshot ${i + 1} of ${slides.length}`)
+    if (i === 0) dot.setAttribute('aria-current', 'true')
+    dot.addEventListener('click', () =>
+      track.scrollTo({ left: i * track.clientWidth, behavior: reducedMotion ? 'auto' : 'smooth' }),
+    )
+    dotsWrap.appendChild(dot)
+  })
+  const dots = [...dotsWrap.children]
+
+  let raf
+  track.addEventListener(
+    'scroll',
+    () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        const i = Math.round(track.scrollLeft / track.clientWidth)
+        dots.forEach((d, di) =>
+          di === i ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current'),
+        )
+      })
+    },
+    { passive: true },
+  )
+})
+
 /* ---------- Header headroom ---------- */
 // "Headroom" behavior: hide the header when scrolling down, reveal on scroll up.
 const header = document.querySelector('[data-header]')
