@@ -1242,6 +1242,34 @@ html.is-locked body {
   margin-top: 0;
 }
 
+.reflections-item__body ul {
+  margin: 0.2em 0 1em;
+  padding: 0 0 0 1.1em;
+  list-style: none;
+}
+.reflections-item__body li {
+  position: relative;
+  margin: 0 0 0.55em;
+  line-height: 1.6;
+  color: #cfcfcf;
+}
+.reflections-item__body li::before {
+  content: "";
+  position: absolute;
+  left: -1.1em;
+  top: 0.72em;
+  width: 9px;
+  height: 1px;
+  background: var(--fg-dim);
+}
+.reflections-item__body strong {
+  color: var(--fg);
+  font-weight: 500;
+}
+.reflections-item__body em {
+  font-style: italic;
+}
+
 /* A small link back to the original piece */
 .reflections-source {
   margin-top: 1.8em;
@@ -1376,6 +1404,16 @@ html.is-locked body {
   font-size: clamp(1.05rem, 1.7vw, 1.2rem);
   line-height: 1.58;
   color: #cfcfcf;
+}
+
+/* Everything else in an agent article (subheads, lists, emphasis) is serif too */
+.reflections-item--agent .reflections-item__body h4,
+.reflections-item--agent .reflections-item__body li {
+  font-family: var(--font-serif);
+}
+.reflections-item--agent .reflections-item__body li {
+  font-size: clamp(1.02rem, 1.6vw, 1.14rem);
+  line-height: 1.5;
 }
 
 @media (prefers-reduced-motion: reduce) {
