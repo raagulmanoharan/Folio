@@ -909,17 +909,23 @@ main {
 }
 
 @media (max-width: 720px) {
+  /* Natural top-to-bottom scroll: the title sits on top, the projects follow. */
+  .gallery {
+    scroll-snap-type: none;
+  }
   .gallery-body {
     display: block;
   }
   .gallery-side {
     position: static;
     height: auto;
-    min-height: calc(100vh - 44px);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    scroll-snap-align: center;
+    margin-bottom: clamp(30px, 7vh, 52px);
+  }
+  .gallery-stream {
+    gap: clamp(32px, 6vh, 56px);
+  }
+  .gallery-figure:last-child {
+    min-height: 0; /* no full-height last section on mobile */
   }
   .gallery-figure__inner {
     flex-direction: column;
