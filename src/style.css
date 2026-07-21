@@ -800,11 +800,21 @@ main {
 .case-section > .case-list {
   max-width: 50%;
 }
-.case-section > .case-figure,
-.case-section > .case-grid {
+/* A side figure floats into the right column and top-aligns to the paragraph
+   (or title) it sits beside — place it directly before that element. */
+.case-section > .case-figure {
   float: right;
   width: 46%;
-  margin: 0.4em 0 1.4em 4%;
+  margin: 0 0 1.4em 4%;
+}
+/* A full-width figure (add case-figure--full) or the supporting-shot gallery
+   spans the whole column. */
+.case-section > .case-figure--full,
+.case-section > .case-grid {
+  float: none;
+  clear: both;
+  width: 100%;
+  margin: clamp(28px, 4vh, 44px) 0 0;
 }
 
 @media (max-width: 900px) {
