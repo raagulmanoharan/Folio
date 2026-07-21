@@ -781,6 +781,55 @@ main {
   padding-right: 44px; /* clear the close button */
 }
 
+/* An image rides in the upper-right of the drawer, with its caption set to the
+   left of it, right-aligned and top-aligned so it hugs the image's corner. */
+.gallery-figure {
+  margin: 0 0 clamp(20px, 3vh, 32px);
+  padding-right: 44px; /* clear the close button */
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: clamp(16px, 2vw, 30px);
+}
+.gallery-figure__cap {
+  flex: 0 1 auto;
+  max-width: 20ch;
+  padding-top: 3px;
+  text-align: right;
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(20, 20, 20, 0.72);
+}
+.gallery-figure img {
+  display: block;
+  width: min(56%, 660px);
+  height: auto;
+}
+
+@media (max-width: 720px) {
+  .gallery {
+    height: 88vh;
+    max-height: none;
+  }
+  .gallery-figure {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .gallery-figure__cap {
+    max-width: none;
+    text-align: left;
+  }
+  .gallery-figure img {
+    width: 100%;
+  }
+  /* flow the title under the image instead of pinning it to the bottom */
+  .gallery-body {
+    margin-top: clamp(22px, 5vh, 40px);
+  }
+}
+
 /* Title borrows the Reflections masthead lockup (heavy grotesque caps
    interlocked with a roundhand accent), in the drawer's dark ink on yellow. */
 .gallery-title {
