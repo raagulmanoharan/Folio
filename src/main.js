@@ -101,7 +101,6 @@ if (reflections && reflectionsOpenBtn) {
     reflectionsOpenBtn.setAttribute('aria-expanded', 'true')
     document.documentElement.classList.add('is-locked')
     reflections.scrollTop = 0
-    reflections.querySelector('[data-reflections-close]')?.focus()
   }
   const closeReflections = () => {
     reflections.classList.remove('is-open')
@@ -117,6 +116,31 @@ if (reflections && reflectionsOpenBtn) {
     .forEach((el) => el.addEventListener('click', closeReflections))
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && reflections.classList.contains('is-open')) closeReflections()
+  })
+
+  // Each article expands in place on click — no links, no separate pages.
+  const RDUR = reducedMotion ? 20 : 480
+  reflections.querySelectorAll('[data-refl-toggle]').forEach((toggle) => {
+    const item = toggle.closest('.reflections-item')
+    const reveal = item.querySelector('.reflections-item__reveal')
+    let settle
+    toggle.addEventListener('click', () => {
+      const open = item.classList.toggle('is-open')
+      toggle.setAttribute('aria-expanded', String(open))
+      clearTimeout(settle)
+      if (open) {
+        reveal.style.maxHeight = `${reveal.scrollHeight}px`
+        settle = setTimeout(() => {
+          if (item.classList.contains('is-open')) reveal.style.maxHeight = 'none'
+        }, RDUR)
+      } else {
+        reveal.style.maxHeight = `${reveal.scrollHeight}px`
+        void reveal.offsetHeight
+        requestAnimationFrame(() => {
+          reveal.style.maxHeight = '0px'
+        })
+      }
+    })
   })
 }
 

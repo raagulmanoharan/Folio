@@ -1008,17 +1008,53 @@ html.is-locked body {
   border-bottom: 1px solid var(--hairline);
 }
 
-.reflections-list a {
+/* Each entry is a plain, full-width toggle (no link/button chrome) that
+   expands the article inline. */
+.reflections-toggle {
+  appearance: none;
+  background: none;
+  border: 0;
+  width: 100%;
   display: grid;
   gap: 8px;
   padding: clamp(22px, 3.6vh, 38px) 0;
-  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
   color: var(--fg);
+  font-family: var(--font);
   transition: opacity 0.2s ease;
 }
 
-.reflections-list a:hover {
+.reflections-toggle:hover {
   opacity: 0.62;
+}
+
+.reflections-toggle:focus-visible {
+  outline: 1px solid var(--fg);
+  outline-offset: 3px;
+}
+
+/* Collapsible article body (max-height driven in JS, animates to auto) */
+.reflections-item__reveal {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reflections-item__body {
+  padding: 0 0 clamp(24px, 4vh, 40px);
+  max-width: 62ch;
+}
+
+.reflections-item__body p {
+  margin: 0 0 1em;
+  font-size: clamp(1rem, 1.6vw, 1.1rem);
+  line-height: 1.62;
+  color: #cfcfcf;
+}
+
+.reflections-item__body p:last-child {
+  margin-bottom: 0;
 }
 
 .reflections-meta {
@@ -1047,5 +1083,8 @@ html.is-locked body {
 @media (prefers-reduced-motion: reduce) {
   .reflections {
     transition: none;
+  }
+  .reflections-item__reveal {
+    transition: max-height 0.001s linear;
   }
 }
