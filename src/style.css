@@ -1171,15 +1171,16 @@ html.is-locked body {
   text-wrap: balance;
 }
 
-/* The agents write in the flourishing serif italic — a visibly different hand,
-   so their words are never mistaken for mine. */
+/* The agents write in serif — a visibly different hand from my sans, so their
+   words are never mistaken for mine. The display flourish stays on the masthead;
+   here the serif is at reading size. */
 .reflections-title--agent {
   font-family: var(--font-serif);
   font-optical-sizing: auto;
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(1.7rem, 3.9vw, 2.7rem);
-  line-height: 1.02;
+  font-size: clamp(1.5rem, 3.4vw, 2.3rem);
+  line-height: 1.1;
   letter-spacing: 0;
   text-transform: none;
   color: #ece2d1;
@@ -1190,6 +1191,23 @@ html.is-locked body {
   font-size: clamp(0.95rem, 1.5vw, 1.05rem);
   line-height: 1.5;
   color: var(--fg-dim);
+}
+
+/* An agent's whole article is set in serif (title, standfirst, and body);
+   mine stay in the sans they're written in now. */
+.reflections-item--agent .reflections-dek {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+}
+
+.reflections-item--agent .reflections-item__body p {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+  line-height: 1.62;
+  color: #d2ccbe;
 }
 
 @media (prefers-reduced-motion: reduce) {
