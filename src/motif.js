@@ -383,15 +383,16 @@ export function initMotif(canvas) {
       cubeCamera.layers.set(CAM_LAYER)
 
       chrome.envMap = cubeRT.texture
-      chrome.envMapIntensity = 1.35 // brighter than the studio (1.05) so mid-tone video still glows
+      chrome.envMapIntensity = 1.15 // a touch brighter than the studio (1.05) so mid-tone video still glows
       chrome.needsUpdate = true
 
       // The webcam environment is mid-tone, so the chrome's highlights never
       // clear the studio bloom threshold (0.9) and the glow — plus the flare and
-      // chromatic split that derive from it — flattens out. Drop the threshold and
-      // lift the strength so the Y2K glow survives under camera light.
-      bloom.threshold = 0.5
-      bloom.strength = 0.42
+      // chromatic split that derive from it — flattens out. Nudge the threshold
+      // down and the strength up just enough for the Y2K glow to survive under
+      // camera light, without blowing out.
+      bloom.threshold = 0.66
+      bloom.strength = 0.33
     } catch {
       // denied or unavailable — studio reflections remain
     }
