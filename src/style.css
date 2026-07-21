@@ -333,6 +333,7 @@ main {
 
 /* On the featured item the repo/live-demo links and the role live inside the
    expanded case study, so hide the duplicate row in the collapsed view. */
+/* On the featured item the links and role are hidden for now. */
 .work-item--featured .work-links {
   display: none;
 }
@@ -382,6 +383,43 @@ main {
 .case-toggle:focus-visible {
   outline: 1px solid var(--fg);
   outline-offset: 3px;
+}
+/* Non-interactive placeholder while the case study is in progress. */
+.case-toggle--soon {
+  cursor: default;
+  color: var(--fg-dim);
+}
+.case-toggle--soon:hover {
+  opacity: 1;
+}
+
+/* Single Jarwiz shot: fills the media column, flush to the right edge. */
+.work-shot {
+  grid-column: 3;
+  align-self: stretch;
+  position: relative;
+  margin: 0;
+  width: 100%;
+}
+.work-shot img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #0f0f0f;
+}
+@media (max-width: 720px) {
+  .work-shot {
+    grid-column: 1 / -1;
+    margin-top: clamp(20px, 4vh, 32px);
+    position: static;
+  }
+  .work-shot img {
+    position: static;
+    height: auto;
+    object-fit: contain;
+  }
 }
 
 .work-carousel {
