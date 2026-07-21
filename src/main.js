@@ -120,18 +120,13 @@ if (reflections && reflectionsOpenBtn) {
 
   // Each article expands in place on click — no links, no separate pages.
   const RDUR = reducedMotion ? 20 : 480
-  // A sticky footer with a "Collapse" link appears while any article is open.
-  const syncReading = () => {
-    reflections.classList.toggle(
-      'is-reading',
-      !!reflections.querySelector('.reflections-item.is-open'),
-    )
-  }
   const collapseItem = (item) => {
     const toggle = item.querySelector('[data-refl-toggle]')
     const reveal = item.querySelector('.reflections-item__reveal')
     item.classList.remove('is-open')
     toggle.setAttribute('aria-expanded', 'false')
+    // clip again before animating shut (overflow was opened for the sticky control)
+    reveal.style.overflow = 'hidden'
     reveal.style.maxHeight = `${reveal.scrollHeight}px`
     void reveal.offsetHeight
     requestAnimationFrame(() => {
@@ -147,30 +142,33 @@ if (reflections && reflectionsOpenBtn) {
       toggle.setAttribute('aria-expanded', String(open))
       clearTimeout(settle)
       if (open) {
+        reveal.style.overflow = 'hidden'
         reveal.style.maxHeight = `${reveal.scrollHeight}px`
         settle = setTimeout(() => {
-          if (item.classList.contains('is-open')) reveal.style.maxHeight = 'none'
+          if (item.classList.contains('is-open')) {
+            reveal.style.maxHeight = 'none'
+            // let the sticky "Collapse" control stick to the viewport
+            reveal.style.overflow = 'visible'
+          }
         }, RDUR)
       } else {
+        reveal.style.overflow = 'hidden'
         reveal.style.maxHeight = `${reveal.scrollHeight}px`
         void reveal.offsetHeight
         requestAnimationFrame(() => {
           reveal.style.maxHeight = '0px'
         })
       }
-      syncReading()
     })
   })
 
+  // The in-article "Collapse" control closes its own article and returns to
+  // the heading.
   reflections.querySelectorAll('[data-refl-collapse]').forEach((btn) => {
+    const item = btn.closest('.reflections-item')
     btn.addEventListener('click', () => {
-      const open = reflections.querySelector('.reflections-item.is-open')
-      reflections
-        .querySelectorAll('.reflections-item.is-open')
-        .forEach((item) => collapseItem(item))
-      syncReading()
-      // bring the collapsed article's heading back into view
-      open?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' })
+      collapseItem(item)
+      item.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' })
     })
   })
 }
