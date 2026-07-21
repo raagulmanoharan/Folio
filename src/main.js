@@ -120,10 +120,22 @@ if (reflections && reflectionsOpenBtn) {
 
   // Each article expands in place on click — no links, no separate pages.
   const RDUR = reducedMotion ? 20 : 480
+  const bar = reflections.querySelector('.reflections-bar')
+  // Smoothly bring an item's heading just under the sticky bar.
+  const scrollToItem = (item) => {
+    const toggle = item.querySelector('[data-refl-toggle]')
+    const y =
+      reflections.scrollTop +
+      toggle.getBoundingClientRect().top -
+      reflections.getBoundingClientRect().top -
+      (bar ? bar.offsetHeight : 0) -
+      12
+    reflections.scrollTo({ top: Math.max(0, y), behavior: reducedMotion ? 'auto' : 'smooth' })
+  }
   const collapseItem = (item) => {
     const toggle = item.querySelector('[data-refl-toggle]')
     const reveal = item.querySelector('.reflections-item__reveal')
-    item.classList.remove('is-open')
+    item.classList.remove('is-open', 'is-settled') // fade the control out first
     toggle.setAttribute('aria-expanded', 'false')
     // clip again before animating shut (overflow was opened for the sticky control)
     reveal.style.overflow = 'hidden'
@@ -147,11 +159,13 @@ if (reflections && reflectionsOpenBtn) {
         settle = setTimeout(() => {
           if (item.classList.contains('is-open')) {
             reveal.style.maxHeight = 'none'
-            // let the sticky "Collapse" control stick to the viewport
+            // let the sticky "Collapse" control stick, then fade it in
             reveal.style.overflow = 'visible'
+            item.classList.add('is-settled')
           }
         }, RDUR)
       } else {
+        item.classList.remove('is-settled')
         reveal.style.overflow = 'hidden'
         reveal.style.maxHeight = `${reveal.scrollHeight}px`
         void reveal.offsetHeight
@@ -162,13 +176,13 @@ if (reflections && reflectionsOpenBtn) {
     })
   })
 
-  // The in-article "Collapse" control closes its own article and returns to
-  // the heading.
+  // The in-article "Collapse" control closes its own article and eases back
+  // to the heading.
   reflections.querySelectorAll('[data-refl-collapse]').forEach((btn) => {
     const item = btn.closest('.reflections-item')
     btn.addEventListener('click', () => {
+      scrollToItem(item)
       collapseItem(item)
-      item.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' })
     })
   })
 }
