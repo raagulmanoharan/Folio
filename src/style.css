@@ -1037,34 +1037,38 @@ html.is-locked body {
   color: var(--fg);
 }
 
+/* Each row keeps its caps and script accent on the same baseline; the script
+   runs larger, so its loops rise above and dip below the cap line. */
+.mh-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.28em;
+  line-height: 1; /* tight leading between rows */
+}
+
 .mh-caps {
   font-family: var(--font-display);
   font-weight: 800;
   text-transform: uppercase;
-  font-size: clamp(2.4rem, 7.6vw, 5rem);
-  line-height: 1.02; /* a touch of room so the script sits in the gap */
+  font-size: clamp(2.2rem, 7vw, 4.6rem);
   letter-spacing: -0.015em;
   position: relative;
   z-index: 1;
 }
 
-/* Script accent lines sit in the leading gap between cap rows; only their tall
-   loops reach up and down into the caps, so the words stay clearly readable. */
+/* The roundhand accent sits inline on the caps' baseline, larger, so its
+   capital flourish rises above the line. A small negative bottom margin keeps
+   its descending loop from pushing the next row down. */
 .mh-script {
   font-family: var(--font-script);
   font-weight: 400;
-  font-size: clamp(2.9rem, 8.6vw, 5.6rem);
+  font-size: clamp(3.2rem, 10vw, 6.6rem);
   line-height: 0.9;
-  margin: -0.14em 0 -0.16em;
+  margin: 0 0 -0.16em 0.02em;
   position: relative;
   z-index: 2;
   pointer-events: none;
-}
-.mh-script--a {
-  margin-left: 1.4em; /* stagger the script to the right */
-}
-.mh-script--b {
-  margin-left: 2.3em;
 }
 
 .mh-caption {
