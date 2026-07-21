@@ -783,11 +783,46 @@ main {
 /* Sections */
 .case-section {
   margin-top: clamp(48px, 8vh, 88px);
+  display: flow-root; /* contain the floated figures within the section */
 }
 
 /* first section follows the meta block, so it needs less breathing room */
 .case-section--first {
   margin-top: clamp(30px, 5vh, 52px);
+}
+
+/* Two-column body: text reads in the left half; figures float into the right
+   half. The meta row above sits outside the sections and stays full width. */
+.case-section > .case-section__label,
+.case-section > .case-h,
+.case-section > .case-p,
+.case-section > .case-quote,
+.case-section > .case-list {
+  max-width: 50%;
+}
+.case-section > .case-figure,
+.case-section > .case-grid {
+  float: right;
+  clear: right;
+  width: 46%;
+  margin: 0.4em 0 1.4em 4%;
+}
+
+@media (max-width: 900px) {
+  /* stack to a single readable column on smaller screens */
+  .case-section > .case-section__label,
+  .case-section > .case-h,
+  .case-section > .case-p,
+  .case-section > .case-quote,
+  .case-section > .case-list {
+    max-width: 62ch;
+  }
+  .case-section > .case-figure,
+  .case-section > .case-grid {
+    float: none;
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 .case-section__label {
