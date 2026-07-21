@@ -191,7 +191,7 @@ export function initMotif(canvas) {
 
   const T_FAN = 0.9 // ring fans open + spins one full turn (globe)
   const T_MERGE = 0.5 // globe merges back to a single ring
-  const T_DIE = 1.9 // die spins the whole time, halting after the globe merges
+  const T_DIE = 2.35 // die spins the whole time, halting after the globe merges (longer tail = smoother settle)
   const T_HOLD = 1.1 // hold on the number after it stops
   const T_RESUME = 1.5 // ease back into the auto swing
   const GLOBE_ANGLE = 0.42 // fan spread while it's a globe (8 copies → ~170° of longitudes)

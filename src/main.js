@@ -119,7 +119,7 @@ if (reflections && reflectionsOpenBtn) {
   })
 
   // Each article expands in place on click — no links, no separate pages.
-  const RDUR = reducedMotion ? 20 : 480
+  const RDUR = reducedMotion ? 20 : 500
   const bar = reflections.querySelector('.reflections-bar')
   // Smoothly bring an item's heading just under the sticky bar.
   const scrollToItem = (item) => {
@@ -222,15 +222,22 @@ if (caseInline) {
     clearTimeout(settleTimer)
     // animate to the measured content height, then release to `none` so the
     // panel can grow if images finish loading or the viewport reflows
+    reveal.style.overflow = 'hidden'
     reveal.style.maxHeight = `${reveal.scrollHeight}px`
     settleTimer = setTimeout(() => {
-      if (caseInline.classList.contains('is-open')) reveal.style.maxHeight = 'none'
+      if (caseInline.classList.contains('is-open')) {
+        reveal.style.maxHeight = 'none'
+        // overflow visible so the sticky footer collapse can stick
+        reveal.style.overflow = 'visible'
+      }
     }, DUR)
     scrollToEl(caseInline)
   }
   const closeCase = () => {
     setState(false)
     clearTimeout(settleTimer)
+    // clip again before animating shut (overflow was opened for the sticky control)
+    reveal.style.overflow = 'hidden'
     // from `none`/auto back to a fixed height, then to 0 so it animates
     reveal.style.maxHeight = `${reveal.scrollHeight}px`
     // force a reflow so the browser registers the fixed start height
@@ -250,6 +257,41 @@ if (caseInline) {
     if (e.key === 'Escape' && caseInline.classList.contains('is-open')) closeCase()
   })
 }
+
+/* ---------- Work carousel (screenshots on the right) ---------- */
+document.querySelectorAll('[data-carousel]').forEach((car) => {
+  const track = car.querySelector('[data-carousel-track]')
+  const dotsWrap = car.querySelector('[data-carousel-dots]')
+  const slides = track ? [...track.children] : []
+  if (!track || !dotsWrap || slides.length < 2) return
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button')
+    dot.type = 'button'
+    dot.setAttribute('aria-label', `Show screenshot ${i + 1} of ${slides.length}`)
+    if (i === 0) dot.setAttribute('aria-current', 'true')
+    dot.addEventListener('click', () =>
+      track.scrollTo({ left: i * track.clientWidth, behavior: reducedMotion ? 'auto' : 'smooth' }),
+    )
+    dotsWrap.appendChild(dot)
+  })
+  const dots = [...dotsWrap.children]
+
+  let raf
+  track.addEventListener(
+    'scroll',
+    () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        const i = Math.round(track.scrollLeft / track.clientWidth)
+        dots.forEach((d, di) =>
+          di === i ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current'),
+        )
+      })
+    },
+    { passive: true },
+  )
+})
 
 /* ---------- Header headroom ---------- */
 // "Headroom" behavior: hide the header when scrolling down, reveal on scroll up.

@@ -352,69 +352,85 @@ main {
   background: var(--fg);
 }
 
-/* Featured work: one board thumbnail that expands into the case study.
-   The whole thumbnail is a button spanning the full work-item width. */
-.work-shot--open {
-  grid-column: 1 / -1;
-  margin: clamp(28px, 4vh, 44px) 0 0;
+/* Featured work: a text row (like the writing) with the screenshots riding on
+   the right as a carousel, and an article-style "Read the case study" toggle. */
+.case-toggle {
+  appearance: none;
+  background: none;
+  border: 0;
   padding: 0;
-  border: 1px solid var(--hairline);
-  border-radius: 10px;
-  background: #0f0f0f;
-  overflow: hidden;
-  position: relative;
-  display: block;
-  width: 100%;
+  margin-top: clamp(20px, 3vh, 30px);
   cursor: pointer;
-  color: var(--fg);
-  transition: border-color 0.3s ease;
-}
-
-.work-shot--open img {
-  display: block;
-  width: 100%;
-  height: auto;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-}
-
-.work-shot__hint {
-  position: absolute;
-  left: 16px;
-  bottom: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: rgba(14, 14, 14, 0.7);
-  border: 1px solid var(--hairline);
-  backdrop-filter: blur(6px);
+  text-align: left;
+  font-family: var(--font);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.1px;
   text-transform: uppercase;
   color: var(--fg);
-  opacity: 0.85;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.2s ease;
 }
-
-.work-shot--open:hover {
-  border-color: rgba(255, 255, 255, 0.28);
+.case-toggle:hover {
+  opacity: 0.6;
 }
-
-.work-shot--open:hover img {
-  transform: scale(1.02);
-  opacity: 0.92;
-}
-
-.work-shot--open:hover .work-shot__hint {
-  opacity: 1;
-  transform: translateY(-2px);
-}
-
-.work-shot--open:focus-visible {
+.case-toggle:focus-visible {
   outline: 1px solid var(--fg);
   outline-offset: 3px;
+}
+
+.work-carousel {
+  grid-column: 3;
+  align-self: start;
+  width: 100%;
+}
+
+.work-carousel__track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: #0f0f0f;
+  scrollbar-width: none;
+}
+.work-carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.work-carousel__slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  aspect-ratio: 4 / 3;
+}
+.work-carousel__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.work-carousel__dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 12px;
+}
+.work-carousel__dots button {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.work-carousel__dots button[aria-current='true'] {
+  background: var(--fg);
 }
 
 @media (max-width: 720px) {
@@ -426,6 +442,11 @@ main {
   }
   .work-media {
     display: none;
+  }
+  /* carousel drops to a full-width row beneath the text */
+  .work-carousel {
+    grid-column: 1 / -1;
+    margin-top: clamp(20px, 4vh, 32px);
   }
 }
 
@@ -622,7 +643,10 @@ main {
 
 /* ---------- Case study (the work item itself expands into it, in place) ---------- */
 .case-inline {
-  grid-column: 1 / -1; /* span the full width of the work-item grid */
+  grid-column: 1 / -1;
+  /* break out of the work-item's side padding so the expanded study is
+     full-bleed, edge to edge */
+  margin: 0 calc(-1 * var(--gutter));
 }
 
 /* Collapsible height: max-height is driven in JS (measured), so it animates
@@ -633,20 +657,33 @@ main {
   transition: max-height 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* A slim bar with a collapse control; sticks under the header while reading */
-/* A minimal sticky close, right-aligned — no module header, so the card
-   just reveals more content rather than opening a separate section */
-.case-bar {
+/* Sticky footer collapse — same behaviour as the writing panel: it rides the
+   bottom of the viewport while reading (with a fade beneath), and locks at the
+   end of the study. Fades in together with the expand. */
+.case-inline__collapse {
   position: sticky;
-  top: var(--header-h);
-  z-index: 3;
-  display: flex;
-  justify-content: flex-end;
-  padding: 12px 0 4px;
+  bottom: 0;
+  z-index: 2;
+  padding: 14px var(--gutter) clamp(22px, 3.5vh, 40px);
   background: var(--bg);
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.42, 0, 0.58, 1);
+}
+.case-inline.is-open .case-inline__collapse {
+  opacity: 1;
+}
+.case-inline__collapse::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 60px;
+  background: linear-gradient(to top, var(--bg), rgba(22, 22, 22, 0));
+  pointer-events: none;
 }
 
-.case-bar__close,
+/* Plain-text collapse link, like the writing panel. */
 .case-collapse {
   appearance: none;
   background: none;
@@ -661,21 +698,18 @@ main {
   color: var(--fg);
   transition: opacity 0.2s ease;
 }
-.case-bar__close:hover,
 .case-collapse:hover {
   opacity: 0.6;
 }
-.case-bar__close:focus-visible,
 .case-collapse:focus-visible {
   outline: 1px solid var(--fg);
   outline-offset: 3px;
 }
 
 .case-inner {
-  max-width: 860px;
-  margin: 0 auto;
-  /* the work item already supplies the gutter; align to its content edges */
-  padding: clamp(28px, 4vh, 48px) 0 clamp(48px, 7vh, 80px);
+  max-width: none; /* fill the full width */
+  margin: 0;
+  padding: clamp(28px, 4vh, 48px) var(--gutter) clamp(40px, 6vh, 64px);
 }
 
 /* Header block */
@@ -749,11 +783,46 @@ main {
 /* Sections */
 .case-section {
   margin-top: clamp(48px, 8vh, 88px);
+  display: flow-root; /* contain the floated figures within the section */
 }
 
 /* first section follows the meta block, so it needs less breathing room */
 .case-section--first {
   margin-top: clamp(30px, 5vh, 52px);
+}
+
+/* Two-column body: text reads in the left half; figures float into the right
+   half. The meta row above sits outside the sections and stays full width. */
+.case-section > .case-section__label,
+.case-section > .case-h,
+.case-section > .case-p,
+.case-section > .case-quote,
+.case-section > .case-list {
+  max-width: 50%;
+}
+.case-section > .case-figure,
+.case-section > .case-grid {
+  float: right;
+  clear: right;
+  width: 46%;
+  margin: 0.4em 0 1.4em 4%;
+}
+
+@media (max-width: 900px) {
+  /* stack to a single readable column on smaller screens */
+  .case-section > .case-section__label,
+  .case-section > .case-h,
+  .case-section > .case-p,
+  .case-section > .case-quote,
+  .case-section > .case-list {
+    max-width: 62ch;
+  }
+  .case-section > .case-figure,
+  .case-section > .case-grid {
+    float: none;
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 .case-section__label {
@@ -776,10 +845,10 @@ main {
 
 .case-p {
   margin: 0 0 1.15em;
-  max-width: 66ch;
   font-size: clamp(1rem, 1.5vw, 1.075rem);
   line-height: 1.62;
   color: #cfcfcf;
+  text-wrap: pretty;
 }
 
 .case-p:last-child {
@@ -807,7 +876,6 @@ main {
   margin: 0.4em 0 0;
   padding: 0;
   list-style: none;
-  max-width: 66ch;
 }
 
 .case-list li {
@@ -967,13 +1035,15 @@ html.is-locked body {
 .reflections-bar {
   position: sticky;
   top: 0;
-  z-index: 2;
+  /* above the masthead's positioned caps/script so the tall script flourishes
+     scroll *under* the frosted bar instead of painting over it */
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: var(--header-h);
   padding: 0 var(--gutter);
-  background: rgba(22, 22, 22, 0.82);
+  background: rgba(22, 22, 22, 0.9);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--hairline);
 }
@@ -1127,7 +1197,7 @@ html.is-locked body {
 .reflections-item__reveal {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: max-height 0.5s cubic-bezier(0.42, 0, 0.58, 1); /* easy ease */
 }
 
 .reflections-item__body {
@@ -1157,13 +1227,13 @@ html.is-locked body {
   z-index: 1;
   padding: 14px 0 clamp(22px, 3.5vh, 40px);
   background: var(--bg);
-  /* stays put; only fades once the expand animation has settled, so it never
-     pops or jumps into place */
+  /* fades in together with the expand (same easing/duration) so the control
+     eases into view as the article opens, rather than popping in afterwards */
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
-.reflections-item.is-settled .reflections-item__collapse {
+.reflections-item.is-open .reflections-item__collapse {
   opacity: 1;
 }
 

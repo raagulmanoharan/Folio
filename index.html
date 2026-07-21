@@ -243,34 +243,36 @@
               <a href="https://raagulmanoharan.github.io/Jarwiz-V3/">Live demo &#8599;</a>
               <span>Founder &amp; Designer</span>
             </div>
+            <button
+              class="case-toggle"
+              type="button"
+              data-case-open
+              aria-expanded="false"
+              aria-controls="case-jarwiz"
+            >
+              <span data-case-hint>Read the case study <span aria-hidden="true">&#8595;</span></span>
+            </button>
           </div>
           <div class="work-year">2025</div>
-          <button
-            class="work-shot work-shot--open"
-            type="button"
-            data-case-open
-            aria-expanded="false"
-            aria-controls="case-jarwiz"
-          >
-            <img
-              src="/work/jarwiz-board.png"
-              alt="A Jarwiz board: a SWOT of a design tool laid out as cards, a TOWS strategic-moves table, and the agent flagging a tension between two cards."
-              loading="lazy"
-              width="3200"
-              height="1520"
-            />
-            <span class="work-shot__hint" data-case-hint>Read the case study <span aria-hidden="true">&#8595;</span></span>
-          </button>
+
+          <!-- Screenshots ride on the right as a carousel (consistent with the
+               other work items' right-hand media slot) -->
+          <div class="work-carousel" data-carousel>
+            <ul class="work-carousel__track" data-carousel-track>
+              <li class="work-carousel__slide"><img src="/work/jarwiz-board.png" alt="A Jarwiz board: a SWOT laid out as cards, a TOWS strategic-moves table, and the agent flagging a tension between two cards." loading="lazy" width="3200" height="1520" /></li>
+              <li class="work-carousel__slide"><img src="/work/jarwiz-canvas.png" alt="A dense Jarwiz board: research source cards, a feature matrix, a pricing table, a recommendation doc, and a decision flowchart connected by provenance arrows." loading="lazy" width="2400" height="1260" /></li>
+              <li class="work-carousel__slide"><img src="/work/jarwiz-dashboard.png" alt="A generated dashboard card with KPI tiles and regional revenue charts." loading="lazy" width="1638" height="1176" /></li>
+              <li class="work-carousel__slide"><img src="/work/jarwiz-diagram.png" alt="A generated flowchart card of a new-signup flow." loading="lazy" width="1404" height="1422" /></li>
+              <li class="work-carousel__slide"><img src="/work/jarwiz-doc.png" alt="A research doc card summarising market size with a cited source." loading="lazy" width="1392" height="582" /></li>
+              <li class="work-carousel__slide"><img src="/work/jarwiz-prototype.png" alt="An interactive mobile prototype card of a focus-timer app screen." loading="lazy" width="1008" height="1680" /></li>
+            </ul>
+            <div class="work-carousel__dots" data-carousel-dots aria-hidden="true"></div>
+          </div>
 
           <!-- The Jarwiz work item expands in place into a case study -->
           <div class="case-inline" id="case-jarwiz" data-case>
             <div class="case-inline__reveal">
               <div class="case-inline__inner">
-                <div class="case-bar">
-                  <button class="case-bar__close" type="button" data-case-close aria-label="Collapse case study">
-                    Close <span aria-hidden="true">&#10005;</span>
-                  </button>
-                </div>
                 <div class="case-inner">
                   <dl class="case-meta">
                     <div>
@@ -491,9 +493,11 @@
                     <div class="case-cta">
                       <a href="https://github.com/raagulmanoharan/Jarwiz-V3">View the repository &#8599;</a>
                       <a href="https://raagulmanoharan.github.io/Jarwiz-V3/">Try the live demo &#8599;</a>
-                      <button class="case-collapse" type="button" data-case-close>Collapse case study <span aria-hidden="true">&#8593;</span></button>
                     </div>
                   </section>
+                </div>
+                <div class="case-inline__collapse">
+                  <button class="case-collapse" type="button" data-case-close>Collapse <span aria-hidden="true">&#8593;</span></button>
                 </div>
               </div>
             </div>
