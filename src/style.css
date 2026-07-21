@@ -1255,6 +1255,23 @@ html.is-locked body {
   color: #cfcfcf;
   border-bottom: 1px solid var(--hairline);
 }
+/* Article figures sit flush at the text column width — no border, no rounding */
+.reflections-item__body figure {
+  margin: clamp(24px, 4vh, 40px) 0;
+}
+.reflections-item__body figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #0f0f0f;
+}
+.reflections-item__body figcaption {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg-dim);
+}
+
 .reflections-item__body strong {
   color: var(--fg);
   font-weight: 500;
