@@ -265,32 +265,59 @@ document.querySelectorAll('[data-carousel]').forEach((car) => {
   const slides = track ? [...track.children] : []
   if (!track || !dotsWrap || slides.length < 2) return
 
+  // Track the current index explicitly so a click always advances exactly one
+  // (reading scrollLeft mid-scroll is unreliable when clicks come quickly).
+  let current = 0
+  let lock = false
+  let lockT
+  const setActive = (i) => {
+    current = ((i % slides.length) + slides.length) % slides.length
+    dots.forEach((d, di) =>
+      di === current ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current'),
+    )
+  }
+  const goTo = (i) => {
+    setActive(i)
+    // Lock the scroll listener out until the programmatic scroll settles, so it
+    // can't clobber `current` with an in-progress position.
+    lock = true
+    clearTimeout(lockT)
+    lockT = setTimeout(() => (lock = false), reducedMotion ? 60 : 600)
+    track.scrollTo({ left: current * track.clientWidth, behavior: reducedMotion ? 'auto' : 'smooth' })
+  }
+
   slides.forEach((_, i) => {
     const dot = document.createElement('button')
     dot.type = 'button'
     dot.setAttribute('aria-label', `Show screenshot ${i + 1} of ${slides.length}`)
     if (i === 0) dot.setAttribute('aria-current', 'true')
-    dot.addEventListener('click', () =>
-      track.scrollTo({ left: i * track.clientWidth, behavior: reducedMotion ? 'auto' : 'smooth' }),
-    )
+    dot.addEventListener('click', () => goTo(i))
     dotsWrap.appendChild(dot)
   })
   const dots = [...dotsWrap.children]
 
+  // Keep the counter in sync when the reader swipes/scrolls the track by hand.
   let raf
   track.addEventListener(
     'scroll',
     () => {
+      if (lock) return
       cancelAnimationFrame(raf)
       raf = requestAnimationFrame(() => {
-        const i = Math.round(track.scrollLeft / track.clientWidth)
-        dots.forEach((d, di) =>
-          di === i ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current'),
-        )
+        if (!lock) setActive(Math.round(track.scrollLeft / track.clientWidth))
       })
     },
     { passive: true },
   )
+
+  // Click the image to advance; wrap back to the first after the last.
+  track.addEventListener('click', () => goTo(current + 1))
+
+  // While hovering the images, the custom cursor reads "Next" (fine pointers only).
+  if (cursor && finePointer && !reducedMotion) {
+    track.addEventListener('mouseenter', () => cursor.classList.add('is-next'))
+    track.addEventListener('mouseleave', () => cursor.classList.remove('is-next'))
+  }
 })
 
 /* ---------- Header headroom ---------- */
