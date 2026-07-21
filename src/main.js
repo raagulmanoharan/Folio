@@ -222,15 +222,22 @@ if (caseInline) {
     clearTimeout(settleTimer)
     // animate to the measured content height, then release to `none` so the
     // panel can grow if images finish loading or the viewport reflows
+    reveal.style.overflow = 'hidden'
     reveal.style.maxHeight = `${reveal.scrollHeight}px`
     settleTimer = setTimeout(() => {
-      if (caseInline.classList.contains('is-open')) reveal.style.maxHeight = 'none'
+      if (caseInline.classList.contains('is-open')) {
+        reveal.style.maxHeight = 'none'
+        // overflow visible so the sticky footer collapse can stick
+        reveal.style.overflow = 'visible'
+      }
     }, DUR)
     scrollToEl(caseInline)
   }
   const closeCase = () => {
     setState(false)
     clearTimeout(settleTimer)
+    // clip again before animating shut (overflow was opened for the sticky control)
+    reveal.style.overflow = 'hidden'
     // from `none`/auto back to a fixed height, then to 0 so it animates
     reveal.style.maxHeight = `${reveal.scrollHeight}px`
     // force a reflow so the browser registers the fixed start height
