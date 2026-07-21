@@ -1228,6 +1228,36 @@ html.is-locked body {
   margin-bottom: 0;
 }
 
+/* Section subheads within a long essay */
+.reflections-item__body h4 {
+  margin: 1.9em 0 0.55em;
+  font-weight: 500;
+  font-size: clamp(1.12rem, 1.9vw, 1.35rem);
+  line-height: 1.2;
+  letter-spacing: -0.2px;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.reflections-item__body h4:first-child {
+  margin-top: 0;
+}
+
+/* A small link back to the original piece */
+.reflections-source {
+  margin-top: 1.8em;
+  font-size: 0.95em;
+  color: var(--fg-dim);
+}
+.reflections-source a {
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hairline);
+  transition: opacity 0.2s ease;
+}
+.reflections-source a:hover {
+  opacity: 0.6;
+}
+
 /* The collapse control sits at the end of the article and sticks to the bottom
    of the viewport while the article runs past the fold, then "locks" at its
    natural position (the next divider follows) once you reach the end. A fade
