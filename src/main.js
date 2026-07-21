@@ -120,6 +120,13 @@ if (reflections && reflectionsOpenBtn) {
 
   // Each article expands in place on click — no links, no separate pages.
   const RDUR = reducedMotion ? 20 : 480
+  // A sticky footer with a "Collapse" link appears while any article is open.
+  const syncReading = () => {
+    reflections.classList.toggle(
+      'is-reading',
+      !!reflections.querySelector('.reflections-item.is-open'),
+    )
+  }
   const collapseItem = (item) => {
     const toggle = item.querySelector('[data-refl-toggle]')
     const reveal = item.querySelector('.reflections-item__reveal')
@@ -151,44 +158,21 @@ if (reflections && reflectionsOpenBtn) {
           reveal.style.maxHeight = '0px'
         })
       }
+      syncReading()
     })
   })
 
-  // While an article is open, the side margins beside the reading column act
-  // as a close affordance: the cursor turns into a "Close" and a click there
-  // collapses the open article(s). The column itself stays normal so text
-  // remains selectable. Pointer-driven, so it only applies on fine pointers.
-  if (cursor && finePointer && !reducedMotion) {
-    const column = reflections.querySelector('.reflections-body')
-    let onSide = false
-    const anyOpen = () => reflections.querySelector('.reflections-item.is-open')
-    const inSideMargin = (x) => {
-      const r = column.getBoundingClientRect()
-      return x < r.left || x > r.right
-    }
-    const clearSide = () => {
-      if (onSide) {
-        onSide = false
-        cursor.classList.remove('is-close')
-      }
-    }
-    reflections.addEventListener('mousemove', (e) => {
-      const active = !!anyOpen() && inSideMargin(e.clientX)
-      if (active !== onSide) {
-        onSide = active
-        cursor.classList.toggle('is-close', active)
-      }
+  reflections.querySelectorAll('[data-refl-collapse]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const open = reflections.querySelector('.reflections-item.is-open')
+      reflections
+        .querySelectorAll('.reflections-item.is-open')
+        .forEach((item) => collapseItem(item))
+      syncReading()
+      // bring the collapsed article's heading back into view
+      open?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' })
     })
-    reflections.addEventListener('mouseleave', clearSide)
-    reflections.addEventListener('click', (e) => {
-      if (anyOpen() && inSideMargin(e.clientX)) {
-        reflections
-          .querySelectorAll('.reflections-item.is-open')
-          .forEach((item) => collapseItem(item))
-        clearSide()
-      }
-    })
-  }
+  })
 }
 
 /* ---------- Case study (expands inline, in place, below the work item) ---------- */

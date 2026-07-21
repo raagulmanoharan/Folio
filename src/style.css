@@ -403,8 +403,7 @@ main {
   opacity: 0;
   /* translate is driven per-frame via a CSS var; scale handles hover growth */
   transform: translate(var(--cx, -50px), var(--cy, -50px)) translate(-50%, -50%) scale(var(--cs, 1));
-  transition: opacity 0.25s ease, width 0.22s ease, height 0.22s ease,
-    background-color 0.22s ease;
+  transition: opacity 0.25s ease;
   will-change: transform;
 }
 
@@ -415,29 +414,6 @@ main {
 /* Over text/links: invert against the content (same size, no grow). */
 .cursor.is-invert {
   mix-blend-mode: difference;
-}
-
-/* Over the side margins of an expanded article: becomes a "Close" affordance. */
-.cursor.is-close {
-  width: 66px;
-  height: 66px;
-  background: #ededed;
-  mix-blend-mode: normal;
-}
-
-.cursor.is-close::after {
-  content: 'Close';
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #161616;
 }
 
 /* Only take over the pointer on devices that actually have one. */
@@ -1081,6 +1057,67 @@ html.is-locked body {
   margin-bottom: 0;
 }
 
+/* Sticky footer: pinned to the bottom of the panel while an article is open,
+   with a "Collapse" link (works at every viewport width). */
+.reflections-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  padding: 14px var(--gutter) calc(14px + env(safe-area-inset-bottom, 0px));
+  background: rgba(22, 22, 22, 0.9);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--hairline);
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.reflections.is-reading .reflections-footer {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.reflections-collapse {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  color: var(--fg);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: opacity 0.2s ease;
+}
+
+.reflections-collapse:hover {
+  opacity: 0.6;
+}
+
+.reflections-collapse__arrow {
+  transition: transform 0.2s ease;
+}
+
+.reflections-collapse:hover .reflections-collapse__arrow {
+  transform: translateY(-2px);
+}
+
+.reflections-collapse:focus-visible {
+  outline: 1px solid var(--fg);
+  outline-offset: 3px;
+}
+
 .reflections-meta {
   font-size: 12px;
   font-weight: 500;
@@ -1105,7 +1142,8 @@ html.is-locked body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reflections {
+  .reflections,
+  .reflections-footer {
     transition: none;
   }
   .reflections-item__reveal {
