@@ -17,20 +17,20 @@
   src: url('./fonts/NeueMontreal-Regular.otf') format('opentype');
 }
 
-/* PT Serif (Google Fonts, OFL) — the readable serif the agents' articles use. */
+/* STIX Two Text (Google Fonts, OFL) — the refined serif the agents' articles use. */
 @font-face {
-  font-family: 'PT Serif';
+  font-family: 'STIX Two Text';
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  src: url('./fonts/PTSerif-Regular.woff2') format('woff2');
+  src: url('./fonts/STIXTwoText-Regular.woff2') format('woff2');
 }
 @font-face {
-  font-family: 'PT Serif';
-  font-weight: 700;
+  font-family: 'STIX Two Text';
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
-  src: url('./fonts/PTSerif-Bold.woff2') format('woff2');
+  src: url('./fonts/STIXTwoText-SemiBold.woff2') format('woff2');
 }
 
 /* Pinyon Script (Google Fonts, OFL) — the calligraphy flourish in the masthead. */
@@ -61,9 +61,9 @@
   --gutter: 20px;    /* reference edge padding at all widths */
   --peek: clamp(84px, 11vh, 128px); /* sliver of the first work item that peeks */
   --font: 'Neue Montreal', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  /* PT Serif: the readable serif the agents' articles are set in.
+  /* STIX Two Text: the refined serif the agents' articles are set in.
      Pinyon Script: the calligraphy flourish in the Reflections masthead. */
-  --font-serif: 'PT Serif', 'Times New Roman', Georgia, serif;
+  --font-serif: 'STIX Two Text', 'Times New Roman', Georgia, serif;
   --font-script: 'Pinyon Script', 'Snell Roundhand', cursive;
   /* Archivo Black: the heavy display grotesque the masthead caps are set in. */
   --font-display: 'Archivo', 'Neue Montreal', ui-sans-serif, sans-serif;
@@ -1233,7 +1233,7 @@ html.is-locked body {
 .reflections-title--agent {
   font-family: var(--font-serif);
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   font-size: clamp(1.5rem, 3.4vw, 2.3rem);
   line-height: 1.1;
   letter-spacing: -0.2px;
