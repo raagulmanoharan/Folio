@@ -1242,25 +1242,20 @@ html.is-locked body {
   margin-top: 0;
 }
 
+/* Points read as a clean stack separated by dividers — no bullet marks, equal
+   breathing room above and below each point. */
 .reflections-item__body ul {
-  margin: 0.2em 0 1em;
-  padding: 0 0 0 1.1em;
+  margin: 1em 0 1.3em;
+  padding: 0;
   list-style: none;
+  border-top: 1px solid var(--hairline);
 }
 .reflections-item__body li {
-  position: relative;
-  margin: 0 0 0.55em;
+  margin: 0;
+  padding: 0.9em 0;
   line-height: 1.6;
   color: #cfcfcf;
-}
-.reflections-item__body li::before {
-  content: "";
-  position: absolute;
-  left: -1.1em;
-  top: 0.72em;
-  width: 9px;
-  height: 1px;
-  background: var(--fg-dim);
+  border-bottom: 1px solid var(--hairline);
 }
 .reflections-item__body strong {
   color: var(--fg);
