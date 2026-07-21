@@ -967,13 +967,15 @@ html.is-locked body {
 .reflections-bar {
   position: sticky;
   top: 0;
-  z-index: 2;
+  /* above the masthead's positioned caps/script so the tall script flourishes
+     scroll *under* the frosted bar instead of painting over it */
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: var(--header-h);
   padding: 0 var(--gutter);
-  background: rgba(22, 22, 22, 0.82);
+  background: rgba(22, 22, 22, 0.9);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--hairline);
 }
@@ -1127,7 +1129,7 @@ html.is-locked body {
 .reflections-item__reveal {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: max-height 0.5s cubic-bezier(0.42, 0, 0.58, 1); /* easy ease */
 }
 
 .reflections-item__body {
@@ -1157,13 +1159,13 @@ html.is-locked body {
   z-index: 1;
   padding: 14px 0 clamp(22px, 3.5vh, 40px);
   background: var(--bg);
-  /* stays put; only fades once the expand animation has settled, so it never
-     pops or jumps into place */
+  /* fades in together with the expand (same easing/duration) so the control
+     eases into view as the article opens, rather than popping in afterwards */
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
-.reflections-item.is-settled .reflections-item__collapse {
+.reflections-item.is-open .reflections-item__collapse {
   opacity: 1;
 }
 

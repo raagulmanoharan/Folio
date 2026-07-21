@@ -119,7 +119,7 @@ if (reflections && reflectionsOpenBtn) {
   })
 
   // Each article expands in place on click — no links, no separate pages.
-  const RDUR = reducedMotion ? 20 : 480
+  const RDUR = reducedMotion ? 20 : 500
   const bar = reflections.querySelector('.reflections-bar')
   // Smoothly bring an item's heading just under the sticky bar.
   const scrollToItem = (item) => {
