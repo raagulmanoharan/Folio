@@ -778,6 +778,33 @@ main {
   transform: rotate(-45deg);
 }
 
+/* A persistent close in the bottom-right corner (fixed within the drawer, so it
+   stays put while the projects scroll). */
+.gallery-close--br {
+  position: fixed;
+  top: auto;
+  bottom: 22px;
+  right: 22px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #141414;
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 3;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.gallery-close--br:hover {
+  transform: scale(1.06);
+}
+.gallery-close--br span {
+  top: 50%;
+  left: 31%;
+  width: 38%;
+  height: 1.6px;
+  background: #f4c400;
+}
+
 /* Two columns: the title + description lock to the bottom-left while a column
    of images scrolls past on the right. */
 .gallery-body {
@@ -799,15 +826,14 @@ main {
 .gallery-stream {
   display: flex;
   flex-direction: column;
+  gap: clamp(48px, 12vh, 140px); /* space so the next project peeks below */
+  padding-bottom: clamp(24px, 6vh, 64px);
 }
 
-/* Each project is a full-height section that scroll-locks into view. */
+/* Each project scroll-locks into view, top-aligned, with the next peeking below. */
 .gallery-figure {
   margin: 0;
-  min-height: calc(100vh - 44px);
-  display: flex;
-  align-items: center; /* centre the project block vertically in its section */
-  scroll-snap-align: center;
+  scroll-snap-align: start;
   scroll-snap-stop: always;
 }
 /* The caption sits to the left of the media, right-aligned and top-aligned. */
@@ -850,6 +876,11 @@ main {
   aspect-ratio: 16 / 9;
   background: #0d0d0f;
   overflow: hidden;
+}
+/* The Figma deck player adds its own toolbars, so give it a taller frame — the
+   slide fills the width instead of sitting letterboxed. */
+.gallery-figure__embed--deck {
+  aspect-ratio: 16 / 10.5;
 }
 .gallery-figure__embed iframe {
   display: block;
