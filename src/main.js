@@ -130,6 +130,22 @@ if (gallery && galleryBackdrop && galleryOpenBtn) {
     gallery.classList.toggle('show-close', near)
   })
   gallery.addEventListener('mouseleave', () => gallery.classList.remove('show-close'))
+
+  // Reveal each project's caption only once it scrolls into view.
+  const figures = gallery.querySelectorAll('[data-figure]')
+  if (figures.length && 'IntersectionObserver' in window) {
+    // Observe against the viewport (not the transformed drawer, whose transform
+    // breaks a scroll-container root); the fixed drawer fills the viewport.
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => e.target.classList.toggle('is-inview', e.isIntersecting))
+      },
+      { threshold: 0.5 },
+    )
+    figures.forEach((f) => io.observe(f))
+  } else {
+    figures.forEach((f) => f.classList.add('is-inview'))
+  }
 }
 
 /* ---------- Reflections (full-screen writing panel) ---------- */
