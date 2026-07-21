@@ -17,6 +17,40 @@
   src: url('./fonts/NeueMontreal-Regular.otf') format('opentype');
 }
 
+/* STIX Two Text (Google Fonts, OFL) — the refined serif the agents' articles use. */
+@font-face {
+  font-family: 'STIX Two Text';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/STIXTwoText-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'STIX Two Text';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/STIXTwoText-SemiBold.woff2') format('woff2');
+}
+
+/* Pinyon Script (Google Fonts, OFL) — the calligraphy flourish in the masthead. */
+@font-face {
+  font-family: 'Pinyon Script';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/PinyonScript-Regular.woff2') format('woff2');
+}
+
+/* Archivo ExtraBold (Google Fonts, OFL) — the heavy grotesque caps in the masthead. */
+@font-face {
+  font-family: 'Archivo';
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/Archivo-ExtraBold.woff2') format('woff2');
+}
+
 :root {
   --bg: #161616;         /* content ground — matches reference (not pure black) */
   --fg: #ededed;         /* header links */
@@ -27,6 +61,12 @@
   --gutter: 20px;    /* reference edge padding at all widths */
   --peek: clamp(84px, 11vh, 128px); /* sliver of the first work item that peeks */
   --font: 'Neue Montreal', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* STIX Two Text: the refined serif the agents' articles are set in.
+     Pinyon Script: the calligraphy flourish in the Reflections masthead. */
+  --font-serif: 'STIX Two Text', 'Times New Roman', Georgia, serif;
+  --font-script: 'Pinyon Script', 'Snell Roundhand', cursive;
+  /* Archivo Black: the heavy display grotesque the masthead caps are set in. */
+  --font-display: 'Archivo', 'Neue Montreal', ui-sans-serif, sans-serif;
 }
 
 * {
@@ -984,15 +1024,64 @@ html.is-locked body {
   padding: clamp(48px, 11vh, 132px) var(--gutter) clamp(80px, 16vh, 180px);
 }
 
+/* Masthead: the site sans, with the accent phrase in a calligraphy script —
+   loops and flourishes against the clean grotesque (best of both worlds). */
+/* Masthead — heavy grotesque caps interleaved with a roundhand script. The
+   script sits on its own staggered lines, packed tight so its loops cross into
+   the caps above and below while the words stay readable. */
 .reflections-intro {
-  margin: 0 0 clamp(40px, 7vh, 80px);
-  max-width: 20ch;
-  font-weight: 400;
-  font-size: clamp(1.5rem, 4vw, 2.6rem);
-  line-height: 1.14;
-  letter-spacing: -0.4px;
+  margin: clamp(8px, 2vh, 28px) 0 clamp(52px, 8vh, 92px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   color: var(--fg);
-  text-wrap: balance;
+}
+
+/* Each row keeps its caps and script accent on the same baseline; the script
+   runs larger, so its loops rise above and dip below the cap line. */
+/* The caps size is set on the row so the script can scale from it, and the
+   line-height is a fixed length (em resolves to px here and inherits as that
+   px) so EVERY row is the same height — the larger script overflows its line
+   box and interlocks, but never changes the row rhythm. */
+.mh-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.28em;
+  font-size: clamp(2.2rem, 7vw, 4.6rem);
+  line-height: 0.94em;
+}
+
+.mh-caps {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 1em;
+  letter-spacing: -0.015em;
+  position: relative;
+  z-index: 1;
+}
+
+/* The roundhand accent, inline on the caps' baseline and larger, so its capital
+   flourish rises above the line and its loops cross into the rows around it. */
+.mh-script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: 1.42em;
+  margin-left: 0.02em;
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.mh-caption {
+  margin-top: clamp(6px, 1.2vh, 14px);
+  font-family: var(--font);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: clamp(0.62rem, 1.1vw, 0.75rem);
+  letter-spacing: 0.16em;
+  color: var(--fg-dim);
 }
 
 .reflections-list {
@@ -1051,6 +1140,7 @@ html.is-locked body {
   font-size: clamp(1rem, 1.6vw, 1.1rem);
   line-height: 1.62;
   color: #cfcfcf;
+  text-wrap: pretty; /* even rag, no orphaned last-line words */
 }
 
 .reflections-item__body p:last-child {
@@ -1139,11 +1229,42 @@ html.is-locked body {
   text-wrap: balance;
 }
 
+/* The agents write in a regular (upright) serif — the only thing that separates
+   their entries from mine is the typeface (no italics, bylines, marks, colour). */
+.reflections-title--agent {
+  font-family: var(--font-serif);
+  font-style: normal;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3.4vw, 2.3rem);
+  line-height: 1.1;
+  letter-spacing: -0.2px;
+  text-transform: none;
+  color: var(--fg);
+  text-wrap: balance;
+}
+
 .reflections-dek {
   max-width: 54ch;
   font-size: clamp(0.95rem, 1.5vw, 1.05rem);
   line-height: 1.5;
   color: var(--fg-dim);
+  text-wrap: pretty;
+}
+
+/* An agent's whole article is set in the upright serif (title, standfirst, and
+   body); mine stay in the sans. Same colours — the typeface is the only tell. */
+.reflections-item--agent .reflections-dek {
+  font-family: var(--font-serif);
+  font-style: normal;
+  font-size: clamp(1rem, 1.6vw, 1.12rem);
+}
+
+.reflections-item--agent .reflections-item__body p {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+  line-height: 1.58;
+  color: #cfcfcf;
 }
 
 @media (prefers-reduced-motion: reduce) {
