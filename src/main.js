@@ -87,6 +87,92 @@ if (drawer && backdrop && openBtn) {
   drawer.addEventListener('mouseleave', () => drawer.classList.remove('show-close'))
 }
 
+/* ---------- Reflections (full-screen writing panel) ---------- */
+const reflections = document.querySelector('[data-reflections]')
+const reflectionsOpenBtn = document.querySelector('[data-reflections-open]')
+
+if (reflections && reflectionsOpenBtn) {
+  let reflectionsLastFocused = null
+
+  const openReflections = () => {
+    reflectionsLastFocused = document.activeElement
+    reflections.classList.add('is-open')
+    reflections.setAttribute('aria-hidden', 'false')
+    reflectionsOpenBtn.setAttribute('aria-expanded', 'true')
+    document.documentElement.classList.add('is-locked')
+    reflections.scrollTop = 0
+  }
+  const closeReflections = () => {
+    reflections.classList.remove('is-open')
+    reflections.setAttribute('aria-hidden', 'true')
+    reflectionsOpenBtn.setAttribute('aria-expanded', 'false')
+    document.documentElement.classList.remove('is-locked')
+    reflectionsLastFocused?.focus?.()
+  }
+
+  reflectionsOpenBtn.addEventListener('click', openReflections)
+  reflections
+    .querySelectorAll('[data-reflections-close]')
+    .forEach((el) => el.addEventListener('click', closeReflections))
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && reflections.classList.contains('is-open')) closeReflections()
+  })
+
+  // Each article expands in place on click — no links, no separate pages.
+  const RDUR = reducedMotion ? 20 : 480
+  const collapseItem = (item) => {
+    const toggle = item.querySelector('[data-refl-toggle]')
+    const reveal = item.querySelector('.reflections-item__reveal')
+    item.classList.remove('is-open')
+    toggle.setAttribute('aria-expanded', 'false')
+    // clip again before animating shut (overflow was opened for the sticky control)
+    reveal.style.overflow = 'hidden'
+    reveal.style.maxHeight = `${reveal.scrollHeight}px`
+    void reveal.offsetHeight
+    requestAnimationFrame(() => {
+      reveal.style.maxHeight = '0px'
+    })
+  }
+  reflections.querySelectorAll('[data-refl-toggle]').forEach((toggle) => {
+    const item = toggle.closest('.reflections-item')
+    const reveal = item.querySelector('.reflections-item__reveal')
+    let settle
+    toggle.addEventListener('click', () => {
+      const open = item.classList.toggle('is-open')
+      toggle.setAttribute('aria-expanded', String(open))
+      clearTimeout(settle)
+      if (open) {
+        reveal.style.overflow = 'hidden'
+        reveal.style.maxHeight = `${reveal.scrollHeight}px`
+        settle = setTimeout(() => {
+          if (item.classList.contains('is-open')) {
+            reveal.style.maxHeight = 'none'
+            // let the sticky "Collapse" control stick to the viewport
+            reveal.style.overflow = 'visible'
+          }
+        }, RDUR)
+      } else {
+        reveal.style.overflow = 'hidden'
+        reveal.style.maxHeight = `${reveal.scrollHeight}px`
+        void reveal.offsetHeight
+        requestAnimationFrame(() => {
+          reveal.style.maxHeight = '0px'
+        })
+      }
+    })
+  })
+
+  // The in-article "Collapse" control closes its own article and returns to
+  // the heading.
+  reflections.querySelectorAll('[data-refl-collapse]').forEach((btn) => {
+    const item = btn.closest('.reflections-item')
+    btn.addEventListener('click', () => {
+      collapseItem(item)
+      item.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' })
+    })
+  })
+}
+
 /* ---------- Case study (expands inline, in place, below the work item) ---------- */
 const caseInline = document.querySelector('[data-case]')
 if (caseInline) {
