@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 
-// Project is served from https://raagulmanoharan.github.io/Folio/,
-// so assets must be requested under the /Folio/ base path in production.
-// Locally (`npm run dev`) the base is '/', so hot-reload just works.
+// Served from the custom domain https://raagulmanoharan.com/ (GitHub Pages),
+// so assets are requested from the site root. The old project-page base
+// (/Folio/) is no longer needed now that a custom apex domain is configured.
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? '/Folio/' : '/',
+  base: '/',
 })
