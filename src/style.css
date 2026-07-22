@@ -687,9 +687,57 @@ main {
   letter-spacing: -0.2px;
 }
 
-.drawer-list {
-  margin-top: auto;
+/* Featured — awards, podcast, talks (mirrored from raagulmanoharan.com). */
+.drawer-featured {
+  margin-top: auto; /* group Featured + Experience toward the drawer's foot */
   padding-top: 48px;
+}
+
+.drawer-featured h2 {
+  margin: 0 0 18px;
+  font-size: 27px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+}
+
+.drawer-featured ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.drawer-feature {
+  padding: 14px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.drawer-featured li:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.drawer-feature__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 18px; /* matches the Experience rows */
+}
+
+.drawer-feature__year {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+.drawer-feature__desc {
+  margin: 6px 0 0;
+  max-width: 52ch;
+  font-size: 14px;
+  line-height: 1.42;
+  opacity: 0.82;
+}
+
+.drawer-list {
+  padding-top: 40px;
 }
 
 .drawer-list h2 {
