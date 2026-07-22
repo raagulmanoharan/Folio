@@ -254,6 +254,9 @@ export function initMotif(canvas) {
       ndc.y = -((ev.clientY - r.top) / r.height) * 2 + 1
       raycaster.setFromCamera(ndc, camera)
       if (raycaster.intersectObject(dieBrush, false).length) {
+        // Subtle haptic tick on tap. Web Vibration API — works on Android;
+        // iOS Safari doesn't support it, so this simply no-ops there.
+        navigator.vibrate?.(10)
         startSequence(clock.getElapsedTime()) // hit the die → run the sequence
       } else if (seq.mode !== 'auto' && seq.mode !== 'resume') {
         startResume(clock.getElapsedTime()) // clicked outside → ease back to auto
