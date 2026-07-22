@@ -115,15 +115,6 @@ if (gallery && galleryBackdrop && galleryOpenBtn) {
     if (e.key === 'Escape' && gallery.classList.contains('is-open')) closeGallery()
   })
 
-  // Reveal the close button only when the cursor is near the top-right corner.
-  const CORNER = 140
-  gallery.addEventListener('mousemove', (e) => {
-    const r = gallery.getBoundingClientRect()
-    const near = e.clientX > r.right - CORNER && e.clientY < r.top + CORNER
-    gallery.classList.toggle('show-close', near)
-  })
-  gallery.addEventListener('mouseleave', () => gallery.classList.remove('show-close'))
-
   // Reveal each project's caption only once it scrolls into view.
   const figures = gallery.querySelectorAll('[data-figure]')
   if (figures.length && 'IntersectionObserver' in window) {
