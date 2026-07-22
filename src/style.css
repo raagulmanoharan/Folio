@@ -834,24 +834,28 @@ main {
 }
 
 .gallery-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  /* Persistent close, matching the Info drawer: always visible and pinned to
+     the top-right of the drawer as its content scrolls. The negative bottom
+     margin overlays it on the content (like the Info drawer) so it doesn't
+     push anything down. */
+  position: sticky;
+  top: 0;
+  align-self: flex-end;
+  margin-bottom: -22px;
+  z-index: 5;
   width: 22px;
   height: 22px;
   padding: 0;
   border: 0;
   background: none;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-/* Reveal only when the cursor is near the top-right corner (or via keyboard). */
-.gallery.show-close .gallery-close,
-.gallery-close:focus-visible {
+  cursor: pointer;
   opacity: 1;
   pointer-events: auto;
+}
+
+.gallery-close:focus-visible {
+  outline: 1px solid #141414;
+  outline-offset: 4px;
 }
 
 .gallery-close span {
@@ -868,46 +872,6 @@ main {
 }
 
 .gallery-close span:last-child {
-  transform: rotate(-45deg);
-}
-
-/* A persistent close pinned to the viewport's bottom-right. It lives outside the
-   transformed drawer so it stays fixed while the projects scroll, and shows only
-   while the drawer is open. */
-.gallery-close-fixed {
-  position: fixed;
-  bottom: 22px;
-  right: 22px;
-  width: 48px;
-  height: 48px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: #141414;
-  z-index: 210; /* above the drawer (200) */
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.2s ease;
-}
-.gallery.is-open ~ .gallery-close-fixed {
-  opacity: 1;
-  pointer-events: auto;
-}
-.gallery-close-fixed:hover {
-  transform: scale(1.06);
-}
-.gallery-close-fixed span {
-  position: absolute;
-  top: 50%;
-  left: 31%;
-  width: 38%;
-  height: 1.6px;
-  background: #f4c400;
-}
-.gallery-close-fixed span:first-child {
-  transform: rotate(45deg);
-}
-.gallery-close-fixed span:last-child {
   transform: rotate(-45deg);
 }
 
@@ -1005,23 +969,6 @@ main {
   .gallery {
     scroll-snap-type: none;
     padding-top: calc(36px + env(safe-area-inset-top, 0px));
-  }
-  /* Close pinned to the top-right (like the Info drawer) rather than the
-     bottom circle: no hover on touch, so make the in-drawer close persistent
-     and sticky, and hide the bottom fixed one. */
-  .gallery-close {
-    position: sticky;
-    top: 0;
-    align-self: flex-end;
-    /* Overlay the title row (like the Info drawer) so the X lines up with the
-       start of the title rather than sitting on its own row above it. */
-    margin-bottom: -22px;
-    z-index: 5;
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .gallery-close-fixed {
-    display: none;
   }
   .gallery-body {
     display: block;
