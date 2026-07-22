@@ -785,6 +785,8 @@ main {
   .drawer {
     width: 100vw;
     max-width: none;
+    /* More breathing room up top on phones (and clear any notch in standalone). */
+    padding-top: calc(36px + env(safe-area-inset-top, 0px));
   }
 }
 
@@ -1002,6 +1004,21 @@ main {
   /* Natural top-to-bottom scroll: the title sits on top, the projects follow. */
   .gallery {
     scroll-snap-type: none;
+    padding-top: calc(36px + env(safe-area-inset-top, 0px));
+  }
+  /* Close pinned to the top-right (like the Info drawer) rather than the
+     bottom circle: no hover on touch, so make the in-drawer close persistent
+     and sticky, and hide the bottom fixed one. */
+  .gallery-close {
+    position: sticky;
+    top: 0;
+    align-self: flex-end;
+    z-index: 5;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .gallery-close-fixed {
+    display: none;
   }
   .gallery-body {
     display: block;
