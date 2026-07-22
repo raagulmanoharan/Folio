@@ -639,6 +639,7 @@ main {
   position: sticky;
   top: 0;
   align-self: flex-end;
+  flex: none; /* fixed-size control: never let the scrolling column shrink it */
   margin-bottom: -22px;
   z-index: 5;
   width: 22px;
@@ -654,6 +655,21 @@ main {
 .drawer-close:focus-visible {
   outline: 1px solid #ffffff;
   outline-offset: 4px;
+}
+
+/* Enlarge the click/tap target to ~44px on every drawer's close without
+   changing the visual X size or affecting layout: a transparent, centered
+   hit area. Clicks on it still fire the button. */
+.drawer-close::before,
+.gallery-close::before,
+.reflections-close::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
 }
 
 .drawer-close span {
@@ -841,6 +857,7 @@ main {
   position: sticky;
   top: 0;
   align-self: flex-end;
+  flex: none; /* fixed-size control: never let the scrolling column shrink it */
   margin-bottom: -22px;
   z-index: 5;
   width: 22px;
