@@ -640,7 +640,7 @@ main {
   will-change: transform;
   display: flex;
   flex-direction: column;
-  padding: 36px 20px 24px; /* generous top gap so the intro isn't jammed against the top edge */
+  padding: 20px 20px 24px; /* top gap matches the left gap */
   overflow-y: auto;
 }
 
@@ -818,8 +818,8 @@ main {
   .drawer {
     width: 100vw;
     max-width: none;
-    /* More breathing room up top on phones (and clear any notch in standalone). */
-    padding-top: calc(36px + env(safe-area-inset-top, 0px));
+    /* Top gap matches the left gap (plus any notch in standalone). */
+    padding-top: calc(20px + env(safe-area-inset-top, 0px));
   }
 }
 
