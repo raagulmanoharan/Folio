@@ -31,10 +31,11 @@ if (cursor && finePointer && !reducedMotion) {
   )
   document.addEventListener('mouseleave', () => cursor.classList.remove('is-visible'))
 
-  // Smooth trailing follow.
+  // Smooth trailing follow. The lerp factor sets how much the cursor lags
+  // behind the pointer; ~0.33 halves the drag of the original 0.2.
   const tick = () => {
-    cx += (tx - cx) * 0.2
-    cy += (ty - cy) * 0.2
+    cx += (tx - cx) * 0.33
+    cy += (ty - cy) * 0.33
     cursor.style.setProperty('--cx', `${cx}px`)
     cursor.style.setProperty('--cy', `${cy}px`)
     requestAnimationFrame(tick)
