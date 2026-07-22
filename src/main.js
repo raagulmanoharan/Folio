@@ -76,15 +76,6 @@ if (drawer && backdrop && openBtn) {
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer()
   })
-
-  // Reveal the close button only when the cursor is near the top-right corner.
-  const CORNER = 140
-  drawer.addEventListener('mousemove', (e) => {
-    const r = drawer.getBoundingClientRect()
-    const near = e.clientX > r.right - CORNER && e.clientY < r.top + CORNER
-    drawer.classList.toggle('show-close', near)
-  })
-  drawer.addEventListener('mouseleave', () => drawer.classList.remove('show-close'))
 }
 
 /* ---------- Gallery drawer (opens from the top) ---------- */
