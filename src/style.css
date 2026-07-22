@@ -623,7 +623,7 @@ main {
   will-change: transform;
   display: flex;
   flex-direction: column;
-  padding: 20px 20px 24px; /* reference: 20px top/left, ~30px right text gap */
+  padding: 36px 20px 24px; /* generous top gap so the intro isn't jammed against the top edge */
   overflow-y: auto;
 }
 
