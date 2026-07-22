@@ -1013,6 +1013,9 @@ main {
     position: sticky;
     top: 0;
     align-self: flex-end;
+    /* Overlay the title row (like the Info drawer) so the X lines up with the
+       start of the title rather than sitting on its own row above it. */
+    margin-bottom: -22px;
     z-index: 5;
     opacity: 1;
     pointer-events: auto;
