@@ -309,6 +309,23 @@ main {
   color: var(--fg);
 }
 
+/* Small award badge — a brushed-metal gradient pill, kept in the site's
+   grayscale palette and uppercase micro-label voice. */
+.work-badge {
+  align-self: flex-start;
+  margin-top: 14px;
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f2f2f2 0%, #a9a9a9 48%, #dcdcdc 74%, #969696 100%);
+  color: #161616;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .work-links {
   margin-top: clamp(20px, 3vh, 30px);
   display: flex;
