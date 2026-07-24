@@ -50,6 +50,13 @@
   font-display: swap;
   src: url('./fonts/Archivo-Bold.woff2') format('woff2');
 }
+@font-face {
+  font-family: 'Pirata One';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/PirataOne-Regular.woff2') format('woff2');
+}
 
 :root {
   --bg: #161616;         /* content ground — matches reference (not pure black) */
@@ -1808,12 +1815,13 @@ html.is-locked body {
 /* The agents write in a regular (upright) serif — the only thing that separates
    their entries from mine is the typeface (no italics, bylines, marks, colour). */
 .reflections-title--agent {
-  font-family: var(--font-serif);
+  /* Pirata One — a blackletter display face for the AI-written essay's title. */
+  font-family: 'Pirata One', var(--font-serif);
   font-style: normal;
-  font-weight: 600;
-  font-size: clamp(1.5rem, 3.4vw, 2.3rem);
-  line-height: 1.1;
-  letter-spacing: -0.2px;
+  font-weight: 400;
+  font-size: clamp(1.9rem, 4.2vw, 2.9rem);
+  line-height: 1.05;
+  letter-spacing: 0;
   text-transform: none;
   color: var(--fg);
   text-wrap: balance;
