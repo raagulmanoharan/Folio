@@ -154,6 +154,10 @@ if (reflections && reflectionsOpenBtn) {
     reflectionsOpenBtn.setAttribute('aria-expanded', 'false')
     document.documentElement.classList.remove('is-locked')
     reflectionsLastFocused?.focus?.()
+    // Drop the deep-link hash so a closed panel doesn't leave a stale URL.
+    if (location.hash.startsWith('#/reflections/')) {
+      history.replaceState(null, '', location.pathname + location.search)
+    }
   }
 
   reflectionsOpenBtn.addEventListener('click', openReflections)
@@ -164,7 +168,8 @@ if (reflections && reflectionsOpenBtn) {
     if (e.key === 'Escape' && reflections.classList.contains('is-open')) closeReflections()
   })
 
-  // Each article expands in place on click — no links, no separate pages.
+  // Each article expands in place, and is addressable via a hash deep link
+  // (#/reflections/<slug>) so a single piece can be linked and shared.
   const RDUR = reducedMotion ? 20 : 500
   const bar = reflections.querySelector('.reflections-bar')
   // Smoothly bring an item's heading just under the sticky bar.
@@ -178,59 +183,95 @@ if (reflections && reflectionsOpenBtn) {
       12
     reflections.scrollTo({ top: Math.max(0, y), behavior: reducedMotion ? 'auto' : 'smooth' })
   }
-  const collapseItem = (item) => {
+
+  // Open or collapse one article. Idempotent, so it's safe to call for a deep
+  // link when the article may already be open.
+  const setItemOpen = (item, open, scroll) => {
     const toggle = item.querySelector('[data-refl-toggle]')
     const reveal = item.querySelector('.reflections-item__reveal')
-    item.classList.remove('is-open', 'is-settled') // fade the control out first
-    toggle.setAttribute('aria-expanded', 'false')
-    // clip again before animating shut (overflow was opened for the sticky control)
-    reveal.style.overflow = 'hidden'
-    reveal.style.maxHeight = `${reveal.scrollHeight}px`
-    void reveal.offsetHeight
-    requestAnimationFrame(() => {
-      reveal.style.maxHeight = '0px'
-    })
+    if (open === item.classList.contains('is-open')) {
+      if (open && scroll) scrollToItem(item)
+      return
+    }
+    clearTimeout(item._reflSettle)
+    if (open) {
+      item.classList.add('is-open')
+      toggle.setAttribute('aria-expanded', 'true')
+      reveal.style.overflow = 'hidden'
+      reveal.style.maxHeight = `${reveal.scrollHeight}px`
+      item._reflSettle = setTimeout(() => {
+        if (item.classList.contains('is-open')) {
+          reveal.style.maxHeight = 'none'
+          reveal.style.overflow = 'visible' // let the sticky "Collapse" control stick
+          item.classList.add('is-settled')
+        }
+      }, RDUR)
+      if (scroll) scrollToItem(item)
+    } else {
+      item.classList.remove('is-open', 'is-settled')
+      toggle.setAttribute('aria-expanded', 'false')
+      reveal.style.overflow = 'hidden'
+      reveal.style.maxHeight = `${reveal.scrollHeight}px`
+      void reveal.offsetHeight
+      requestAnimationFrame(() => {
+        reveal.style.maxHeight = '0px'
+      })
+    }
   }
-  reflections.querySelectorAll('[data-refl-toggle]').forEach((toggle) => {
-    const item = toggle.closest('.reflections-item')
-    const reveal = item.querySelector('.reflections-item__reveal')
-    let settle
+
+  // ---- Hash deep links -------------------------------------------------
+  const REFL_HASH = '#/reflections/'
+  const slugify = (s) =>
+    s
+      .toLowerCase()
+      .replace(/[’'"]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+  const items = [...reflections.querySelectorAll('.reflections-item')]
+  const slugFor = (item) =>
+    item.dataset.slug || slugify(item.querySelector('.reflections-title')?.textContent || '')
+  const bySlug = new Map(items.map((item) => [slugFor(item), item]))
+  const hashSlug = () =>
+    location.hash.startsWith(REFL_HASH)
+      ? decodeURIComponent(location.hash.slice(REFL_HASH.length))
+      : ''
+  const clearReflHash = () => {
+    if (hashSlug()) history.replaceState(null, '', location.pathname + location.search)
+  }
+
+  items.forEach((item) => {
+    const toggle = item.querySelector('[data-refl-toggle]')
     toggle.addEventListener('click', () => {
-      const open = item.classList.toggle('is-open')
-      toggle.setAttribute('aria-expanded', String(open))
-      clearTimeout(settle)
+      const open = !item.classList.contains('is-open')
+      setItemOpen(item, open)
+      const slug = slugFor(item)
       if (open) {
-        reveal.style.overflow = 'hidden'
-        reveal.style.maxHeight = `${reveal.scrollHeight}px`
-        settle = setTimeout(() => {
-          if (item.classList.contains('is-open')) {
-            reveal.style.maxHeight = 'none'
-            // let the sticky "Collapse" control stick, then fade it in
-            reveal.style.overflow = 'visible'
-            item.classList.add('is-settled')
-          }
-        }, RDUR)
-      } else {
-        item.classList.remove('is-settled')
-        reveal.style.overflow = 'hidden'
-        reveal.style.maxHeight = `${reveal.scrollHeight}px`
-        void reveal.offsetHeight
-        requestAnimationFrame(() => {
-          reveal.style.maxHeight = '0px'
-        })
+        if (hashSlug() !== slug) location.hash = REFL_HASH + slug // shareable URL
+      } else if (hashSlug() === slug) {
+        clearReflHash()
       }
     })
   })
 
-  // The in-article "Collapse" control closes its own article and eases back
-  // to the heading.
+  // The in-article "Collapse" control closes its own article.
   reflections.querySelectorAll('[data-refl-collapse]').forEach((btn) => {
     const item = btn.closest('.reflections-item')
     btn.addEventListener('click', () => {
       scrollToItem(item)
-      collapseItem(item)
+      setItemOpen(item, false)
+      if (hashSlug() === slugFor(item)) clearReflHash()
     })
   })
+
+  // Arriving at (or navigating to) a deep link opens the panel and the piece.
+  const syncFromHash = (scroll) => {
+    const item = bySlug.get(hashSlug())
+    if (!item) return
+    if (!reflections.classList.contains('is-open')) openReflections()
+    setItemOpen(item, true, scroll)
+  }
+  window.addEventListener('hashchange', () => syncFromHash(true))
+  if (bySlug.has(hashSlug())) requestAnimationFrame(() => syncFromHash(true))
 }
 
 /* ---------- Case study (expands inline, in place, below the work item) ---------- */
