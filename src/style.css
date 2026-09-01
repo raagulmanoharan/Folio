@@ -396,6 +396,54 @@ main {
   opacity: 1;
 }
 
+/* On hover the pill also catches a glint: a bright diagonal band sweeps across
+   it every couple of seconds, like light passing over a real metal plate. */
+.work-badge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    rgba(255, 255, 255, 0) 38%,
+    rgba(255, 255, 255, 0.9) 50%,
+    rgba(255, 255, 255, 0) 62%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  background-position: 150% 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.work-badge:hover::after,
+.work-badge:focus-visible::after {
+  animation: badge-shine 2s ease-in-out infinite;
+}
+@keyframes badge-shine {
+  0% {
+    background-position: 150% 0;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  40% {
+    background-position: -50% 0;
+    opacity: 0;
+  }
+  100% {
+    background-position: -50% 0;
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-badge:hover::after,
+  .work-badge:focus-visible::after {
+    animation: none;
+  }
+}
+
 .work-links {
   margin-top: clamp(20px, 3vh, 30px);
   display: flex;
