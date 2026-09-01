@@ -171,8 +171,27 @@ if (wordmark && !reducedMotion) {
   wordmark.appendChild(frag)
 
   const pick = (arr) => arr[(Math.random() * arr.length) | 0]
-  let hovering = false
   let timer = null
+
+  // Intensity eases 0 (rest) → 1 (hovered) instead of snapping, so hovering
+  // ramps the flicker up and away smoothly rather than abruptly. Both the
+  // letter count and the flip speed are derived from it.
+  let intensity = 0
+  let intensityTarget = 0
+  let raf = null
+  const ease = () => {
+    intensity += (intensityTarget - intensity) * 0.07
+    if (Math.abs(intensityTarget - intensity) < 0.005) {
+      intensity = intensityTarget
+      raf = null
+      return
+    }
+    raf = requestAnimationFrame(ease)
+  }
+  const setHover = (on) => {
+    intensityTarget = on ? 1 : 0
+    if (!raf) raf = requestAnimationFrame(ease)
+  }
 
   const swapped = () => letters.filter((s) => s.dataset.on)
   const setFace = (s) => {
@@ -190,13 +209,13 @@ if (wordmark && !reducedMotion) {
   }
 
   // Keep a few letters mid-swap at once and keep mutating which ones, so the
-  // name stays busy and unpredictable even at rest (and busier on hover).
+  // name stays busy and unpredictable even at rest, easing busier on hover.
   const flip = () => {
     // Skip work (but keep the heartbeat) when the wordmark isn't visible,
     // e.g. the "RM" short form is showing on mobile.
     if (wordmark.offsetParent) {
       const on = swapped()
-      const target = hovering ? 6 : 3
+      const target = Math.round(3 + intensity * 3) // 3 at rest … 6 hovered
       if (on.length < target) {
         const base = letters.filter((s) => !s.dataset.on)
         setFace(pick(base.length ? base : letters))
@@ -206,7 +225,8 @@ if (wordmark && !reducedMotion) {
         setFace(pick(on)) // mutate an already-swapped letter in place
       }
     }
-    const delay = hovering ? 45 + Math.random() * 90 : 240 + Math.random() * 480
+    // Delay eases from ~240–720ms at rest to ~45–135ms fully hovered.
+    const delay = (240 - intensity * 195) + Math.random() * (480 - intensity * 390)
     timer = setTimeout(flip, delay)
   }
   const arm = (soon) => {
@@ -224,21 +244,34 @@ if (wordmark && !reducedMotion) {
   })
   if (finePointer) {
     wordmarkBtn.addEventListener('pointerenter', () => {
-      hovering = true
-      arm(true)
+      setHover(true)
+      arm(true) // kick the loop so the eased ramp starts promptly
     })
-    wordmarkBtn.addEventListener('pointerleave', () => {
-      hovering = false
-    })
+    wordmarkBtn.addEventListener('pointerleave', () => setHover(false))
     wordmarkBtn.addEventListener('focus', () => {
-      hovering = true
+      setHover(true)
       arm(true)
     })
-    wordmarkBtn.addEventListener('blur', () => {
-      hovering = false
-    })
+    wordmarkBtn.addEventListener('blur', () => setHover(false))
   }
   arm(false)
+}
+
+/* ---------- Metal badge sheen ----------
+   Track the cursor across the award pill so its specular highlight shifts like
+   a reflection on a real metal plate. Desktop pointers only. */
+if (finePointer) {
+  document.querySelectorAll('.work-badge').forEach((badge) => {
+    badge.addEventListener(
+      'pointermove',
+      (e) => {
+        const r = badge.getBoundingClientRect()
+        badge.style.setProperty('--sheen-x', `${((e.clientX - r.left) / r.width) * 100}%`)
+        badge.style.setProperty('--sheen-y', `${((e.clientY - r.top) / r.height) * 100}%`)
+      },
+      { passive: true },
+    )
+  })
 }
 
 /* ---------- Reflections (full-screen writing panel) ---------- */
