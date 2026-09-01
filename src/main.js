@@ -133,6 +133,55 @@ if (gallery && galleryBackdrop && galleryOpenBtn) {
   }
 }
 
+/* ---------- Wordmark type-scramble ----------
+   Hovering the name rapidly cycles it through a spread of type styles, so the
+   otherwise logo-like wordmark reads as something you can open. Desktop-only,
+   and skipped for reduced-motion. */
+const wordmarkBtn = document.querySelector('[data-gallery-open]')
+const wordmark = wordmarkBtn?.querySelector('.wordmark-full')
+if (wordmark && finePointer && !reducedMotion) {
+  const faces = [
+    "'Archivo', sans-serif",
+    "'STIX Two Text', serif",
+    "'Space Mono', monospace",
+    "'Oswald', sans-serif",
+    "'Pirata One', serif",
+    "'Silkscreen', monospace",
+    "'Pinyon Script', cursive",
+    "'Rubik Glitch', system-ui",
+  ]
+  // Warm the cache so the first hover cycles instantly instead of flashing.
+  if (document.fonts?.load) {
+    faces.forEach((f) => document.fonts.load(`400 16px ${f.split(',')[0]}`, 'Raagul Manoharan').catch(() => {}))
+  }
+  let timer = null
+  let last = -1
+  const scramble = () => {
+    let i
+    do {
+      i = Math.floor(Math.random() * faces.length)
+    } while (i === last)
+    last = i
+    wordmark.style.fontFamily = faces[i]
+  }
+  const start = () => {
+    if (timer) return
+    scramble()
+    timer = setInterval(scramble, 80)
+  }
+  const stop = () => {
+    clearInterval(timer)
+    timer = null
+    last = -1
+    wordmark.style.fontFamily = ''
+  }
+  wordmarkBtn.addEventListener('pointerenter', start)
+  wordmarkBtn.addEventListener('pointerleave', stop)
+  wordmarkBtn.addEventListener('focus', start)
+  wordmarkBtn.addEventListener('blur', stop)
+  wordmarkBtn.addEventListener('click', stop)
+}
+
 /* ---------- Reflections (full-screen writing panel) ---------- */
 const reflections = document.querySelector('[data-reflections]')
 const reflectionsOpenBtn = document.querySelector('[data-reflections-open]')
