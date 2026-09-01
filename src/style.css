@@ -57,6 +57,35 @@
   font-display: swap;
   src: url('./fonts/PirataOne-Regular.woff2') format('woff2');
 }
+/* Display faces used only by the wordmark hover "type scramble". */
+@font-face {
+  font-family: 'Silkscreen';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/Silkscreen-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/SpaceMono-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Oswald';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/Oswald-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Rubik Glitch';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/RubikGlitch-Regular.woff2') format('woff2');
+}
 
 :root {
   --bg: #161616;         /* content ground — matches reference (not pure black) */
