@@ -195,6 +195,15 @@ body {
   display: none;
 }
 
+/* Per-letter flicker: lock each letter's box height so swapping to a face with
+   different metrics can't nudge the header's height. Fixed line-height caps the
+   box; a taller glyph overflows visually but never changes layout. */
+.wordmark-full .wm-l {
+  display: inline-block;
+  line-height: 1;
+  vertical-align: baseline;
+}
+
 /* ---------- Hero ---------- */
 main {
   padding-top: var(--header-h);

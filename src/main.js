@@ -161,7 +161,10 @@ if (wordmark && !reducedMotion) {
   ;[...wordmark.textContent].forEach((ch) => {
     const s = document.createElement('span')
     s.textContent = ch
-    if (ch.trim()) letters.push(s)
+    if (ch.trim()) {
+      s.className = 'wm-l' // only letters get the box-lock + swap
+      letters.push(s)
+    }
     frag.appendChild(s)
   })
   wordmark.textContent = ''
@@ -171,25 +174,39 @@ if (wordmark && !reducedMotion) {
   let hovering = false
   let timer = null
 
+  const swapped = () => letters.filter((s) => s.dataset.on)
+  const setFace = (s) => {
+    let f
+    do {
+      f = pick(faces)
+    } while (f === s.dataset.face)
+    s.style.fontFamily = f
+    s.dataset.face = f
+    s.dataset.on = '1'
+  }
+  const revert = (s) => {
+    s.style.fontFamily = ''
+    delete s.dataset.on
+  }
+
+  // Keep a few letters mid-swap at once and keep mutating which ones, so the
+  // name stays busy and unpredictable even at rest (and busier on hover).
   const flip = () => {
-    // Skip work (but keep a slow heartbeat) when the wordmark isn't visible,
+    // Skip work (but keep the heartbeat) when the wordmark isn't visible,
     // e.g. the "RM" short form is showing on mobile.
     if (wordmark.offsetParent) {
-      const s = pick(letters)
-      if (s.dataset.on && Math.random() < 0.55) {
-        s.style.fontFamily = ''
-        delete s.dataset.on
+      const on = swapped()
+      const target = hovering ? 6 : 3
+      if (on.length < target) {
+        const base = letters.filter((s) => !s.dataset.on)
+        setFace(pick(base.length ? base : letters))
+      } else if (Math.random() < 0.35) {
+        revert(pick(on))
       } else {
-        let f
-        do {
-          f = pick(faces)
-        } while (f === s.dataset.face)
-        s.style.fontFamily = f
-        s.dataset.face = f
-        s.dataset.on = '1'
+        setFace(pick(on)) // mutate an already-swapped letter in place
       }
     }
-    const delay = hovering ? 55 + Math.random() * 110 : 1000 + Math.random() * 2600
+    const delay = hovering ? 45 + Math.random() * 90 : 240 + Math.random() * 480
     timer = setTimeout(flip, delay)
   }
   const arm = (soon) => {
