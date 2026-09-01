@@ -357,6 +357,8 @@ main {
 /* Small award badge — a brushed-metal gradient pill, kept in the site's
    grayscale palette and uppercase micro-label voice. */
 .work-badge {
+  position: relative;
+  isolation: isolate;
   align-self: flex-start;
   margin-top: 14px;
   padding: 5px 12px;
@@ -369,6 +371,29 @@ main {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+/* A soft specular highlight that tracks the cursor, so the metal pill catches
+   and shifts a reflection like a real plate under light. z-index keeps it above
+   the brushed-metal fill but below the text. */
+.work-badge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    75px 42px at var(--sheen-x, 50%) var(--sheen-y, -10%),
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0) 66%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.work-badge:hover::before,
+.work-badge:focus-visible::before {
+  opacity: 1;
 }
 
 .work-links {

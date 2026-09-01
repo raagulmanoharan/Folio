@@ -241,6 +241,23 @@ if (wordmark && !reducedMotion) {
   arm(false)
 }
 
+/* ---------- Metal badge sheen ----------
+   Track the cursor across the award pill so its specular highlight shifts like
+   a reflection on a real metal plate. Desktop pointers only. */
+if (finePointer) {
+  document.querySelectorAll('.work-badge').forEach((badge) => {
+    badge.addEventListener(
+      'pointermove',
+      (e) => {
+        const r = badge.getBoundingClientRect()
+        badge.style.setProperty('--sheen-x', `${((e.clientX - r.left) / r.width) * 100}%`)
+        badge.style.setProperty('--sheen-y', `${((e.clientY - r.top) / r.height) * 100}%`)
+      },
+      { passive: true },
+    )
+  })
+}
+
 /* ---------- Reflections (full-screen writing panel) ---------- */
 const reflections = document.querySelector('[data-reflections]')
 const reflectionsOpenBtn = document.querySelector('[data-reflections-open]')
