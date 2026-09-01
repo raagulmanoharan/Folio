@@ -133,13 +133,15 @@ if (gallery && galleryBackdrop && galleryOpenBtn) {
   }
 }
 
-/* ---------- Wordmark type-scramble ----------
-   Hovering the name rapidly cycles it through a spread of type styles, so the
-   otherwise logo-like wordmark reads as something you can open. Desktop-only,
-   and skipped for reduced-motion. */
+/* ---------- Wordmark letter-flicker ----------
+   The name is split into per-letter spans. At random, unpredictable moments a
+   single random letter flips to a random display face and later flips back —
+   never the whole word at once. Quiet and sparse at rest (a subtle "this is
+   alive" cue that also works on touch), busier while hovered. Skipped for
+   reduced-motion, paused while the tab is hidden. */
 const wordmarkBtn = document.querySelector('[data-gallery-open]')
 const wordmark = wordmarkBtn?.querySelector('.wordmark-full')
-if (wordmark && finePointer && !reducedMotion) {
+if (wordmark && !reducedMotion) {
   const faces = [
     "'Archivo', sans-serif",
     "'STIX Two Text', serif",
@@ -150,36 +152,76 @@ if (wordmark && finePointer && !reducedMotion) {
     "'Pinyon Script', cursive",
     "'Rubik Glitch', system-ui",
   ]
-  // Warm the cache so the first hover cycles instantly instead of flashing.
   if (document.fonts?.load) {
-    faces.forEach((f) => document.fonts.load(`400 16px ${f.split(',')[0]}`, 'Raagul Manoharan').catch(() => {}))
+    faces.forEach((f) => document.fonts.load(`400 16px ${f.split(',')[0]}`, wordmark.textContent).catch(() => {}))
   }
+  // Split into per-character spans; spaces are kept but never swapped.
+  const letters = []
+  const frag = document.createDocumentFragment()
+  ;[...wordmark.textContent].forEach((ch) => {
+    const s = document.createElement('span')
+    s.textContent = ch
+    if (ch.trim()) letters.push(s)
+    frag.appendChild(s)
+  })
+  wordmark.textContent = ''
+  wordmark.appendChild(frag)
+
+  const pick = (arr) => arr[(Math.random() * arr.length) | 0]
+  let hovering = false
   let timer = null
-  let last = -1
-  const scramble = () => {
-    let i
-    do {
-      i = Math.floor(Math.random() * faces.length)
-    } while (i === last)
-    last = i
-    wordmark.style.fontFamily = faces[i]
+
+  const flip = () => {
+    // Skip work (but keep a slow heartbeat) when the wordmark isn't visible,
+    // e.g. the "RM" short form is showing on mobile.
+    if (wordmark.offsetParent) {
+      const s = pick(letters)
+      if (s.dataset.on && Math.random() < 0.55) {
+        s.style.fontFamily = ''
+        delete s.dataset.on
+      } else {
+        let f
+        do {
+          f = pick(faces)
+        } while (f === s.dataset.face)
+        s.style.fontFamily = f
+        s.dataset.face = f
+        s.dataset.on = '1'
+      }
+    }
+    const delay = hovering ? 55 + Math.random() * 110 : 1000 + Math.random() * 2600
+    timer = setTimeout(flip, delay)
   }
-  const start = () => {
-    if (timer) return
-    scramble()
-    timer = setInterval(scramble, 80)
+  const arm = (soon) => {
+    clearTimeout(timer)
+    timer = setTimeout(flip, soon ? 30 : 700 + Math.random() * 1400)
   }
-  const stop = () => {
-    clearInterval(timer)
-    timer = null
-    last = -1
-    wordmark.style.fontFamily = ''
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      clearTimeout(timer)
+      timer = null
+    } else {
+      arm(false)
+    }
+  })
+  if (finePointer) {
+    wordmarkBtn.addEventListener('pointerenter', () => {
+      hovering = true
+      arm(true)
+    })
+    wordmarkBtn.addEventListener('pointerleave', () => {
+      hovering = false
+    })
+    wordmarkBtn.addEventListener('focus', () => {
+      hovering = true
+      arm(true)
+    })
+    wordmarkBtn.addEventListener('blur', () => {
+      hovering = false
+    })
   }
-  wordmarkBtn.addEventListener('pointerenter', start)
-  wordmarkBtn.addEventListener('pointerleave', stop)
-  wordmarkBtn.addEventListener('focus', start)
-  wordmarkBtn.addEventListener('blur', stop)
-  wordmarkBtn.addEventListener('click', stop)
+  arm(false)
 }
 
 /* ---------- Reflections (full-screen writing panel) ---------- */
