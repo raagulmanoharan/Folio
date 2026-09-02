@@ -86,6 +86,13 @@
   font-display: swap;
   src: url('./fonts/RubikGlitch-Regular.woff2') format('woff2');
 }
+@font-face {
+  font-family: 'Noto Sans Tamil';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('./fonts/NotoSansTamil-Medium.woff2') format('woff2');
+}
 
 :root {
   --bg: #161616;         /* content ground — matches reference (not pure black) */

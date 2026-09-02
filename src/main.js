@@ -152,10 +152,16 @@ if (wordmark && !reducedMotion) {
     "'Pinyon Script', cursive",
     "'Rubik Glitch', system-ui",
   ]
+  // Tamil aksharas of the name (ராகுல் மனோகரன்); a letter can briefly become
+  // one of these instead of just changing face.
+  const TAMIL = ['ரா', 'கு', 'ல்', 'ம', 'னோ', 'க', 'ர', 'ன்']
+  const TAMIL_FACE = "'Noto Sans Tamil', sans-serif"
   if (document.fonts?.load) {
     faces.forEach((f) => document.fonts.load(`400 16px ${f.split(',')[0]}`, wordmark.textContent).catch(() => {}))
+    document.fonts.load(`500 16px 'Noto Sans Tamil'`, TAMIL.join('')).catch(() => {})
   }
-  // Split into per-character spans; spaces are kept but never swapped.
+  // Split into per-character spans; spaces are kept but never swapped. Each
+  // letter remembers its original Latin glyph so a Tamil swap can flip back.
   const letters = []
   const frag = document.createDocumentFragment()
   ;[...wordmark.textContent].forEach((ch) => {
@@ -163,6 +169,7 @@ if (wordmark && !reducedMotion) {
     s.textContent = ch
     if (ch.trim()) {
       s.className = 'wm-l' // only letters get the box-lock + swap
+      s.dataset.orig = ch
       letters.push(s)
     }
     frag.appendChild(s)
@@ -195,6 +202,16 @@ if (wordmark && !reducedMotion) {
 
   const swapped = () => letters.filter((s) => s.dataset.on)
   const setFace = (s) => {
+    // ~1 in 4 swaps flips the glyph itself to a Tamil akshara; the rest just
+    // change the Latin letter's face.
+    if (Math.random() < 0.25) {
+      s.textContent = pick(TAMIL)
+      s.style.fontFamily = TAMIL_FACE
+      s.dataset.face = TAMIL_FACE
+      s.dataset.on = '1'
+      return
+    }
+    if (s.textContent !== s.dataset.orig) s.textContent = s.dataset.orig
     let f
     do {
       f = pick(faces)
@@ -204,8 +221,10 @@ if (wordmark && !reducedMotion) {
     s.dataset.on = '1'
   }
   const revert = (s) => {
+    if (s.textContent !== s.dataset.orig) s.textContent = s.dataset.orig
     s.style.fontFamily = ''
     delete s.dataset.on
+    delete s.dataset.face
   }
 
   // Keep a few letters mid-swap at once and keep mutating which ones, so the
