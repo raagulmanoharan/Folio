@@ -137,11 +137,11 @@ if (gallery && galleryBackdrop && galleryOpenBtn) {
    The name is split into per-letter spans and arrives scrambled — each letter
    cycles cipher glyphs (with Tamil aksharas from ராகுல் மனோகரன் woven in), then
    locks to its real letter, left to right, resolving into "Raagul Manoharan".
-   Runs once on load and again on hover/focus; calm and readable at rest.
-   Skipped for reduced-motion. */
+   Both wordmark forms are wired — the full name on desktop and the "RM" short
+   form on mobile — and whichever is visible decodes. Runs once on load and
+   again on hover/focus; calm and readable at rest. Skipped for reduced-motion. */
 const wordmarkBtn = document.querySelector('[data-gallery-open]')
-const wordmark = wordmarkBtn?.querySelector('.wordmark-full')
-if (wordmark && !reducedMotion) {
+if (wordmarkBtn && !reducedMotion) {
   const TAMIL = ['ரா', 'கு', 'ல்', 'ம', 'னோ', 'க', 'ர', 'ன்']
   const TAMIL_FACE = "'Noto Sans Tamil', sans-serif"
   // Scramble vocabulary: cipher glyphs plus a few Tamil aksharas from the name.
@@ -153,23 +153,6 @@ if (wordmark && !reducedMotion) {
   if (document.fonts?.load) {
     document.fonts.load(`500 16px 'Noto Sans Tamil'`, TAMIL.join('')).catch(() => {})
   }
-
-  // Split into per-letter spans; the space is kept but never scrambled. Each
-  // letter remembers its final glyph.
-  const letters = []
-  const frag = document.createDocumentFragment()
-  ;[...wordmark.textContent].forEach((ch) => {
-    const s = document.createElement('span')
-    s.textContent = ch
-    if (ch.trim()) {
-      s.className = 'wm-l'
-      s.dataset.orig = ch
-      letters.push(s)
-    }
-    frag.appendChild(s)
-  })
-  wordmark.textContent = ''
-  wordmark.appendChild(frag)
 
   const pick = (arr) => arr[(Math.random() * arr.length) | 0]
   const scramble = (s) => {
@@ -184,41 +167,70 @@ if (wordmark && !reducedMotion) {
     s.classList.remove('is-cipher')
   }
 
-  let runId = 0
-  const decode = () => {
-    if (!wordmark.offsetParent) return // e.g. the "RM" short form on mobile
-    const id = ++runId // a newer run supersedes any in progress
-    const STAGGER = 70 // ms between each letter locking in
-    const PREROLL = 220 // ms of scramble before the first letter resolves
-    const t0 = performance.now()
-    letters.forEach((s, i) => {
-      s._lockAt = t0 + PREROLL + i * STAGGER + Math.random() * 80
-    })
-    let last = 0
-    const tick = (now) => {
-      if (id !== runId) return // cancelled by a newer run
-      const reroll = now - last >= 45
-      if (reroll) last = now
-      let anyLeft = false
-      for (const s of letters) {
-        if (now >= s._lockAt) {
-          if (s.classList.contains('is-cipher')) lock(s)
-        } else {
-          anyLeft = true
-          if (reroll) scramble(s)
-        }
+  // Build one decoder per wordmark form. Each splits its text into per-letter
+  // spans (the space is kept but never scrambled) and exposes a decode() that
+  // no-ops when its element is hidden — so the offscreen form stays readable.
+  const makeCipher = (el) => {
+    const letters = []
+    const frag = document.createDocumentFragment()
+    ;[...el.textContent].forEach((ch) => {
+      const s = document.createElement('span')
+      s.textContent = ch
+      if (ch.trim()) {
+        s.className = 'wm-l'
+        s.dataset.orig = ch
+        letters.push(s)
       }
-      if (anyLeft) requestAnimationFrame(tick)
+      frag.appendChild(s)
+    })
+    el.textContent = ''
+    el.appendChild(frag)
+
+    let runId = 0
+    const decode = () => {
+      if (!el.offsetParent) return // hidden form (e.g. the other one at this width)
+      const id = ++runId // a newer run supersedes any in progress
+      const STAGGER = 70 // ms between each letter locking in
+      const PREROLL = 220 // ms of scramble before the first letter resolves
+      const t0 = performance.now()
+      letters.forEach((s, i) => {
+        s._lockAt = t0 + PREROLL + i * STAGGER + Math.random() * 80
+      })
+      let last = 0
+      const tick = (now) => {
+        if (id !== runId) return // cancelled by a newer run
+        const reroll = now - last >= 45
+        if (reroll) last = now
+        let anyLeft = false
+        for (const s of letters) {
+          if (now >= s._lockAt) {
+            if (s.classList.contains('is-cipher')) lock(s)
+          } else {
+            anyLeft = true
+            if (reroll) scramble(s)
+          }
+        }
+        if (anyLeft) requestAnimationFrame(tick)
+      }
+      requestAnimationFrame(tick)
     }
-    requestAnimationFrame(tick)
+
+    letters.forEach(scramble) // show scrambled immediately, then resolve
+    return decode
   }
 
-  letters.forEach(scramble) // show scrambled immediately, then resolve
-  decode() // decode on load
+  const decoders = [...wordmarkBtn.querySelectorAll('.wordmark-full, .wordmark-short')]
+    .map(makeCipher)
+  const decodeAll = () => decoders.forEach((d) => d()) // only the visible form runs
+
+  decodeAll() // decode on load
   if (finePointer) {
-    wordmarkBtn.addEventListener('pointerenter', decode) // re-decode on hover
+    wordmarkBtn.addEventListener('pointerenter', decodeAll) // re-decode on hover
   }
-  wordmarkBtn.addEventListener('focus', decode) // and on keyboard focus
+  wordmarkBtn.addEventListener('focus', decodeAll) // and on keyboard focus
+  // When the layout swaps forms (crossing the mobile breakpoint), decode the
+  // one that just became visible.
+  window.matchMedia('(max-width: 640px)').addEventListener('change', decodeAll)
 }
 
 /* ---------- Metal badge sheen ----------
