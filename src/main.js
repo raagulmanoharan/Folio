@@ -133,42 +133,36 @@ if (gallery && galleryBackdrop && galleryOpenBtn) {
   }
 }
 
-/* ---------- Wordmark letter-flicker ----------
-   The name is split into per-letter spans. At random, unpredictable moments a
-   single random letter flips to a random display face and later flips back —
-   never the whole word at once. Quiet and sparse at rest (a subtle "this is
-   alive" cue that also works on touch), busier while hovered. Skipped for
-   reduced-motion, paused while the tab is hidden. */
+/* ---------- Wordmark cipher decode ----------
+   The name is split into per-letter spans and arrives scrambled — each letter
+   cycles cipher glyphs (with Tamil aksharas from ராகுல் மனோகரன் woven in), then
+   locks to its real letter, left to right, resolving into "Raagul Manoharan".
+   Runs once on load and again on hover/focus; calm and readable at rest.
+   Skipped for reduced-motion. */
 const wordmarkBtn = document.querySelector('[data-gallery-open]')
 const wordmark = wordmarkBtn?.querySelector('.wordmark-full')
 if (wordmark && !reducedMotion) {
-  const faces = [
-    "'Archivo', sans-serif",
-    "'STIX Two Text', serif",
-    "'Space Mono', monospace",
-    "'Oswald', sans-serif",
-    "'Pirata One', serif",
-    "'Silkscreen', monospace",
-    "'Pinyon Script', cursive",
-    "'Rubik Glitch', system-ui",
-  ]
-  // Tamil aksharas of the name (ராகுல் மனோகரன்); a letter can briefly become
-  // one of these instead of just changing face.
   const TAMIL = ['ரா', 'கு', 'ல்', 'ம', 'னோ', 'க', 'ர', 'ன்']
   const TAMIL_FACE = "'Noto Sans Tamil', sans-serif"
+  // Scramble vocabulary: cipher glyphs plus a few Tamil aksharas from the name.
+  const CIPHER = [
+    '▓', '#', '&', 'R', 'K', 'Q', '1', '0', '3', '%', '☰', '*', '£', '€', '▒', '§', '¥', 'Ø',
+    ...TAMIL,
+  ]
+  const isTamil = (g) => /[஀-௿]/.test(g)
   if (document.fonts?.load) {
-    faces.forEach((f) => document.fonts.load(`400 16px ${f.split(',')[0]}`, wordmark.textContent).catch(() => {}))
     document.fonts.load(`500 16px 'Noto Sans Tamil'`, TAMIL.join('')).catch(() => {})
   }
-  // Split into per-character spans; spaces are kept but never swapped. Each
-  // letter remembers its original Latin glyph so a Tamil swap can flip back.
+
+  // Split into per-letter spans; the space is kept but never scrambled. Each
+  // letter remembers its final glyph.
   const letters = []
   const frag = document.createDocumentFragment()
   ;[...wordmark.textContent].forEach((ch) => {
     const s = document.createElement('span')
     s.textContent = ch
     if (ch.trim()) {
-      s.className = 'wm-l' // only letters get the box-lock + swap
+      s.className = 'wm-l'
       s.dataset.orig = ch
       letters.push(s)
     }
@@ -178,102 +172,53 @@ if (wordmark && !reducedMotion) {
   wordmark.appendChild(frag)
 
   const pick = (arr) => arr[(Math.random() * arr.length) | 0]
-  let timer = null
-
-  // Intensity eases 0 (rest) → 1 (hovered) instead of snapping, so hovering
-  // ramps the flicker up and away smoothly rather than abruptly. Both the
-  // letter count and the flip speed are derived from it.
-  let intensity = 0
-  let intensityTarget = 0
-  let raf = null
-  const ease = () => {
-    intensity += (intensityTarget - intensity) * 0.07
-    if (Math.abs(intensityTarget - intensity) < 0.005) {
-      intensity = intensityTarget
-      raf = null
-      return
-    }
-    raf = requestAnimationFrame(ease)
+  const scramble = (s) => {
+    const g = pick(CIPHER)
+    s.textContent = g
+    s.style.fontFamily = isTamil(g) ? TAMIL_FACE : ''
+    s.classList.add('is-cipher')
   }
-  const setHover = (on) => {
-    intensityTarget = on ? 1 : 0
-    if (!raf) raf = requestAnimationFrame(ease)
-  }
-
-  const swapped = () => letters.filter((s) => s.dataset.on)
-  const setFace = (s) => {
-    // ~1 in 4 swaps flips the glyph itself to a Tamil akshara; the rest just
-    // change the Latin letter's face.
-    if (Math.random() < 0.25) {
-      s.textContent = pick(TAMIL)
-      s.style.fontFamily = TAMIL_FACE
-      s.dataset.face = TAMIL_FACE
-      s.dataset.on = '1'
-      return
-    }
-    if (s.textContent !== s.dataset.orig) s.textContent = s.dataset.orig
-    let f
-    do {
-      f = pick(faces)
-    } while (f === s.dataset.face)
-    s.style.fontFamily = f
-    s.dataset.face = f
-    s.dataset.on = '1'
-  }
-  const revert = (s) => {
-    if (s.textContent !== s.dataset.orig) s.textContent = s.dataset.orig
+  const lock = (s) => {
+    s.textContent = s.dataset.orig
     s.style.fontFamily = ''
-    delete s.dataset.on
-    delete s.dataset.face
+    s.classList.remove('is-cipher')
   }
 
-  // Keep a few letters mid-swap at once and keep mutating which ones, so the
-  // name stays busy and unpredictable even at rest, easing busier on hover.
-  const flip = () => {
-    // Skip work (but keep the heartbeat) when the wordmark isn't visible,
-    // e.g. the "RM" short form is showing on mobile.
-    if (wordmark.offsetParent) {
-      const on = swapped()
-      const target = Math.round(3 + intensity * 3) // 3 at rest … 6 hovered
-      if (on.length < target) {
-        const base = letters.filter((s) => !s.dataset.on)
-        setFace(pick(base.length ? base : letters))
-      } else if (Math.random() < 0.35) {
-        revert(pick(on))
-      } else {
-        setFace(pick(on)) // mutate an already-swapped letter in place
+  let runId = 0
+  const decode = () => {
+    if (!wordmark.offsetParent) return // e.g. the "RM" short form on mobile
+    const id = ++runId // a newer run supersedes any in progress
+    const STAGGER = 70 // ms between each letter locking in
+    const PREROLL = 220 // ms of scramble before the first letter resolves
+    const t0 = performance.now()
+    letters.forEach((s, i) => {
+      s._lockAt = t0 + PREROLL + i * STAGGER + Math.random() * 80
+    })
+    let last = 0
+    const tick = (now) => {
+      if (id !== runId) return // cancelled by a newer run
+      const reroll = now - last >= 45
+      if (reroll) last = now
+      let anyLeft = false
+      for (const s of letters) {
+        if (now >= s._lockAt) {
+          if (s.classList.contains('is-cipher')) lock(s)
+        } else {
+          anyLeft = true
+          if (reroll) scramble(s)
+        }
       }
+      if (anyLeft) requestAnimationFrame(tick)
     }
-    // Delay eases from ~240–720ms at rest to ~45–135ms fully hovered.
-    const delay = (240 - intensity * 195) + Math.random() * (480 - intensity * 390)
-    timer = setTimeout(flip, delay)
-  }
-  const arm = (soon) => {
-    clearTimeout(timer)
-    timer = setTimeout(flip, soon ? 30 : 700 + Math.random() * 1400)
+    requestAnimationFrame(tick)
   }
 
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      clearTimeout(timer)
-      timer = null
-    } else {
-      arm(false)
-    }
-  })
+  letters.forEach(scramble) // show scrambled immediately, then resolve
+  decode() // decode on load
   if (finePointer) {
-    wordmarkBtn.addEventListener('pointerenter', () => {
-      setHover(true)
-      arm(true) // kick the loop so the eased ramp starts promptly
-    })
-    wordmarkBtn.addEventListener('pointerleave', () => setHover(false))
-    wordmarkBtn.addEventListener('focus', () => {
-      setHover(true)
-      arm(true)
-    })
-    wordmarkBtn.addEventListener('blur', () => setHover(false))
+    wordmarkBtn.addEventListener('pointerenter', decode) // re-decode on hover
   }
-  arm(false)
+  wordmarkBtn.addEventListener('focus', decode) // and on keyboard focus
 }
 
 /* ---------- Metal badge sheen ----------
