@@ -1,0 +1,24 @@
+{
+  "type": "blog",
+  "slug": "api-connection-test",
+  "title": "API connection test",
+  "summary": "A private draft used to verify the Folio content API. Not published.",
+  "status": "draft",
+  "year": "2026",
+  "blocks": [
+    {
+      "type": "hero",
+      "text": "The content API is connected."
+    },
+    {
+      "type": "paragraph",
+      "text": "This test draft verifies agent authentication, GitHub storage, image uploads, and the signed preview. It has not been published to the live website."
+    },
+    {
+      "type": "image",
+      "src": "/uploads/c96e700e-5aff-4e25-86d1-c0826dbdc50d.png",
+      "alt": "A gray test image generated to verify image uploads.",
+      "caption": "Test image uploaded through the content API."
+    }
+  ]
+}
