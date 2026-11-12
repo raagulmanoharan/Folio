@@ -1,0 +1,109 @@
+{
+  "type": "case-study",
+  "slug": "viva-connections",
+  "title": "Viva Connections",
+  "summary": "Case study layout draft with placeholder copy, imagery, and sample metrics.",
+  "status": "published",
+  "role": "Your role",
+  "year": "YYYY",
+  "blocks": [
+    {
+      "type": "hero",
+      "text": "Open with the big idea: what you set out to change, who it was for, and why it mattered. Keep it direct, human, and easy to remember."
+    },
+    {
+      "type": "image",
+      "src": "/work/placeholder-overview.svg",
+      "alt": "Placeholder for a product overview image",
+      "caption": "01 / Hero image — replace with a product screen or a view of the experience."
+    },
+    {
+      "type": "heading",
+      "text": "The project at a glance"
+    },
+    {
+      "type": "paragraph",
+      "text": "Introduce the project, the people it serves, and the context behind the work. This paragraph is sample copy for reviewing reading width, type size, and rhythm."
+    },
+    {
+      "type": "subheading",
+      "text": "The challenge"
+    },
+    {
+      "type": "paragraph",
+      "text": "Describe the friction in the existing experience. What were people trying to do, what stood in their way, and what made this problem worth solving?"
+    },
+    {
+      "type": "subheading",
+      "text": "The approach"
+    },
+    {
+      "type": "paragraph",
+      "text": "Explain how you explored the problem, the constraints you worked with, and the decisions that shaped the direction. Replace this with your actual process when the layout is settled."
+    },
+    {
+      "type": "image",
+      "src": "/work/placeholder-process.svg",
+      "alt": "Placeholder for research, sketches, or a process diagram",
+      "caption": "02 / Process image — add research, exploration, or a key design decision."
+    },
+    {
+      "type": "heading",
+      "text": "Making the experience feel simple"
+    },
+    {
+      "type": "paragraph",
+      "text": "Use this section to walk through the solution. Focus on a few meaningful choices and connect each one to the need it addresses."
+    },
+    {
+      "type": "subheading",
+      "text": "A detail that made the difference"
+    },
+    {
+      "type": "paragraph",
+      "text": "Zoom in on an interaction, a pattern, or a small moment of craft. Explain what changed and why, with an image to help tell the story."
+    },
+    {
+      "type": "image",
+      "src": "/work/placeholder-detail.svg",
+      "alt": "Placeholder for a close-up of the finished design",
+      "caption": "03 / Detail image — highlight one interaction or design decision."
+    },
+    {
+      "type": "heading",
+      "text": "The impact"
+    },
+    {
+      "type": "paragraph",
+      "text": "Summarize what changed after the work. Use evidence where you have it and explain what you learned. These metric cards show styling only; they are not project results."
+    },
+    {
+      "type": "metrics",
+      "items": [
+        {
+          "value": "00%",
+          "label": "Outcome metric",
+          "note": "Placeholder / add a verified result"
+        },
+        {
+          "value": "0×",
+          "label": "Efficiency metric",
+          "note": "Placeholder / add a verified result"
+        },
+        {
+          "value": "00",
+          "label": "Reach metric",
+          "note": "Placeholder / add a verified result"
+        }
+      ]
+    },
+    {
+      "type": "subheading",
+      "text": "What I would take forward"
+    },
+    {
+      "type": "paragraph",
+      "text": "Close with a useful reflection: what you learned, what you would do differently, or the next question the project opened up."
+    }
+  ]
+}

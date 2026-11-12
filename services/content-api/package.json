@@ -1,0 +1,20 @@
+{
+  "name": "folio-content-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --ip 127.0.0.1",
+    "deploy": "wrangler deploy",
+    "mcp": "node mcp.mjs",
+    "test": "node --test --test-isolation=none ../../test/*.test.mjs"
+  },
+  "dependencies": {
+    "@cfworker/json-schema": "^4.1.6",
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.65.0",
+    "wrangler": "^4.0.0"
+  }
+}

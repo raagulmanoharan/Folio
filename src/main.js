@@ -1,4 +1,5 @@
 import './style.css'
+import './project.css'
 
 /* ---------- 3D hero motif (three.js, code-split) ---------- */
 const motifCanvas = document.querySelector('[data-motif]')

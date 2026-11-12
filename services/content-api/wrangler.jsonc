@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "folio-content-api",
+  "main": "worker.js",
+  "compatibility_date": "2026-11-12",
+  "workers_dev": true,
+  "vars": {
+    "FOLIO_REPOSITORY": "raagulmanoharan/Folio",
+    "FOLIO_BASE_BRANCH": "main",
+    "FOLIO_DRAFT_BRANCH": "content-drafts",
+    "FOLIO_SITE_URL": "https://raagulmanoharan.com"
+  }
+}
