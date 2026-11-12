@@ -6,7 +6,7 @@ const encode = s => {
 }
 const decode = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g,'')), c => c.charCodeAt(0)))
 export class GitHubStore {
-  constructor(env, fetcher = fetch) {
+  constructor(env, fetcher = globalThis.fetch.bind(globalThis)) {
     this.env = env; this.fetcher = fetcher
     if (!/^[\w.-]+\/[\w.-]+$/.test(env.FOLIO_REPOSITORY || '')) throw new ContentError('Repository is not configured.', 503)
     this.root = `https://api.github.com/repos/${env.FOLIO_REPOSITORY}`

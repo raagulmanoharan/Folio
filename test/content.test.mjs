@@ -82,6 +82,17 @@ test('GitHub adapter writes drafts only to draft branch and surfaces write confl
  const write=calls.find(c=>c.init.method==='PUT');assert.equal(JSON.parse(write.init.body).branch,'content-drafts')
  assert.throws(()=>new GitHubStore({FOLIO_REPOSITORY:'example/site',FOLIO_DRAFT_BRANCH:'main'}))
 })
+test('GitHub adapter preserves the native Cloudflare fetch receiver',async()=>{
+ const original=globalThis.fetch
+ globalThis.fetch=async function(){
+  assert.equal(this,globalThis,'Native fetch must keep its Worker global receiver')
+  return Response.json({ok:true})
+ }
+ try{
+  const store=new GitHubStore({FOLIO_REPOSITORY:'example/site',FOLIO_GITHUB_TOKEN:'test'})
+  assert.deepEqual(await store.api('/probe'),{ok:true})
+ }finally{globalThis.fetch=original}
+})
 test('GitHub publication copies only the selected document and its images into one review commit',async()=>{
  const calls=[];const doc={...draft,blocks:[{type:'image',src:'/uploads/example.png',alt:'Example'}]}
  const store=new GitHubStore({FOLIO_REPOSITORY:'example/site',FOLIO_GITHUB_TOKEN:'test'},async(url,init)=>{
