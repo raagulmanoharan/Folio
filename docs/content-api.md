@@ -44,6 +44,22 @@ Wrangler prints its local address (normally `http://127.0.0.1:8787`). `GET /heal
 
 ## Cloudflare setup (first deployment)
 
+### Deploy through the dashboard
+
+Connect **raagulmanoharan/Folio** to Workers Builds (not the separate static `foliostaging` repository).
+Use production branch `feat/agent-content-api` until this implementation is merged.
+Set the Worker name to `folio-content-api`, root directory to `/`, build command to
+`npm --prefix services/content-api ci`, and deploy command to
+`cd services/content-api && npx wrangler deploy`.
+
+After changing branch settings, use a fresh branch push/build. Retrying an older
+deployment can rebuild its original commit. The build's source commit must include
+`services/content-api/package.json`, `package-lock.json`, and `wrangler.jsonc`.
+An `npm ci` missing-lockfile error means the selected checkout/path must be checked;
+the service lockfile is committed, so do not replace `npm ci` with an unlocked install.
+
+### Account and secret setup
+
 1. Create a Cloudflare account at https://dash.cloudflare.com/sign-up. Open **Workers & Pages** and finish the account setup. A custom domain is optional; the initial API can use `workers.dev`.
 2. Install dependencies as above. From `services/content-api`, run `npx wrangler login` on your own machine to authorize Cloudflare. Alternatively, CI can use a Cloudflare API token with permission to edit Workers and the account ID, supplied securely through that system's secrets. No Cloudflare credential is included in this repo.
 3. Create a fine-grained GitHub personal access token for **only** `raagulmanoharan/Folio` (or install a GitHub App and supply/rotate its installation token externally). Required repository permissions: **Contents: read/write**, **Pull requests: read/write**, and metadata read. Set an appropriate expiry and rotate it before expiration. The chat's GitHub connection is not automatically available to a deployed Worker.
