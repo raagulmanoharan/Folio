@@ -1,0 +1,13 @@
+{
+  "type": "blog",
+  "slug": "notes-on-making",
+  "title": "Notes on making",
+  "summary": "A short introduction to the idea behind this post.",
+  "year": "2026",
+  "blocks": [
+    { "type": "hero", "text": "The thought that started it all." },
+    { "type": "paragraph", "text": "Write your opening paragraph here." },
+    { "type": "heading", "text": "What changed" },
+    { "type": "paragraph", "text": "Develop the idea in your own words." }
+  ]
+}

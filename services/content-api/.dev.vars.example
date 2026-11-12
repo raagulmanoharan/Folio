@@ -1,0 +1,5 @@
+# Copy to .dev.vars (ignored) and set actual values locally; never commit secrets.
+FOLIO_GITHUB_TOKEN=
+FOLIO_API_KEY=
+FOLIO_PUBLISH_KEY=
+FOLIO_PREVIEW_SECRET=

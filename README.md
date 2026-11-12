@@ -1,5 +1,12 @@
 # Folio
 
+## Agent content API and MCP
+
+Create case studies, blog posts, and side projects through the Git-backed content service.
+See [setup, API examples, and MCP configuration](docs/content-api.md) and the
+[implementation plan](docs/content-plan.md). Content lives in `content/`; generated
+pages use the existing project styles. Drafts require review before publication.
+
 A minimal [Vite](https://vitejs.dev) site deployed to GitHub Pages.
 
 ## Develop (with hot reload)

@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test --test-isolation=none test/*.test.mjs",
+    "content:dev": "npm --prefix services/content-api run dev",
+    "content:mcp": "npm --prefix services/content-api run mcp",
+    "test:site": "node scripts/test-content-site.mjs"
   },
   "devDependencies": {
     "vite": "^6.0.0"

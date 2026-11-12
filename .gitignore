@@ -1,4 +1,10 @@
 node_modules
 dist
+dist-staging
+.generated-content
+services/content-api/node_modules
+services/content-api/.wrangler
+services/content-api/.dev.vars*
+!services/content-api/.dev.vars.example
 *.local
 .DS_Store

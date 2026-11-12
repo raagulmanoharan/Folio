@@ -1,0 +1,13 @@
+{
+  "type": "side-project",
+  "slug": "sound-lab",
+  "title": "Sound lab",
+  "summary": "An experiment in making sound feel tangible.",
+  "role": "Designer and maker",
+  "year": "2026",
+  "blocks": [
+    { "type": "hero", "text": "A small experiment with a big question." },
+    { "type": "heading", "text": "The experiment" },
+    { "type": "paragraph", "text": "Describe what you made and what you learned." }
+  ]
+}

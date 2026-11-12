@@ -1,0 +1,21 @@
+{
+  "type": "case-study",
+  "slug": "a-better-workflow",
+  "title": "A better workflow",
+  "summary": "How a simpler experience helped people get their work done.",
+  "role": "Product designer",
+  "year": "2026",
+  "blocks": [
+    { "type": "hero", "text": "Start with the idea and why it matters." },
+    { "type": "heading", "text": "The challenge" },
+    { "type": "paragraph", "text": "Describe the people, the problem, and the constraints." },
+    { "type": "subheading", "text": "The approach" },
+    { "type": "paragraph", "text": "Explain the decisions that shaped the work." },
+    { "type": "image", "src": "/work/placeholder-overview.svg", "alt": "Placeholder for a product overview", "caption": "Replace this with an uploaded image." },
+    { "type": "metrics", "items": [
+      { "value": "00%", "label": "Outcome", "note": "Placeholder, not a measured result" },
+      { "value": "0×", "label": "Efficiency", "note": "Placeholder, not a measured result" },
+      { "value": "00", "label": "Reach", "note": "Placeholder, not a measured result" }
+    ] }
+  ]
+}
