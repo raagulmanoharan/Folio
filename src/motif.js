@@ -9,7 +9,7 @@ import { Evaluator, Brush, SUBTRACTION } from 'three-bvh-csg'
 
 // A chrome die tumbling inside a single chrome ring, with a Y2K bloom glow.
 // Reflects a studio environment by default; if the visitor grants camera
-// access on load, a bright dome + the live feed become the environment, so
+// access after a clicked roll settles, a bright dome + the live feed become the environment, so
 // the die reflects a lit room with the visitor's face in it.
 export function initMotif(canvas) {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -341,7 +341,7 @@ export function initMotif(canvas) {
   resize()
   window.addEventListener('resize', resize)
 
-  // ---- Live webcam environment (auto-requested on load) ----
+  // ---- Live webcam environment (requested after a visitor rolls the die) ----
   const CAM_LAYER = 1
   let cubeCamera = null
   // Touch devices (phones/tablets) skip the webcam entirely — no camera prompt,
@@ -350,8 +350,11 @@ export function initMotif(canvas) {
   // Reflection cube kept modest; smaller on constrained/high-DPR screens so it
   // stays cheap without visibly degrading the reflection.
   const CUBE_SIZE = window.innerWidth < 900 || window.devicePixelRatio > 2 ? 160 : 256
+  let webcamRequested = false
   async function tryWebcam() {
-    if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) return
+    // One attempt per visit: a pending or declined request must not recur on rolls.
+    if (coarse || webcamRequested || !(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) return
+    webcamRequested = true
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'user' },
@@ -422,7 +425,12 @@ export function initMotif(canvas) {
       // denied or unavailable — studio reflections remain
     }
   }
-  if (!coarse) tryWebcam() // desktop only — phones use the studio fallback
+  function requestWebcamAfterRoll() {
+    // Let the locked face render before any browser/OS permission UI opens.
+    requestAnimationFrame(() => {
+      if (seq.mode === 'hold' && !document.hidden) void tryWebcam()
+    })
+  }
 
   // ---- Device tilt → reflection reacts (phones) ----
   // Rotate the studio environment with the phone's orientation, so the chrome's
@@ -530,6 +538,7 @@ export function initMotif(canvas) {
         die.quaternion.copy(seq.dieTarget)
         seq.mode = 'hold'
         seq.holdStart = t
+        requestWebcamAfterRoll()
       }
     } else if (seq.mode === 'hold') {
       // hold the number briefly, then start easing back to the auto swing
