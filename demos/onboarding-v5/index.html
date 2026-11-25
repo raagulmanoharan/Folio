@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><title>Jarwiz · A better first start</title><link rel="stylesheet" href="design.css"><script src="assets/gsap.min.js"></script></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="spark" viewBox="0 0 64 64"><path d="M32 5c3.2 18.7 8.3 23.8 27 27-18.7 3.2-23.8 8.3-27 27C28.8 40.3 23.7 35.2 5 32 23.7 28.8 28.8 23.7 32 5Z" fill="currentColor"/></symbol>
+<symbol id="arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="up" viewBox="0 0 24 24"><path d="M12 20V4m-6 6 6-6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="product" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="none" stroke="currentColor"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="none" stroke="currentColor"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="none" stroke="currentColor"/><path d="M17.5 14v7M14 17.5h7" fill="none" stroke="currentColor" stroke-linecap="round"/></symbol>
+<symbol id="design" viewBox="0 0 24 24"><path d="m13 3 8 8-10 10H3v-8L13 3Z" fill="none" stroke="currentColor" stroke-linejoin="round"/><path d="m3 21 7-7m0 0a2 2 0 1 0 3-3 2 2 0 0 0-3 3Z" fill="none" stroke="currentColor"/></symbol>
+<symbol id="search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="7" fill="none" stroke="currentColor"/><path d="m16 16 5 5" fill="none" stroke="currentColor" stroke-linecap="round"/></symbol>
+<symbol id="trip" viewBox="0 0 24 24"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2V5Zm6-2v16m6-14v16" fill="none" stroke="currentColor" stroke-linejoin="round"/></symbol>
+<symbol id="talk" viewBox="0 0 24 24"><path d="M3 4h18v12H3zM12 16v5m-5 0h10M7 11l3-3 3 2 4-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="decide" viewBox="0 0 24 24"><path d="M12 3v18M4 6h16M6 6l-4 8h8L6 6Zm12 0-4 8h8l-4-8ZM7 21h10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+<symbol id="plus" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="note" viewBox="0 0 24 24"><path d="M5 3h14v18H5zM8 8h8M8 12h8M8 16h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</defs></svg>
+<div id="onboarding" data-composition-id="onboarding" data-width="1920" data-height="1280" data-start="0" data-duration="22">
+ <div class="stage-content"><div class="app-window">
+  <header class="app-header"><div class="brand"><svg><use href="#spark"/></svg>Jarwiz</div><div class="header-detail"><span class="private-label"><svg><use href="#lock"/></svg>Your workspace</span><i class="header-separator"></i><span class="person-avatar">M</span></div></header>
+  <div class="app-body">
+   <section class="scene scene-persona" id="persona"><div class="scene-content">
+    <h1>What brings you to Jarwiz?</h1><p class="subheading">A little context. A more useful place to begin.</p><div class="role-grid"></div>
+    <div class="persona-actions"><button class="continue">Create my canvas<svg><use href="#arrow"/></svg></button><button class="skip">Just exploring</button></div><p class="onboarding-note">You can take your canvas in any direction.</p>
+   </div></section>
+   <section class="scene scene-prompt" id="prompt"><div class="scene-content">
+    <div class="context-pill"><svg><use href="#product"/></svg>Product thinking</div><h1>What’s on your mind?</h1>
+    <div class="prompt-card"><div class="prompt-writing"><p class="prompt-placeholder">An idea, a question, a problem worth exploring…</p><div class="prompt-typed"><p class="prompt-line line-one">People sign up, then leave before making a plan.</p><p class="prompt-line line-two">Help me explore a better start.</p></div></div>
+     <div class="prompt-footer"><div class="prompt-tools"><button class="tool-button"><svg><use href="#plus"/></svg>Add context</button><button class="mode-button"><svg><use href="#spark"/></svg>Explore ideas<svg><use href="#chevron"/></svg></button></div><button class="send" aria-label="Explore ideas"><svg><use href="#up"/></svg></button></div>
+    </div><div class="prompt-hints"><button>Explore a direction</button><button>Map a user flow</button><button>Make a prototype</button></div>
+   </div></section>
+   <section class="scene scene-result" id="result"><div class="scene-content">
+    <div class="result-top"><h1>A better first start</h1><div class="eyebrow"><svg><use href="#spark"/></svg>3 directions to explore</div></div>
+    <div class="problem-chip"><svg><use href="#note"/></svg>People sign up, then leave before making a plan.</div>
+    <div class="idea-grid">
+     <article class="idea idea-example"><div class="idea-focus"></div><div class="idea-heading"><span class="idea-number">01</span><span class="idea-kind">Example first</span></div><h2>Start with an example</h2><p class="idea-description">Something useful to explore, before starting from zero.</p><div class="micro-ui"><div class="micro-title"><svg><use href="#trip"/></svg>Weekend away</div><div class="task"><span class="checkbox"></span>Book train tickets</div><div class="task"><span class="checkbox"></span>Find a place to stay</div><div class="task dim"><span class="checkbox"></span>Make a packing list</div></div><button class="idea-action">Explore this direction<svg><use href="#arrow"/></svg></button></article>
+     <article class="idea idea-notes"><div class="idea-heading"><span class="idea-number">02</span><span class="idea-kind">Own notes</span></div><h2>Bring what you have</h2><p class="idea-description">Turn someone’s existing notes into a useful first plan.</p><div class="micro-ui"><div class="mini-note"><span>Train tickets</span><span>Somewhere to stay</span></div><div class="notes-arrow"><svg><use href="#arrow"/></svg>Keep their words</div><div class="mini-result"><svg><use href="#check"/></svg>A plan they can edit</div></div><button class="idea-action">Explore this direction<svg><use href="#arrow"/></svg></button></article>
+     <article class="idea idea-guided"><div class="idea-heading"><span class="idea-number">03</span><span class="idea-kind">Guided start</span></div><h2>One small step</h2><p class="idea-description">A helpful question when someone isn’t sure yet.</p><div class="micro-ui"><div class="guided-step">01 / Find a starting point</div><div class="guided-question">What are you planning?</div><div class="guided-options"><span class="chosen">A trip</span><span>A project</span></div></div><button class="idea-action">Explore this direction<svg><use href="#arrow"/></svg></button></article>
+    </div><div class="result-bottom"><span class="saved"><svg><use href="#check"/></svg>Ideas you can work with.</span><div class="followup"><span>Where should we take this?</span><span><svg><use href="#up"/></svg></span></div></div>
+   </div></section>
+  </div>
+ </div></div>
+ <div class="click-ring" data-layout-ignore></div><div class="pointer" data-layout-ignore><svg viewBox="0 0 38 46"><path d="M5 3v34l9-10 8 15 7-4-8-14 14-2Z" fill="#171918" stroke="white" stroke-width="2.4" stroke-linejoin="round"/></svg></div>
+</div>
+<script>
+const roles=[['product','Product thinking','Explore, decide, and make.'],['design','Design','Shape an experience.'],['search','Research','Connect what you know.'],['trip','Travel & plans','Make room for what’s next.'],['talk','Presentations','Give your story a shape.'],['decide','Decisions','See the possibilities.']];
+document.querySelector('.role-grid').innerHTML=roles.map(([id,title,detail])=>`<button class="role role-${id}" data-role="${id}"><span class="role-icon"><svg><use href="#${id}"/></svg></span><span class="role-copy"><strong>${title}</strong><small>${detail}</small></span>${id==='product'?'<span class="role-check"><svg><use href="#check"/></svg></span>':''}</button>`).join('');
+</script>
+<script src="script.js"></script>
+</body></html>

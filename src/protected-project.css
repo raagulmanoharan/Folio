@@ -1,0 +1,34 @@
+.protected-case .case-main { width: var(--case-width); margin-inline: auto; padding-top: 43px; min-height: 100svh; }
+.protected-case .site-header { transform: none; }
+.protected-case .header-link--center { grid-column: 2; }
+.protected-case .case-intro { padding: 16px; }
+.protected-case .case-hero-text { margin: 0 0 32px; font-size: clamp(48px,8vw,120px); font-weight: 400; line-height: 1; letter-spacing: -.055em; }
+.protected-case .case-meta { display: flex; flex-wrap: wrap; gap: 32px; font-size: 14px; }
+.protected-case .case-meta p { margin: 0; }
+.protected-case .case-meta p span, .protected-case .case-meta-label { display: block; color: #8a8a8a; margin-bottom: 8px; }
+.protected-case a { color: inherit; }
+.protected-case .case-content { padding: 32px; }
+.protected-case .case-heading { margin: 0 0 32px; font-size: clamp(20px,2.2vw,24px); font-weight: 400; line-height: 1.3; letter-spacing: -.015em; color: #b8b8b8; }
+.protected-case .case-body-text { font-size: clamp(18px,1.8vw,20px); line-height: 1.6; max-width: 70ch; }
+.protected-case .case-subheading { font-size: 16px; font-weight: 400; line-height: 1.4; letter-spacing: .03em; color: #a3a3a3; }
+.protected-case .case-content-block, .protected-case .case-image { margin: 32px 0; }
+.protected-case .case-image img { width: 100%; height: auto; display: block; }
+.protected-case .case-subtext { font-size: 13px; line-height: 1.5; color: #8a8a8a; }
+.protected-case figcaption { margin-top: 12px; }
+.protected-case .case-metrics { display: grid; grid-template-columns: repeat(3,1fr); border-block: 1px solid var(--gutter-line); }
+.protected-case .case-metrics > div { padding: 16px; }
+.protected-case .case-metrics strong { display: block; font-size: 32px; font-weight: 400; }
+.protected-case .case-projects { padding: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; border-top: 1px solid var(--gutter-line); }
+.protected-case .case-projects a { text-decoration: none; }
+.protected-case .site-footer { min-height: 43px; border-top: 1px solid var(--gutter-line); }
+.case-access { max-width: 480px; margin: 80px auto; padding: 32px; }
+.case-access h1 { font-size: 28px; font-weight: 400; }
+.case-access > p { color: #a3a3a3; font-size: 16px; line-height: 1.5; margin-bottom: 32px; }
+.case-access label { display: block; margin-bottom: 12px; font-size: 14px; }
+.case-access input { background: #242424; color: #ededed; border-color: #444; }
+.case-access button { background: #ededed; color: #161616; }
+#project-access-error { color: #efaaa3; font-size: 14px; }
+@media(max-width:600px) {
+  .protected-case .case-metrics, .protected-case .case-projects { grid-template-columns: 1fr; }
+  .protected-case .header-link--center { font-size: 10px; }
+}

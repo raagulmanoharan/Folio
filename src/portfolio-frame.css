@@ -1,0 +1,43 @@
+/* Preserve the approved staging frame in source, not only in a built asset.
+   Matches the shared gutters approved before the Jarwiz case-study rollout. */
+body {
+  --case-width: min(1120px, 84%);
+  --content-inset: 16px;
+  --gutter-line: rgba(255, 255, 255, .07);
+  position: relative;
+}
+
+body::before,
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: var(--case-width);
+  margin-inline: auto;
+  border-inline: 1px solid var(--gutter-line);
+  pointer-events: none;
+}
+
+body::before { z-index: 1; }
+
+.header-inner {
+  width: var(--case-width);
+  margin-inline: auto;
+  padding-inline: var(--content-inset);
+}
+
+body:not(.case-page) > main {
+  width: var(--case-width);
+  margin-inline: auto;
+}
+
+body:not(.case-page) .hero,
+body:not(.case-page) .work-item {
+  padding-inline: var(--content-inset);
+}
+
+@media (max-width: 600px) {
+  body { --case-width: 100%; }
+  body::before,
+  .site-header::before { display: none; }
+}

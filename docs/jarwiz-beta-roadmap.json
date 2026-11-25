@@ -1,0 +1,1979 @@
+{
+  "metadata": {
+    "title": "Jarwiz open workspace roadmap",
+    "summary": "Build a broad, open-source AI canvas. Let people work with their own material, collaborate, bring supported models, extend the workspace, and deploy it on their own infrastructure.",
+    "baseline": "Jarwiz working tree observed November 20, 2026. Base commit 4526745, including local and untracked code.",
+    "releaseDecisions": [
+      "Target the common Miro and Kuse workflow surface across manual canvas work, sources, AI collaboration, outputs, projects and handoff. Verify coverage before making a parity claim.",
+      "The first closed cohort remains manually invited and uses private boards, protected evidence, saved editable output and the configured model path. The full harness and category parity have separate release criteria.",
+      "Open-source first-party code under MIT and clear third-party distribution terms. Verify build, contribution and self-hosting from a clean clone.",
+      "Model choice spans verified providers and feature capabilities. Start with native Anthropic and OpenAI, then native Google and a compatible endpoint tested with Ollama.",
+      "Keep decision records, cross-artifact proposals and branching as optional workflow investments informed by real use."
+    ],
+    "gates": [
+      {
+        "id": "intake",
+        "title": "Personal intake and support",
+        "description": "Verify the email handoff, operational roster and support owner.",
+        "state": "pending",
+        "itemIds": [
+          "JZ-100",
+          "JZ-110"
+        ]
+      },
+      {
+        "id": "access",
+        "title": "Invited account access",
+        "description": "Enforce admission, funded model limits and revocation.",
+        "state": "pending",
+        "itemIds": [
+          "JZ-101",
+          "JZ-102"
+        ]
+      },
+      {
+        "id": "private-evidence",
+        "title": "Private source material",
+        "description": "Prove supported uploads and extraction stay private.",
+        "state": "pending",
+        "itemIds": [
+          "JZ-103"
+        ]
+      },
+      {
+        "id": "recovery",
+        "title": "Saved board recovery",
+        "description": "Demonstrate return after restart and tested restore.",
+        "state": "pending",
+        "itemIds": [
+          "JZ-104"
+        ]
+      },
+      {
+        "id": "activation",
+        "title": "Evidence-to-edit rehearsal",
+        "description": "Import, cite, edit and reopen work through the real beta path.",
+        "state": "pending",
+        "itemIds": [
+          "JZ-105",
+          "JZ-106"
+        ]
+      }
+    ],
+    "operatingMeasures": [
+      "Manually record requests, approved accounts and successful invitations as separate counts.",
+      "Measure first useful edit and same-board return as successful attempts over eligible attempts, with observations about delays, failures and assistance.",
+      "Ask a teammate unfamiliar with the work to identify the evidence and reasoning for one choice. Record whether they can do it and where they get stuck.",
+      "Instrument failure categories without sending source text, email addresses, invitation tokens, or provider credentials to telemetry."
+    ],
+    "estimateNote": "Ranges are engineering or delivery days for the named role and the stated slice. These are planning estimates with no dates or staffing commitments. Provider review, access and approvals can add elapsed time.",
+    "launchGateCategories": [
+      {
+        "id": "first-cohort",
+        "label": "Required before first invites",
+        "description": "Manually approved people can access a private workspace, work with supported material, and recover a saved result. Any optional formats must pass their own checks or remain gated."
+      },
+      {
+        "id": "feature-release",
+        "label": "Required for this feature",
+        "description": "Release each feature only after its acceptance evidence is recorded in the intended environment."
+      },
+      {
+        "id": "none",
+        "label": "Discovery or follow-up",
+        "description": "Use to inform scope, sequencing, or a later release decision."
+      }
+    ]
+  },
+  "statuses": [
+    {
+      "id": "backlog",
+      "label": "Backlog",
+      "description": "Sequenced work awaiting a prerequisite or a scope decision."
+    },
+    {
+      "id": "ready",
+      "label": "Ready",
+      "description": "Actionable now with no listed prerequisites."
+    },
+    {
+      "id": "in-progress",
+      "label": "In progress",
+      "description": "Work has started."
+    },
+    {
+      "id": "verify",
+      "label": "Verify",
+      "description": "Implementation is ready for the intended release checks."
+    },
+    {
+      "id": "done",
+      "label": "Verified",
+      "description": "Acceptance evidence has been reviewed."
+    }
+  ],
+  "phases": [
+    {
+      "id": "foundation",
+      "label": "Make the beta safe to open",
+      "description": "Stage the landing, prepare personal intake and secure the invited environment.",
+      "exitCriteria": [
+        "Manual intake is operational",
+        "Account and asset boundaries hold",
+        "Private boards and attachments recover after a service restart and restore"
+      ]
+    },
+    {
+      "id": "first-cohort",
+      "label": "Prove the working board",
+      "description": "Use real source material, make a useful edit and return to the same project. Validate optional outputs separately and fund web intake when manual volume warrants it.",
+      "exitCriteria": [
+        "The real model returns inspectable work from supplied evidence",
+        "An admitted user reopens the saved result",
+        "Support and cohort measures are ready"
+      ]
+    },
+    {
+      "id": "connected-context",
+      "label": "Make shared context dependable",
+      "description": "Verify teammate access and live source connections, then make reviewed changes legible.",
+      "exitCriteria": [
+        "A teammate can accept, reopen and contribute with the right role",
+        "Each enabled connector passes staging consent, access loss and revision review",
+        "Users can see which work may need attention and choose a fix"
+      ]
+    },
+    {
+      "id": "open-core",
+      "label": "Open-source distribution",
+      "description": "Review first-party and third-party boundaries. Make development, self-hosting and contribution reproducible.",
+      "exitCriteria": [
+        "Pinned dependencies and assets have documented distribution terms",
+        "A clean clone passes install, build, smoke tests and a self-host restart/restore drill"
+      ]
+    },
+    {
+      "id": "model-harness",
+      "label": "Open model harness",
+      "description": "Replace provider-specific behavior behind a versioned contract. Verify native cloud adapters, compatible local endpoints and permissioned extensions.",
+      "exitCriteria": [
+        "Supported models pass capability and workflow tests",
+        "Keys, endpoints, usage, cancellation and fallback behavior are verified",
+        "An external example extension works through published tool, agent and card contracts"
+      ]
+    },
+    {
+      "id": "workspace-parity",
+      "label": "Workspace category parity",
+      "description": "Build and verify the common canvas, source, research, artifact, collaboration and handoff workflows across roles.",
+      "exitCriteria": [
+        "Core authoring and project organization work at representative scale",
+        "Wide source and output coverage passes evidence, editing and portability checks",
+        "Distinct workflows complete with authorized collaboration and accessible recovery"
+      ]
+    },
+    {
+      "id": "expansion",
+      "label": "Optional decision workflows",
+      "description": "Use evidence from real return visits to decide whether lineage, impact review and alternatives deserve investment.",
+      "exitCriteria": [
+        "A named use case shows a recurring need",
+        "Each scoped decision workflow passes its own evidence and release gate"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "hero",
+      "label": "An open AI workspace for everyday projects",
+      "scope": "Category direction across manual canvas work, sourced AI and editable output. Present coverage follows verified workflows.",
+      "itemIds": [
+        "JZ-105",
+        "JZ-130",
+        "JZ-132",
+        "JZ-133",
+        "JZ-138"
+      ]
+    },
+    {
+      "id": "canvas",
+      "label": "Ask about a report passage",
+      "scope": "Current PDF mechanism. The visible citation should return to the actual referenced page.",
+      "itemIds": [
+        "JZ-103",
+        "JZ-105",
+        "JZ-106",
+        "JZ-131",
+        "JZ-132"
+      ]
+    },
+    {
+      "id": "design",
+      "label": "Try and revise a clickable flow",
+      "scope": "Working prototype and deliberate scoped edit. Performance and sandbox checks gate delivery to a cohort.",
+      "itemIds": [
+        "JZ-107",
+        "JZ-130",
+        "JZ-133"
+      ]
+    },
+    {
+      "id": "sales",
+      "label": "Review the sales pipeline",
+      "scope": "Illustrative sales data and prepared source snapshots. Test the native dashboard on a known workbook before enabling the flow.",
+      "itemIds": [
+        "JZ-108",
+        "JZ-125",
+        "JZ-133"
+      ]
+    },
+    {
+      "id": "trip",
+      "label": "Pack for Kyoto using the plan",
+      "scope": "Illustrative reuse of notes already on the board. Keep the evidence visible and omit live price, inventory or forecast claims.",
+      "itemIds": [
+        "JZ-105",
+        "JZ-106",
+        "JZ-132"
+      ]
+    },
+    {
+      "id": "direction-evidence",
+      "label": "See why a decision was made",
+      "scope": "Optional future workflow. Planned decision-level evidence, rationale, and downstream draft links.",
+      "itemIds": [
+        "JZ-201"
+      ]
+    },
+    {
+      "id": "direction-drafts",
+      "label": "Review drafts a change touches",
+      "scope": "Optional future workflow. Planned per-artifact before/after review with independent approvals, including future in-project review decks.",
+      "itemIds": [
+        "JZ-126",
+        "JZ-201",
+        "JZ-202"
+      ]
+    },
+    {
+      "id": "direction-branches",
+      "label": "Try another direction side by side",
+      "scope": "Optional future workflow. Planned project-level branches from a common starting state and deliberate adoption of the selected version.",
+      "itemIds": [
+        "JZ-201",
+        "JZ-203"
+      ]
+    },
+    {
+      "id": "invite",
+      "label": "Request access by email",
+      "scope": "The published CTA opens an email draft. An operator receives manually sent requests and sends access invitations separately.",
+      "itemIds": [
+        "JZ-100",
+        "JZ-102"
+      ]
+    },
+    {
+      "id": "open-source",
+      "label": "Open-source Jarwiz code",
+      "scope": "Public first-party code carries MIT. Full distribution and self-host wording depend on dependency review and a reproducible release.",
+      "itemIds": [
+        "JZ-300",
+        "JZ-301"
+      ]
+    },
+    {
+      "id": "model-choice",
+      "label": "Choose supported models",
+      "scope": "Current model access uses Anthropic. Provider-neutral workflows, native OpenAI and Google, and a tested compatible local endpoint are roadmap work.",
+      "itemIds": [
+        "JZ-302",
+        "JZ-303",
+        "JZ-304",
+        "JZ-305",
+        "JZ-306",
+        "JZ-307"
+      ]
+    },
+    {
+      "id": "extensions",
+      "label": "Extend tools, agents and cards",
+      "scope": "Versioned extension APIs and example packages require capability, permission and failure isolation checks before release.",
+      "itemIds": [
+        "JZ-308"
+      ]
+    },
+    {
+      "id": "workspace-range",
+      "label": "Work across projects, teams and outputs",
+      "scope": "Category parity is a target. Publish verified workflow coverage, formats and limitations before claiming completion.",
+      "itemIds": [
+        "JZ-130",
+        "JZ-131",
+        "JZ-132",
+        "JZ-133",
+        "JZ-134",
+        "JZ-135",
+        "JZ-136",
+        "JZ-137",
+        "JZ-138"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "JZ-100",
+      "title": "Operate personal beta intake",
+      "description": "Use the published email address for initial requests. Keep request, approval and invitation receipt separate.",
+      "status": "ready",
+      "priority": "P0",
+      "phase": "foundation",
+      "ownerRole": "Beta Operations",
+      "effort": {
+        "minDays": 1,
+        "maxDays": 2,
+        "uncertainty": "Inbox access, roster ownership and support coverage need confirmation."
+      },
+      "userBenefit": "I know what happens when I ask to join and where to get help.",
+      "acceptanceCriteria": [
+        "The staging CTA opens a draft to the correct address and the address is copyable for webmail.",
+        "A named operator can log a test request in a restricted roster, approve or decline it and verify the resulting invitation state with a local sink or staging mailbox.",
+        "The preview makes no receipt, delivery, timing or admission claim at click."
+      ],
+      "dependencies": [],
+      "launchGate": "first-cohort",
+      "sourceEvidence": [
+        {
+          "label": "Future launch brief",
+          "path": "Folio/docs/jarwiz-future-launch-spec.md"
+        },
+        {
+          "label": "Existing published contact",
+          "path": "Jarwiz/site/index.html#L1094"
+        }
+      ],
+      "implementationStatus": "needs-work"
+    },
+    {
+      "id": "JZ-101",
+      "title": "Stand up a durable invite environment",
+      "description": "Host the authorized app, team API and WebSocket under one TLS origin with persistent storage, a pinned Node runtime and explicit readiness.",
+      "status": "ready",
+      "priority": "P0",
+      "phase": "foundation",
+      "ownerRole": "App Infrastructure",
+      "effort": {
+        "minDays": 3,
+        "maxDays": 6,
+        "uncertainty": "Host and domain access, volume provisioning, Google app setup and license configuration."
+      },
+      "userBenefit": "My saved work survives a service restart and I get a clear error when access is unavailable.",
+      "acceptanceCriteria": [
+        "The release build, OAuth callbacks and authenticated WebSocket route use the same staging origin.",
+        "Room DB, account DB and attachments use persistent paths, and encryption material is recoverable separately.",
+        "Readiness fails on missing required state, and operators can observe error categories, stop admissions and roll back the release.",
+        "Record production license coverage for the deployed canvas SDK before inviting end users."
+      ],
+      "dependencies": [],
+      "launchGate": "first-cohort",
+      "sourceEvidence": [
+        {
+          "label": "Existing free host",
+          "path": "Jarwiz/render.yaml#L8"
+        },
+        {
+          "label": "Runtime and storage contract",
+          "path": "Jarwiz/apps/server/src/team/README.md#runtime-and-mounting"
+        }
+      ],
+      "implementationStatus": "needs-work"
+    },
+    {
+      "id": "JZ-102",
+      "title": "Admit and revoke approved beta accounts",
+      "description": "Bind beta access to an approved verified Google identity. Keep workspace entitlement, board membership and model spend enforcement explicit.",
+      "status": "backlog",
+      "priority": "P0",
+      "phase": "foundation",
+      "ownerRole": "Identity and Backend",
+      "effort": {
+        "minDays": 4,
+        "maxDays": 8,
+        "uncertainty": "Existing OAuth is isolated-tested. Admission state and atomic model budget enforcement are new."
+      },
+      "userBenefit": "My invitation opens the intended private workspace and my identity controls access.",
+      "acceptanceCriteria": [
+        "Only approved verified accounts obtain beta workspace and funded model access. Wrong identity, expired approval and revoked access receive readable recovery states.",
+        "Server-funded model access stops after revocation or persisted budget exhaustion, including concurrent requests and background actions.",
+        "Separate the public example from beta routes and verify request limits and telemetry with staging identities."
+      ],
+      "dependencies": [
+        "JZ-101"
+      ],
+      "launchGate": "first-cohort",
+      "sourceEvidence": [
+        {
+          "label": "Google identity callback",
+          "path": "Jarwiz/apps/server/src/team/index.ts#L92"
+        },
+        {
+          "label": "Pilot code budget",
+          "path": "Jarwiz/apps/server/src/pilot.ts#L26"
+        },
+        {
+          "label": "Model key selection",
+          "path": "Jarwiz/apps/server/src/model.ts#L48"
+        }
+      ],
+      "implementationStatus": "needs-work"
+    },
+    {
+      "id": "JZ-103",
+      "title": "Keep imported evidence private and durable",
+      "description": "Give supported private-board uploads an authorized owner and apply the same access check during ingestion, retrieval and extraction.",
+      "status": "backlog",
+      "priority": "P0",
+      "phase": "foundation",
+      "ownerRole": "Backend and Data Security",
+      "effort": {
+        "minDays": 4,
+        "maxDays": 9,
+        "uncertainty": "Ownership spans storage, upload and parser entry points. Cover only the PDF, spreadsheet and image formats enabled for the first cohort."
+      },
+      "userBenefit": "My reports and data stay with the intended board and reopen with their citations.",
+      "acceptanceCriteria": [
+        "Anonymous, other-account and revoked users cannot fetch, replace or process a private asset on any beta path.",
+        "An admitted user can upload a supported file and reopen/render it after restart or service restore; rejected files give an actionable error.",
+        "Verify that browser caches, generated output previews and export paths respect the same access and data-retention policy."
+      ],
+      "dependencies": [
+        "JZ-101",
+        "JZ-102"
+      ],
+      "launchGate": "first-cohort",
+      "sourceEvidence": [
+        {
+          "label": "Public legacy asset routes",
+          "path": "Jarwiz/apps/server/src/index.ts#L174"
+        },
+        {
+          "label": "Temporary asset directory",
+          "path": "Jarwiz/apps/server/src/assets.ts#L34"
+        },
+        {
+          "label": "Shared snapshot validation",
+          "path": "Jarwiz/apps/server/src/team/rooms.ts#L45"
+        }
+      ],
+      "implementationStatus": "needs-work"
+    },
+    {
+      "id": "JZ-104",
+      "title": "Persist and recover private boards",
+      "description": "Verify the stateful canvas for individual users and establish a restore drill for the account, saved board and attachments.",
+      "status": "backlog",
+      "priority": "P0",
+      "phase": "foundation",
+      "ownerRole": "App Infrastructure",
+      "effort": {
+        "minDays": 3,
+        "maxDays": 6,
+        "uncertainty": "Includes operational recovery and release-build contract testing."
+      },
+      "userBenefit": "I can return to the same project even after a process restart or deployment.",
+      "acceptanceCriteria": [
+        "An admitted user can reopen the correct board, with its source cards, edits and citation references, after refresh, restart and redeploy.",
+        "Restore a representative private board, account ownership and private attachments from a backup into staging.",
+        "Test same-origin authenticated WebSocket access and planned app rollback. A failed restore is visible to operators."
+      ],
+      "dependencies": [
+        "JZ-101",
+        "JZ-102",
+        "JZ-103"
+      ],
+      "launchGate": "first-cohort",
+      "sourceEvidence": [
+        {
+          "label": "Room storage and authorization",
+          "path": "Jarwiz/apps/server/src/team/rooms.ts#L22"
+        },
+        {
+          "label": "Local board persistence",
+          "path": "Jarwiz/apps/web/src/App.tsx#L286"
+        },
+        {
+          "label": "Team persistence tests",
+          "path": "Jarwiz/apps/server/src/team/team.test.ts#L72"
+        }
+      ],
+      "implementationStatus": "implemented-unverified"
+    },
+    {
+      "id": "JZ-105",
+      "title": "Get from first source to first useful edit",
+      "description": "Rehearse an admitted solo user's normal path from a blank board through evidence import, real Ask, an editable result and the next visit.",
+      "status": "backlog",
+      "priority": "P0",
+      "phase": "first-cohort",
+      "ownerRole": "Product Engineering and QA",
+      "effort": {
+        "minDays": 3,
+        "maxDays": 6,
+        "uncertainty": "Failures in live model quality, access and first-use affordances may need a follow-up fix."
+      },
+      "userBenefit": "I can use my own material on the first visit and pick up the result later.",
+      "acceptanceCriteria": [
+        "A supported-browser staging session imports text and a representative PDF, chooses a source, generates a useful editable brief or table through the real backend, edits it and reopens it.",
+        "Connection loss, cancel, bad upload and unavailable or exhausted model states preserve prior work, with retry or recovery available.",
+        "Keyboard-accessible paths cover opening the board, attaching material, asking and reopening the result."
+      ],
+      "dependencies": [
+        "JZ-102",
+        "JZ-103",
+        "JZ-104",
+        "JZ-106"
+      ],
+      "launchGate": "first-cohort",
+      "sourceEvidence": [
+        {
+          "label": "Attachment preparation",
+          "path": "Jarwiz/apps/web/src/ingest/attachments.ts#L96"
+        },
+        {
+          "label": "Ask source handling",
+          "path": "Jarwiz/apps/web/src/ask/useAsk.ts#L141"
+        },
+        {
+          "label": "Backend states",
+          "path": "Jarwiz/apps/web/src/lib/backend.ts#L19"
+        }
+      ],
+      "implementationStatus": "implemented-unverified"
+    },
+    {
+      "id": "JZ-106",
+      "title": "Verify the evidence behind an answer",
+      "description": "Prove the PDF passage round trip and source selection for a reliable first-session answer. Distinguish scoped source facts from proposals.",
+      "status": "backlog",
+      "priority": "P0",
+      "phase": "first-cohort",
+      "ownerRole": "Applied AI and QA",
+      "effort": {
+        "minDays": 3,
+        "maxDays": 6,
+        "uncertainty": "Citation accuracy across real PDF extraction and model runs is still unmeasured."
+      },
+      "userBenefit": "I can check an answer against the material I brought and explain which part supports it.",
+      "acceptanceCriteria": [
+        "Select a known report passage, Ask from the card and click the cited page in the generated response. Open the original PDF at the correct page after reload.",
+        "A two-source fixture can distinguish the source used from a plausible but irrelevant source, and a missing or unreadable input yields explicit uncertainty.",
+        "Check that reported figures and quotes match the cited page and that recommendations are presented as proposals."
+      ],
+      "dependencies": [
+        "JZ-102",
+        "JZ-103"
+      ],
+      "launchGate": "first-cohort",
+      "sourceEvidence": [
+        {
+          "label": "Passage selection",
+          "path": "Jarwiz/apps/web/src/ask/SelectionAsk.tsx#L23"
+        },
+        {
+          "label": "Page citation rendering",
+          "path": "Jarwiz/apps/web/src/ui/DocMarkdown.tsx#L355"
+        },
+        {
+          "label": "PDF extraction tests",
+          "path": "Jarwiz/apps/server/src/assets.pdf.test.ts#L20"
+        }
+      ],
+      "implementationStatus": "implemented-unverified"
+    },
+    {
+      "id": "JZ-107",
+      "title": "Validate clickable prototypes and scoped revisions",
+      "description": "Check one generated multi-screen prototype through preview, interaction, annotation and an approved correction.",
+      "status": "backlog",
+      "priority": "P1",
+      "phase": "first-cohort",
+      "ownerRole": "Frontend and Applied AI",
+      "effort": {
+        "minDays": 3,
+        "maxDays": 7,
+        "uncertainty": "The standalone Chromium preview currently has a timeout and generated interaction remains unverified in staging."
+      },
+      "userBenefit": "I can try a flow and adjust one detail while preserving the rest of the interaction.",
+      "acceptanceCriteria": [
+        "A real generated two-screen prototype is interactive and usable after reopen. Browser checks verify iframe isolation.",
+        "An annotation proposes a single scoped change which applies after explicit approval. Other screens, behavior and source references remain intact.",
+        "Preview loading, retry, cancellation and invalid generation preserve the previous usable artifact. Resolve or explain the reproducible standalone preview failure."
+      ],
+      "dependencies": [
+        "JZ-105"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Prototype runner",
+          "path": "Jarwiz/apps/web/src/ui/PrototypeRunner.tsx#L17"
+        },
+        {
+          "label": "Sandbox preview test",
+          "path": "Jarwiz/apps/web/test/prototypePreview.browser.test.ts#L12"
+        },
+        {
+          "label": "Refinement validation",
+          "path": "Jarwiz/apps/server/src/prototypeRefinement.test.ts#L15"
+        }
+      ],
+      "implementationStatus": "implemented-unverified"
+    },
+    {
+      "id": "JZ-108",
+      "title": "Validate one actionable dashboard",
+      "description": "Use a known pipeline workbook and prepared account notes to verify the numbers, evidence and follow-up in one dashboard.",
+      "status": "backlog",
+      "priority": "P1",
+      "phase": "first-cohort",
+      "ownerRole": "Applied AI and Product QA",
+      "effort": {
+        "minDays": 3,
+        "maxDays": 6,
+        "uncertainty": "Unknown handling of a representative workbook and variation across model runs."
+      },
+      "userBenefit": "I can inspect an account and act on the actual blocker without guessing whether the forecast changed.",
+      "acceptanceCriteria": [
+        "The native dashboard matches known account IDs, sums, currencies and denominators and handles blank or inconsistent rows visibly.",
+        "Open the target account. Its next action is supported by the supplied note and the forecast stays unchanged when evidence clears only one blocker.",
+        "The dashboard reopens with original sources. Prepared snapshots are labelled in the story."
+      ],
+      "dependencies": [
+        "JZ-105",
+        "JZ-125"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Dashboard vocabulary",
+          "path": "Jarwiz/apps/web/src/dashboard/library.tsx#L561"
+        },
+        {
+          "label": "Dashboard stream checks",
+          "path": "Jarwiz/apps/web/test/dashboardStream.test.ts#L16"
+        }
+      ],
+      "implementationStatus": "implemented-unverified"
+    },
+    {
+      "id": "JZ-109",
+      "title": "Verify the Markdown and PDF handoffs",
+      "description": "Produce a shareable Markdown summary and a slideshow through the browser's print-to-PDF path.",
+      "status": "backlog",
+      "priority": "P2",
+      "phase": "first-cohort",
+      "ownerRole": "Frontend and QA",
+      "effort": {
+        "minDays": 2,
+        "maxDays": 4,
+        "uncertainty": "Print fidelity and source retention vary with browser and artifact content."
+      },
+      "userBenefit": "I can carry a usable summary or review deck out of the board.",
+      "acceptanceCriteria": [
+        "The enabled formats open from staging, retain critical claims and source references, and use the correct board title and scope.",
+        "A browser comparison confirms readable pages, charts and citations. Generation failure or print cancellation leaves the board and previous export intact.",
+        "Use accurate format labels for Markdown download and browser PDF printing."
+      ],
+      "dependencies": [
+        "JZ-105"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Board export menu",
+          "path": "Jarwiz/apps/web/src/ui/export/ExportMenu.tsx#L60"
+        },
+        {
+          "label": "Browser printing",
+          "path": "Jarwiz/apps/web/src/ui/export/download.ts#L30"
+        }
+      ],
+      "implementationStatus": "implemented-unverified"
+    },
+    {
+      "id": "JZ-110",
+      "title": "Prepare the first cohort and support handoff",
+      "description": "Rehearse the complete invite, first edit and return workflow, and set up support and research before admitting participants.",
+      "status": "backlog",
+      "priority": "P0",
+      "phase": "first-cohort",
+      "ownerRole": "Product and Research",
+      "effort": {
+        "minDays": 2,
+        "maxDays": 4,
+        "uncertainty": "Requires a named operator and enough staging access to exercise the support runbook."
+      },
+      "userBenefit": "My feedback improves the parts of the workflow I use on a real project.",
+      "acceptanceCriteria": [
+        "An owner is assigned for access, triage, incident escalation and pause or rollback. The cohort has clear instructions, consent and a support contact.",
+        "A dry run exercises invite, first useful edit, same-board return and issue handoff with two distinct staging identities that keep their boards private.",
+        "Agree the recording method, denominators and the condition for pausing admission. Keep sensitive beta material out of telemetry."
+      ],
+      "dependencies": [
+        "JZ-100",
+        "JZ-104",
+        "JZ-105",
+        "JZ-106"
+      ],
+      "launchGate": "first-cohort",
+      "sourceEvidence": [
+        {
+          "label": "First session and return value",
+          "path": "Folio/docs/jarwiz-future-launch-spec.md"
+        },
+        {
+          "label": "Product readiness baseline",
+          "path": "Folio/docs/jarwiz-beta-capability-audit.md"
+        }
+      ],
+      "implementationStatus": "planned"
+    },
+    {
+      "id": "JZ-111",
+      "title": "Build reliable web intake before scaling requests",
+      "description": "Replace best-effort signup storage with a durable, observable queue and an honest web form when the manual intake volume warrants it.",
+      "status": "backlog",
+      "priority": "P2",
+      "phase": "first-cohort",
+      "ownerRole": "Growth Engineering and Beta Operations",
+      "effort": {
+        "minDays": 3,
+        "maxDays": 7,
+        "uncertainty": "Depends on the selected database, email program and identity handoff."
+      },
+      "userBenefit": "My request is recorded once and I can recover from a lost connection.",
+      "acceptanceCriteria": [
+        "Normalize requests into an atomic durable record, deduplicating retries and concurrent requests across restarts.",
+        "Confirm success only after the write commits. Test timeouts, failure, rate limits and proxy origin with no false success.",
+        "If confirmation is enabled, verify a delivery sink, keep admission separate and give operators intake status, retention and deletion controls."
+      ],
+      "dependencies": [
+        "JZ-100",
+        "JZ-101",
+        "JZ-112"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Best-effort JSONL",
+          "path": "Jarwiz/apps/server/src/beta.ts#L52"
+        },
+        {
+          "label": "Legacy response",
+          "path": "Jarwiz/apps/server/src/index.ts#L137"
+        }
+      ],
+      "implementationStatus": "needs-work"
+    },
+    {
+      "id": "JZ-112",
+      "title": "Observe first useful edits and real return visits",
+      "description": "Follow projects started by invited designers or product leads and observe how they use the board when the evidence or question changes.",
+      "status": "backlog",
+      "priority": "P1",
+      "phase": "first-cohort",
+      "ownerRole": "Product Research",
+      "effort": {
+        "minDays": 3,
+        "maxDays": 6,
+        "uncertainty": "Research and synthesis only. Time to participants’ natural return visits will vary."
+      },
+      "userBenefit": "Product priorities reflect where a real project loses its context or requires too much explanation.",
+      "acceptanceCriteria": [
+        "Report admitted, initial evidence imported, first useful edit and same-board return as successes over eligible attempts, with friction and assistance observations.",
+        "In a return session, bring changed material or a new question and observe where the participant can recover source and rationale.",
+        "Document evidence for advancing or deferring decision lineage, impact review and branching without publishing participant data."
+      ],
+      "dependencies": [
+        "JZ-110"
+      ],
+      "launchGate": "none",
+      "sourceEvidence": [
+        {
+          "label": "Return-value study plan",
+          "path": "Folio/docs/jarwiz-future-launch-spec.md"
+        }
+      ],
+      "implementationStatus": "planned"
+    },
+    {
+      "id": "JZ-120",
+      "title": "Complete teammate invite, return and removal",
+      "description": "Connect invitation links to the accept API and expose board return and role controls. Verify safe migration of supported attachments before opening shared boards.",
+      "status": "backlog",
+      "priority": "P1",
+      "phase": "connected-context",
+      "ownerRole": "Full-Stack Product Engineering",
+      "effort": {
+        "minDays": 8,
+        "maxDays": 15,
+        "uncertainty": "Includes the second-account journey, explicit membership controls and migrating supported attachments into a shared scope."
+      },
+      "userBenefit": "I can bring a reviewer into the same board and return to it without saving a private link.",
+      "acceptanceCriteria": [
+        "An authorized owner creates an email-bound editor or viewer link. A second approved verified user follows it from a signed-out session, signs in, accepts and lands in the intended board.",
+        "Expired, forwarded and already-used links recover gracefully. Viewers are read-only, and owners can revoke membership and disconnect active revoked sessions.",
+        "Admitted members can discover and reopen shared boards after leaving and after reconnect. The UI uses real member data.",
+        "Share a board containing supported uploads. The shared copy opens with authorized attachment access and intact citations. Refusal, timeout and cancellation leave the original accessible."
+      ],
+      "dependencies": [
+        "JZ-102",
+        "JZ-103",
+        "JZ-104"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Create and accept endpoints",
+          "path": "Jarwiz/apps/server/src/team/index.ts#L146"
+        },
+        {
+          "label": "Copy-link UI",
+          "path": "Jarwiz/apps/web/src/team/TeamPanel.tsx#L105"
+        },
+        {
+          "label": "Current routing",
+          "path": "Jarwiz/apps/web/src/App.tsx#L325"
+        },
+        {
+          "label": "Snapshot migration boundary",
+          "path": "Jarwiz/apps/server/src/team/rooms.ts#L45"
+        }
+      ],
+      "implementationStatus": "needs-work"
+    },
+    {
+      "id": "JZ-121",
+      "title": "Make teammate discussions attributable and durable",
+      "description": "Use authenticated member identity on shared comments and keep concurrent replies from overwriting each other.",
+      "status": "backlog",
+      "priority": "P1",
+      "phase": "connected-context",
+      "ownerRole": "Collaboration Engineering",
+      "effort": {
+        "minDays": 4,
+        "maxDays": 9,
+        "uncertainty": "May need independently stored messages or merge changes to preserve concurrent history."
+      },
+      "userBenefit": "I can tell who said what and find the discussion where the decision happened.",
+      "acceptanceCriteria": [
+        "Two independent authorized sessions post on the same card at once. Both messages and their verified authors survive reconnect and reload.",
+        "Ordinary threads and prototype annotations continue to distinguish human and Jarwiz authors. Viewer and revoked controls respect the stated roles.",
+        "A suggested change stays in the thread until an authorized person applies it. Local boards retain their existing discussion history."
+      ],
+      "dependencies": [
+        "JZ-120"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Current shape metadata and local author defaults",
+          "path": "Jarwiz/apps/web/src/ask/noticeThreads.ts#L44"
+        },
+        {
+          "label": "Browser fixture",
+          "path": "Jarwiz/apps/web/test/sharedComments.browser.test.cjs#L60"
+        }
+      ],
+      "implementationStatus": "needs-work"
+    },
+    {
+      "id": "JZ-122",
+      "title": "Verify selected Google Docs as board context",
+      "description": "Configure staging Google OAuth and Picker and validate a native Google Doc through selection, review, retrieval and access loss.",
+      "status": "backlog",
+      "priority": "P1",
+      "phase": "connected-context",
+      "ownerRole": "Integrations Engineering",
+      "effort": {
+        "minDays": 3,
+        "maxDays": 7,
+        "uncertainty": "Google project configuration, consent review and tester access can extend elapsed time."
+      },
+      "userBenefit": "I can use a chosen Google document without granting teammates my provider credentials.",
+      "acceptanceCriteria": [
+        "A dedicated staging account selects one authorized native Doc. The UI explains the board copy and shows it pending until approved.",
+        "Provider cancellation, expired consent, unsupported type and access removal are recoverable. Disconnect stops refreshing and explains the retained copy.",
+        "Teammates can see the accepted board copy according to role, and the connector performs only its documented read operations."
+      ],
+      "dependencies": [
+        "JZ-120"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Google Picker",
+          "path": "Jarwiz/apps/web/src/team/ConnectedSourcePicker.tsx#L9"
+        },
+        {
+          "label": "Google scope and reads",
+          "path": "Jarwiz/apps/server/src/team/providers.ts#L20"
+        }
+      ],
+      "implementationStatus": "implemented-unverified"
+    },
+    {
+      "id": "JZ-123",
+      "title": "Verify Slack channel snapshots",
+      "description": "Connect one accessible Slack channel, show the recent-message boundary and preserve accepted snapshots across provider errors.",
+      "status": "backlog",
+      "priority": "P1",
+      "phase": "connected-context",
+      "ownerRole": "Integrations Engineering",
+      "effort": {
+        "minDays": 3,
+        "maxDays": 7,
+        "uncertainty": "Workspace app approval, user-scoped permissions and provider limits are external dependencies."
+      },
+      "userBenefit": "I can use recent account or project updates and see how much of the conversation was included.",
+      "acceptanceCriteria": [
+        "A dedicated staging workspace lists accessible channels and reads a selected bounded channel and eligible threads through actual OAuth.",
+        "The UI describes incomplete thread coverage and last checked state. Rate-limit, permission-loss and disconnect preserve the previous accepted version for the stated board-copy policy.",
+        "Confirmation accurately describes visibility. The connector makes no provider write or export of unrelated channel material."
+      ],
+      "dependencies": [
+        "JZ-120"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Slack history and replies",
+          "path": "Jarwiz/apps/server/src/team/providers.ts#L87"
+        },
+        {
+          "label": "Bounded coverage tests",
+          "path": "Jarwiz/apps/server/src/team/team.test.ts#L151"
+        }
+      ],
+      "implementationStatus": "implemented-unverified"
+    },
+    {
+      "id": "JZ-124",
+      "title": "Surface incoming context and preserve review control",
+      "description": "Expose timely update state from manual refresh or configured polling, preserve accepted revisions, and give editors source removal controls.",
+      "status": "backlog",
+      "priority": "P1",
+      "phase": "connected-context",
+      "ownerRole": "Full-Stack Product Engineering",
+      "effort": {
+        "minDays": 4,
+        "maxDays": 8,
+        "uncertainty": "Includes event catch-up, stale review recovery, a source-management UI and representative provider limits."
+      },
+      "userBenefit": "I can see what changed, decide when to use it and know when a source stopped refreshing.",
+      "acceptanceCriteria": [
+        "Across a provider fixture and at least one configured connector, a staged revision surfaces after refresh or scheduled check with a timestamp and readable diff.",
+        "Pending content stays out of answers until an authorized editor accepts that exact revision. A stale diff prompts fresh review and preserves previously accepted evidence.",
+        "An editor can remove a shared copy and the connection owner can disconnect. Reconnect reads update state idempotently across two authorized sessions."
+      ],
+      "dependencies": [
+        "JZ-120"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Source revision endpoints",
+          "path": "Jarwiz/apps/server/src/team/index.ts#L176"
+        },
+        {
+          "label": "Opt-in polling",
+          "path": "Jarwiz/apps/server/src/team/index.ts#L210"
+        },
+        {
+          "label": "Current client review",
+          "path": "Jarwiz/apps/web/src/team/TeamPanel.tsx#L173"
+        }
+      ],
+      "implementationStatus": "needs-work"
+    },
+    {
+      "id": "JZ-125",
+      "title": "Replace study-only workflow evidence",
+      "description": "Keep illustrative material labelled and use a separately reproducible normal-app scenario to support claims about current mechanisms.",
+      "status": "ready",
+      "priority": "P1",
+      "phase": "first-cohort",
+      "ownerRole": "Product QA and Design",
+      "effort": {
+        "minDays": 2,
+        "maxDays": 4,
+        "uncertainty": "Actual product footage remains a separate content pass. This covers fixture review and claim evidence."
+      },
+      "userBenefit": "I can tell which details illustrate the workflow and what I can try with my own material.",
+      "acceptanceCriteria": [
+        "Flag study identities, source snapshots, Slack history ranges, apparent presence and named affected outputs wherever example material uses them.",
+        "Keep capture flags and canned responses outside the access flow. Record the normal app route and source fixture for a repeatable evidence-backed check.",
+        "Mark future decision, draft impact and branch scenes as concept previews in any capture or static composition."
+      ],
+      "dependencies": [],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Study team switch and named outputs",
+          "path": "Jarwiz/apps/web/src/team/store.ts#L38"
+        },
+        {
+          "label": "Scripted Ask",
+          "path": "Jarwiz/apps/server/src/ask.ts#L810"
+        },
+        {
+          "label": "Public scene contract",
+          "path": "Folio/docs/jarwiz-future-launch-spec.md"
+        }
+      ],
+      "implementationStatus": "demo-only"
+    },
+    {
+      "id": "JZ-126",
+      "title": "Show affected work and one approved revision",
+      "description": "Turn accepted source dependency events into inspectable stale markers and a deliberate fix for one artifact. Validate Notice as a separate, quiet on-board signal.",
+      "status": "backlog",
+      "priority": "P1",
+      "phase": "connected-context",
+      "ownerRole": "Applied AI and Product Engineering",
+      "effort": {
+        "minDays": 5,
+        "maxDays": 10,
+        "uncertainty": "A real cited passage and repeatable edit safety may require changes in retrieval, sync and generation."
+      },
+      "userBenefit": "I can see which draft uses older evidence and decide whether it needs to change.",
+      "acceptanceCriteria": [
+        "The list of impacted cards comes from persisted used-source dependencies. It stays accurate after a reload or reconnect and excludes unrelated cards.",
+        "A source reference opens the actual evidence passage or honestly bounded revision evidence, while its historical version remains findable under the sharing policy.",
+        "Accepting new context leaves artifacts intact. An explicitly approved fix updates one target, with an undo path and preservation on failure, cancellation or a newer draft edit.",
+        "Notice remains tied to meaningful on-board changes, stays quiet while editing where appropriate, and cannot trigger an unapproved rewrite."
+      ],
+      "dependencies": [
+        "JZ-106",
+        "JZ-124"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Revision and dependency events",
+          "path": "Jarwiz/apps/server/src/team/store.ts#L217"
+        },
+        {
+          "label": "Current UI ignores affected artifact IDs",
+          "path": "Jarwiz/apps/web/src/team/store.ts#L176"
+        },
+        {
+          "label": "Existing automatic canvas sync",
+          "path": "Jarwiz/apps/web/src/ask/sync.ts#L169"
+        },
+        {
+          "label": "Active board Notice",
+          "path": "Jarwiz/apps/web/src/ask/useNotice.ts#L18"
+        }
+      ],
+      "implementationStatus": "needs-work"
+    },
+    {
+      "id": "JZ-201",
+      "title": "Trace one decision to evidence and drafts",
+      "description": "Start on a personal board with an uploaded report. Add a durable record for an authored choice, rationale, exact source version or passage and dependent drafts.",
+      "status": "backlog",
+      "priority": "P2",
+      "phase": "expansion",
+      "ownerRole": "Product Design and Full-Stack Engineering",
+      "effort": {
+        "minDays": 8,
+        "maxDays": 15,
+        "uncertainty": "Decision and passage data model, migration and how authors create or confirm links need discovery."
+      },
+      "userBenefit": "When asked why a choice was made, I can open one record and show the evidence and reasoning.",
+      "acceptanceCriteria": [
+        "Author one representative decision, link the precise source version and passage, distinguish a rationale from source evidence, and link two dependent drafts.",
+        "Attaching a revised report and reopening the board preserves historical links and shows which evidence changed. Access follows the same board policy.",
+        "A second reader can find the reason and evidence from the draft and identify the other affected draft without an explanation from the author."
+      ],
+      "dependencies": [
+        "JZ-106",
+        "JZ-112"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Planned decision direction",
+          "path": "Folio/docs/jarwiz-future-launch-spec.md"
+        },
+        {
+          "label": "Existing citation dependency primitives",
+          "path": "Jarwiz/apps/server/src/team/store.ts#L249"
+        }
+      ],
+      "implementationStatus": "planned"
+    },
+    {
+      "id": "JZ-202",
+      "title": "Review proposed changes across related drafts",
+      "description": "Start with a manually added report revision or a changed decision. Propose separate before-and-after edits for a brief and an editable in-project review deck.",
+      "status": "backlog",
+      "priority": "P2",
+      "phase": "expansion",
+      "ownerRole": "Applied AI and Full-Stack Engineering",
+      "effort": {
+        "minDays": 10,
+        "maxDays": 20,
+        "uncertainty": "Needs an editable in-project deck type or equivalent scoped artifact, durable proposals and conflict handling."
+      },
+      "userBenefit": "I can update the draft that needs attention and hold another for the right reviewer.",
+      "acceptanceCriteria": [
+        "A brief and a board-owned editable review deck each preserve their own revision identity. Two draft proposals identify their affected passages and evidence versions independently.",
+        "Accept one change and defer the other. Reload, coworker edits, retry and stale approvals never alter the deferred draft or erase newer work.",
+        "The history records who made each decision and which edit applied. Previously downloaded exports retain their original content."
+      ],
+      "dependencies": [
+        "JZ-201",
+        "JZ-133"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Planned impact review",
+          "path": "Folio/docs/jarwiz-future-launch-spec.md"
+        },
+        {
+          "label": "Existing accepted-source events",
+          "path": "Jarwiz/apps/server/src/team/index.ts#L191"
+        },
+        {
+          "label": "Current export is a handoff",
+          "path": "Jarwiz/apps/web/src/ui/export/ExportMenu.tsx#L111"
+        }
+      ],
+      "implementationStatus": "planned"
+    },
+    {
+      "id": "JZ-203",
+      "title": "Compare and adopt a project branch",
+      "description": "Once real projects reveal a need for alternatives, start two versions from the same evidence and decision state, compare outcomes and explicitly adopt one with its rationale.",
+      "status": "backlog",
+      "priority": "P3",
+      "phase": "expansion",
+      "ownerRole": "Product Design and Collaboration Engineering",
+      "effort": {
+        "minDays": 12,
+        "maxDays": 25,
+        "uncertainty": "High uncertainty around version storage, conflict behavior, multi-artifact adoption and useful comparison UX."
+      },
+      "userBenefit": "I can explore a different plan without losing the original or its evidence.",
+      "acceptanceCriteria": [
+        "Two named alternatives start from the same visible baseline and keep their changes separate across at least two linked artifacts.",
+        "The comparison explains differences, evidence and tradeoffs. Adopting one version is explicit, handles later edits without silent overwrite and retains the rationale.",
+        "A user can recover the original and reopen the unselected alternative. Verify the workflow against real comparison needs before broad release."
+      ],
+      "dependencies": [
+        "JZ-107",
+        "JZ-201"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Planned branch direction",
+          "path": "Folio/docs/jarwiz-future-launch-spec.md"
+        },
+        {
+          "label": "Existing prototype alternatives",
+          "path": "Jarwiz/packages/shared/src/prototypeSet.ts"
+        }
+      ],
+      "implementationStatus": "planned"
+    },
+    {
+      "id": "JZ-300",
+      "title": "Establish dependency and distribution rights",
+      "description": "Record the MIT scope of first-party code and inventory licenses for the exact shipped browser and server dependencies and media. Resolve the tldraw 5.1 distribution boundary.",
+      "status": "ready",
+      "implementationStatus": "needs-work",
+      "priority": "P1",
+      "phase": "open-core",
+      "ownerRole": "Maintainer and Licensing Reviewer",
+      "effort": {
+        "minDays": 2,
+        "maxDays": 6,
+        "uncertainty": "The pinned canvas SDK terms, release assets and replacement cost require review."
+      },
+      "userBenefit": "I can tell which code I may use and which terms apply before I fork or host it.",
+      "acceptanceCriteria": [
+        "Review the installed tldraw SDK and sync packages, asset/font licenses, commercial production requirements, redistribution terms and licensing-key requirements.",
+        "Record which components are covered by Jarwiz MIT. Verify any applicable production agreement for the intended host and include full verbatim required third-party license copies and notices in the distributed software, preserving key enforcement.",
+        "Unrestricted self-host release depends on verified license coverage for downstream operators or a permissively licensed alternative passing canvas, shared-board and data-migration tests. Obtain owner approval for any first-party license change."
+      ],
+      "dependencies": [],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "First-party MIT license",
+          "path": "Jarwiz/LICENSE"
+        },
+        {
+          "label": "Canvas dependencies",
+          "path": "Jarwiz/apps/web/package.json"
+        },
+        {
+          "label": "Canvas license build input",
+          "path": "Jarwiz/.github/workflows/pages.yml#L59"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-301",
+      "title": "Publish a reproducible self-host and contributor path",
+      "description": "Make the public source build and run from a clean clone through a documented development and persistent self-host path.",
+      "status": "backlog",
+      "implementationStatus": "needs-work",
+      "priority": "P1",
+      "phase": "open-core",
+      "ownerRole": "Developer Experience and Infrastructure",
+      "effort": {
+        "minDays": 5,
+        "maxDays": 10,
+        "uncertainty": "Clean install, direct dependencies, durable service configuration and a safe local identity bootstrap require verification."
+      },
+      "userBenefit": "I can run Jarwiz on infrastructure I control and submit a fix from a clean setup.",
+      "acceptanceCriteria": [
+        "A fresh clone uses the supported Node version of at least 22.13, the lockfile and documented install, dev, build, check and test commands.",
+        "A clean TLS same-origin deploy initializes a private owner account and persists rooms, attachments and optional provider configuration. Reopen a saved board after restart and restore.",
+        "Publish example environment variables with placeholders, CI smoke checks, contribution and issue guidance, versioned releases and a vulnerability reporting contact. Document opt-in network and service dependencies."
+      ],
+      "dependencies": [
+        "JZ-300"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Current setup requirements",
+          "path": "Jarwiz/README.md#L27"
+        },
+        {
+          "label": "Actual runtime engine",
+          "path": "Jarwiz/package.json"
+        },
+        {
+          "label": "Persistent team deployment",
+          "path": "Jarwiz/apps/server/src/team/README.md#runtime-and-mounting"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-302",
+      "title": "Specify the model harness and capability contract",
+      "description": "Define a provider-neutral run contract so application workflows can declare the model capabilities they need.",
+      "status": "ready",
+      "implementationStatus": "planned",
+      "priority": "P1",
+      "phase": "model-harness",
+      "ownerRole": "AI Platform Engineering",
+      "effort": {
+        "minDays": 5,
+        "maxDays": 9,
+        "uncertainty": "Provider event shapes, token accounting, multimodal fidelity and structured-output support vary."
+      },
+      "userBenefit": "I can select a model with a clear view of the workflows it can run and why a choice is unavailable.",
+      "acceptanceCriteria": [
+        "Specify typed input messages, modalities, tool schemas and replies, structured responses, cancellation and usage/cost metadata, plus normalized streaming events and errors.",
+        "Publish an explicit capability matrix for streaming, tool loop, vision, structured output, context and usage reporting per tested model and endpoint. Preflight each feature requirement and explain unavailable capabilities.",
+        "Use a deterministic test adapter to verify event order, tool IDs, partial output policy, schema rejection, normalized failure, cancellation and budget hooks. Capture unmeterable usage explicitly."
+      ],
+      "dependencies": [],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Current Anthropic client",
+          "path": "Jarwiz/apps/server/src/model.ts#L22"
+        },
+        {
+          "label": "Provider-specific stream",
+          "path": "Jarwiz/apps/server/src/textStream.ts#L60"
+        },
+        {
+          "label": "Provider-specific tool loop",
+          "path": "Jarwiz/apps/server/src/agents/runtime.ts#L372"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-303",
+      "title": "Scope model credentials and endpoint access",
+      "description": "Implement server-managed keys and model endpoint settings with clear owner, scope, rotation and network controls.",
+      "status": "backlog",
+      "implementationStatus": "needs-work",
+      "priority": "P1",
+      "phase": "model-harness",
+      "ownerRole": "Security and AI Platform Engineering",
+      "effort": {
+        "minDays": 5,
+        "maxDays": 10,
+        "uncertainty": "Owner-configured local endpoints and hosted user credentials require distinct policies and tests."
+      },
+      "userBenefit": "I can choose a model provider or local endpoint without sharing a key with board members or sending context to an unapproved service.",
+      "acceptanceCriteria": [
+        "No credential appears in board snapshots, exports, browser persistence, model tool payloads, URLs or logs. Encrypt persisted credentials and allow validation, removal and rotation.",
+        "Only the authorized owner can configure a connection. Server-funded budgets and user-owned usage remain separate and enforceable across concurrent requests.",
+        "A self-host operator may explicitly configure a local endpoint. Hosted service only dials configured allowed destinations with validation of redirects and network boundaries. UI clearly identifies the provider receiving data."
+      ],
+      "dependencies": [
+        "JZ-302"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Current browser key storage and header",
+          "path": "Jarwiz/apps/web/src/lib/api.ts#L17"
+        },
+        {
+          "label": "Current key selection",
+          "path": "Jarwiz/apps/server/src/model.ts#L48"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-304",
+      "title": "Implement and verify Anthropic and OpenAI model adapters",
+      "description": "Use native Anthropic and OpenAI APIs behind the same harness and preserve the current Anthropic behavior.",
+      "status": "backlog",
+      "implementationStatus": "planned",
+      "priority": "P1",
+      "phase": "model-harness",
+      "ownerRole": "AI Platform Engineering",
+      "effort": {
+        "minDays": 6,
+        "maxDays": 12,
+        "uncertainty": "Hosted test-model access and consistent handling of tools, usage and streaming across API versions."
+      },
+      "userBenefit": "I can try the same supported task with two model providers without changing how I work on the board.",
+      "acceptanceCriteria": [
+        "Provider contract tests cover streamed and structured results, image input, tool calls and replies, cancellation, errors and budgets on a named tested model from each provider.",
+        "On each provider, use the same supplied source to generate an editable artifact, make a useful edit and ask a grounded follow-up. Switch providers in the same board and verify its saved work, edit history and provenance remain accessible.",
+        "Keep existing Anthropic-only configurations working during migration. Model/provider selection is explicit and failures never silently send context to another provider."
+      ],
+      "dependencies": [
+        "JZ-302",
+        "JZ-303"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Ask vision and model tools",
+          "path": "Jarwiz/apps/server/src/ask.ts#L568"
+        },
+        {
+          "label": "Anthropic client",
+          "path": "Jarwiz/apps/server/src/model.ts#L63"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-305",
+      "title": "Add native Google and compatible local model endpoints",
+      "description": "Add a native Google adapter and a tested OpenAI-compatible endpoint adapter, including an Ollama self-host example.",
+      "status": "backlog",
+      "implementationStatus": "planned",
+      "priority": "P2",
+      "phase": "model-harness",
+      "ownerRole": "AI Platform Engineering",
+      "effort": {
+        "minDays": 6,
+        "maxDays": 12,
+        "uncertainty": "Google capability mapping and Ollama model/tool support depend on tested versions and host setup."
+      },
+      "userBenefit": "I can use a supported Google model or run a compatible local model on a self-hosted installation.",
+      "acceptanceCriteria": [
+        "Validate native Google and a documented Ollama deployment against the same harness tests and one real compatible end-to-end workflow each.",
+        "Report the model-dependent capabilities of each configured endpoint. Unsupported modality, schema or tool features fail preflight with a named reason.",
+        "When optional services are disabled, a local text-only workflow completes without sending its material to a hosted model or research provider."
+      ],
+      "dependencies": [
+        "JZ-303",
+        "JZ-304"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Current single hosted provider path",
+          "path": "Jarwiz/apps/server/src/model.ts#L63"
+        },
+        {
+          "label": "Current sidecar and demo capabilities",
+          "path": "Jarwiz/apps/web/src/lib/backend.ts#L19"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-306",
+      "title": "Decouple research and tool execution from model providers",
+      "description": "Run search, retrieval and canvas actions through server-managed tools usable by models that support the required tool capabilities.",
+      "status": "backlog",
+      "implementationStatus": "needs-work",
+      "priority": "P1",
+      "phase": "model-harness",
+      "ownerRole": "Research and AI Platform Engineering",
+      "effort": {
+        "minDays": 6,
+        "maxDays": 12,
+        "uncertainty": "Search-provider choice, source attribution, tool permissions and existing provider-specific dependencies."
+      },
+      "userBenefit": "I can inspect research sources and use permitted tools even when I change model providers.",
+      "acceptanceCriteria": [
+        "Give each tool a typed schema, permission and scope check, timeout, budget and normalized result or error. Missing or disabled tools surface a clear state.",
+        "Verify retrieval, search-result attribution and stable source identity from two model adapters. Keep search optional and support supplied-source-only runs.",
+        "Disclose network destinations for research tools and validate untrusted text, URLs and tool actions before use. Shared content remains scoped to a permitted board."
+      ],
+      "dependencies": [
+        "JZ-302",
+        "JZ-303"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Provider-native web search",
+          "path": "Jarwiz/apps/server/src/webTools.ts"
+        },
+        {
+          "label": "Canvas/tool runtime",
+          "path": "Jarwiz/apps/server/src/agents/runtime.ts#L44"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-307",
+      "title": "Move every AI entry point onto the harness",
+      "description": "Route Ask, Compose, agents, Notice, discovery, link summaries, OCR/vision where modeled, recommendations, prototypes, dashboards and exports via the model harness.",
+      "status": "backlog",
+      "implementationStatus": "needs-work",
+      "priority": "P1",
+      "phase": "model-harness",
+      "ownerRole": "AI Platform and Feature Engineering",
+      "effort": {
+        "minDays": 8,
+        "maxDays": 16,
+        "uncertainty": "Multiple call sites make capability declarations and regression coverage larger than the settings UI."
+      },
+      "userBenefit": "A provider choice applies consistently across supported board workflows.",
+      "acceptanceCriteria": [
+        "Inventory every model call. Migrate each production invocation and confine SDK imports and provider-specific error handling to adapters or explicitly documented legacy paths disabled for configurable runs.",
+        "Run a per-workflow capability and regression matrix on two actual model providers. Verify tool choice, structure validation, citations, cancellation, normalized failure, and no accidental double spend.",
+        "When a chosen model cannot deliver a workflow, explain the missing capability and preserve the board. Capture a supported-model matrix before advertising model-agnostic use."
+      ],
+      "dependencies": [
+        "JZ-304",
+        "JZ-306"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Generate path",
+          "path": "Jarwiz/apps/server/src/generate.ts"
+        },
+        {
+          "label": "Export provider path",
+          "path": "Jarwiz/apps/server/src/export.ts#L147"
+        },
+        {
+          "label": "Runtime providers",
+          "path": "Jarwiz/apps/server/src/agents/runtime.ts#L372"
+        },
+        {
+          "label": "Model summaries",
+          "path": "Jarwiz/apps/server/src/tldr.ts"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-308",
+      "title": "Publish extension APIs for tools, agents and card renderers",
+      "description": "Expose versioned contracts for registering a tool, configuring an agent and rendering a typed custom card in self-hosted Jarwiz.",
+      "status": "backlog",
+      "implementationStatus": "planned",
+      "priority": "P2",
+      "phase": "model-harness",
+      "ownerRole": "Platform and Frontend Engineering",
+      "effort": {
+        "minDays": 10,
+        "maxDays": 20,
+        "uncertainty": "Third-party renderer trust boundaries, state validation, API compatibility and dev ergonomics need design."
+      },
+      "userBenefit": "I can extend my workspace for my own workflow and understand what a third-party extension may do.",
+      "acceptanceCriteria": [
+        "Publish a versioned manifest and SDK contract for requested permissions, tool inputs/outputs, agent configuration, typed card content and migration/uninstall behavior.",
+        "Install an example outside core source that contributes one of each extension type. Admit only enabled permissions, and isolate or explicitly trust each extension execution surface.",
+        "Invalid schemas, missing permissions, renderer failure and version mismatches surface actionable errors with the core board still usable. Document compatibility and versioning."
+      ],
+      "dependencies": [
+        "JZ-301",
+        "JZ-306",
+        "JZ-307"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Built-in agent runtime",
+          "path": "Jarwiz/apps/server/src/agents/runtime.ts"
+        },
+        {
+          "label": "Current built-in card registry",
+          "path": "Jarwiz/apps/web/src/shapes/index.ts"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-130",
+      "title": "Complete core canvas authoring and facilitation primitives",
+      "description": "Make diagramming, planning and workshop boards legible and comfortable on one canvas.",
+      "status": "ready",
+      "implementationStatus": "implemented-unverified",
+      "priority": "P1",
+      "phase": "workspace-parity",
+      "ownerRole": "Canvas Product Engineering",
+      "effort": {
+        "minDays": 6,
+        "maxDays": 13,
+        "uncertainty": "Several operations exist through the canvas SDK. Validate present behavior before implementing missing ones."
+      },
+      "userBenefit": "I can build and revise a board by hand, with or without AI.",
+      "acceptanceCriteria": [
+        "Use the normal app to create and revise text, shapes, cards, connectors, frames and groups. Support multi-select, style and layout controls, duplication, keyboard shortcuts and sensible undo.",
+        "Navigate a dense multi-frame board and present frames in order. Verify selection, zoom and connectors remain usable after copy, reload and asset migration.",
+        "Complete visual ideation and system-diagramming journeys from a blank board. Ship starter layouts for a system diagram, planning board and workshop. Cover keyboard-only authoring and feature-level screen-reader feedback."
+      ],
+      "dependencies": [],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Canvas toolbar",
+          "path": "Jarwiz/apps/web/src/ui/CanvasToolbar.tsx"
+        },
+        {
+          "label": "Built-in types",
+          "path": "Jarwiz/apps/web/src/shapes/index.ts"
+        },
+        {
+          "label": "Board layout utilities",
+          "path": "Jarwiz/apps/web/src/agents/tidyBoard.ts"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-131",
+      "title": "Fill heterogeneous input gaps and source operations",
+      "description": "Baseline paste, links, images, PDF, workbook and video text, then add commonly needed document and presentation imports and reliable citation coordinates.",
+      "status": "backlog",
+      "implementationStatus": "implemented-unverified",
+      "priority": "P1",
+      "phase": "workspace-parity",
+      "ownerRole": "Source and Ingestion Engineering",
+      "effort": {
+        "minDays": 6,
+        "maxDays": 14,
+        "uncertainty": "Existing formats vary in extraction, metadata, offline availability and parser limits."
+      },
+      "userBenefit": "I can bring disparate work into one board and tell when material was only partly read.",
+      "acceptanceCriteria": [
+        "Test a representative supported set across paste, drop and picker, including extraction for CSV/XLSX, multipage PDF, OCR, image and video transcript paths where available.",
+        "Define a documented matrix for DOCX, PPTX and mixed-media ingestion. Ship the highest-demand validated formats with stable page, slide, sheet or passage references.",
+        "Handle missing captions, oversized or encrypted files and unsupported types with specific recovery. Verify permissions, restart and re-upload history."
+      ],
+      "dependencies": [
+        "JZ-103"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Source ingestion",
+          "path": "Jarwiz/apps/web/src/ingest/registerIngestion.ts"
+        },
+        {
+          "label": "Text and uploaded attachment handling",
+          "path": "Jarwiz/apps/web/src/ingest/attachments.ts"
+        },
+        {
+          "label": "Uploaded PDF parsing",
+          "path": "Jarwiz/apps/server/src/assets.ts"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-132",
+      "title": "Ground research and synthesis in selectable project context",
+      "description": "Support selected-card and board-context work, explicit project retrieval, cited web research when enabled, and transparent context inclusion.",
+      "status": "backlog",
+      "implementationStatus": "needs-work",
+      "priority": "P1",
+      "phase": "workspace-parity",
+      "ownerRole": "Applied AI and Search Engineering",
+      "effort": {
+        "minDays": 8,
+        "maxDays": 16,
+        "uncertainty": "Larger project retrieval, source precision and benchmark design require representative multi-source datasets."
+      },
+      "userBenefit": "I can trace an answer through the material it used and ask follow-up questions across related project boards.",
+      "acceptanceCriteria": [
+        "In an authorized project with irrelevant distractors, answer across multiple supported sources and show exactly which sources and relevant passages contributed.",
+        "Pass a source-scope benchmark for omitted, stale, inaccessible or misleading evidence. Keep a supplied-source-only mode and distinguish web research from authored source material.",
+        "Revisit a prior question, switch context scope and verify citation links still work after reopening or source replacement."
+      ],
+      "dependencies": [
+        "JZ-106",
+        "JZ-131"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Selected and ambient context",
+          "path": "Jarwiz/apps/web/src/ask/useAsk.ts#L141"
+        },
+        {
+          "label": "Current Ask request assembly",
+          "path": "Jarwiz/apps/server/src/index.ts#L540"
+        },
+        {
+          "label": "Source references",
+          "path": "Jarwiz/apps/web/src/ui/CardSources.tsx#L16"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-133",
+      "title": "Make major output types genuinely editable",
+      "description": "Deliver a consistent create, edit, undo and reuse loop for docs, tables, diagrams, dashboards, clickable prototypes and in-project presentations.",
+      "status": "backlog",
+      "implementationStatus": "needs-work",
+      "priority": "P1",
+      "phase": "workspace-parity",
+      "ownerRole": "Artifact Product Engineering",
+      "effort": {
+        "minDays": 10,
+        "maxDays": 20,
+        "uncertainty": "Current native editing differs by type. An editable deck and identified chart/diagram editing gaps need product work."
+      },
+      "userBenefit": "I can continue working with useful outputs without starting from a fresh prompt.",
+      "acceptanceCriteria": [
+        "Create and meaningfully edit each named output type via its normal canvas route, with sources preserved after re-open. Allow manual structured edits where advertised.",
+        "Slides are board-owned editable artifacts with reorder, content edits and presentation, followed by a separate PDF export.",
+        "Test partial generation, stale refinements, undo, import/export expectations and access checks with known input/output suites."
+      ],
+      "dependencies": [
+        "JZ-105",
+        "JZ-130"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Editable rich document",
+          "path": "Jarwiz/apps/web/src/ui/RichDocEditor.tsx"
+        },
+        {
+          "label": "Table edits",
+          "path": "Jarwiz/apps/web/src/shapes/tableCellEdit.ts"
+        },
+        {
+          "label": "Current slideshow export",
+          "path": "Jarwiz/apps/web/src/ui/export/ExportMenu.tsx#L87"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-134",
+      "title": "Run multiplayer workshops and review sessions",
+      "description": "Enable shared editing, reliable presence, role-aware review and basic facilitation across team boards.",
+      "status": "backlog",
+      "implementationStatus": "needs-work",
+      "priority": "P1",
+      "phase": "workspace-parity",
+      "ownerRole": "Collaboration Engineering",
+      "effort": {
+        "minDays": 8,
+        "maxDays": 16,
+        "uncertainty": "Real-time convergence, presence, facilitator behavior and workload need testing with independent accounts."
+      },
+      "userBenefit": "I can work live with teammates, keep track of their activity and collect feedback on the same board.",
+      "acceptanceCriteria": [
+        "Three authorized sessions can edit concurrently, see truthful named presence, follow a presenter and leave attributable review.",
+        "A facilitator can share a frame sequence and use defined timer and voting actions; viewers see only actions appropriate for their role.",
+        "TLS reconnect, concurrent edits, revoked users and lost sessions converge without duplicated comments, lost saved edits or synthetic presence."
+      ],
+      "dependencies": [
+        "JZ-120",
+        "JZ-121",
+        "JZ-130"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Shared room storage",
+          "path": "Jarwiz/apps/server/src/team/rooms.ts#L83"
+        },
+        {
+          "label": "Current team status UI",
+          "path": "Jarwiz/apps/web/src/team/TeamPanel.tsx#L17"
+        },
+        {
+          "label": "Comment persistence",
+          "path": "Jarwiz/apps/web/src/ask/noticeThreads.ts#L44"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-135",
+      "title": "Organize boards into projects and preserve project history",
+      "description": "Give users a cross-device board directory, project grouping, permission-aware search and usable version history.",
+      "status": "backlog",
+      "implementationStatus": "needs-work",
+      "priority": "P1",
+      "phase": "workspace-parity",
+      "ownerRole": "Workspace Product Engineering",
+      "effort": {
+        "minDays": 8,
+        "maxDays": 17,
+        "uncertainty": "Needs shared project ownership, scope rules, reliable indexing and a retention decision."
+      },
+      "userBenefit": "I can find the right project, open its board and recover a useful earlier state.",
+      "acceptanceCriteria": [
+        "Users may group, name, find, duplicate, archive and restore authorized boards within a project from a second session.",
+        "Search covers titles and supported card text without exposing inaccessible board content or metadata.",
+        "Recovered versions retain connected references and clear ownership. Restore preserves newer edits in a recoverable state."
+      ],
+      "dependencies": [
+        "JZ-104",
+        "JZ-120"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Local board metadata",
+          "path": "Jarwiz/apps/web/src/boards/boardStore.ts"
+        },
+        {
+          "label": "Current browser board search",
+          "path": "Jarwiz/apps/web/src/boards/boardSearch.ts"
+        },
+        {
+          "label": "Authorized board listing",
+          "path": "Jarwiz/apps/server/src/team/index.ts#L146"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-136",
+      "title": "Support portable handoff across compatible tools",
+      "description": "Verify Markdown and PDF, then prioritize typed exports and a versioned editable board archive for project continuity.",
+      "status": "backlog",
+      "implementationStatus": "needs-work",
+      "priority": "P2",
+      "phase": "workspace-parity",
+      "ownerRole": "Interoperability Engineering",
+      "effort": {
+        "minDays": 7,
+        "maxDays": 15,
+        "uncertainty": "Fidelity varies by format, attachment ownership and destination platform."
+      },
+      "userBenefit": "I can take my material and editable work with me when I move hosts or hand a project off.",
+      "acceptanceCriteria": [
+        "Compact supported artifact exports include Markdown/PDF, tabular CSV and vector diagram output as applicable, with accurate labels and references.",
+        "Export then import an authorized board archive between two clean installations and compare supported card content, layout, valid assets and references.",
+        "Unsupported content and excluded credentials are visible in an export report. Test portability failure, accessibility, scope and version compatibility."
+      ],
+      "dependencies": [
+        "JZ-109",
+        "JZ-131",
+        "JZ-133"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Local board packaging",
+          "path": "Jarwiz/apps/web/src/boards/backup.ts#L160"
+        },
+        {
+          "label": "Markdown and PDF",
+          "path": "Jarwiz/apps/web/src/ui/export/ExportMenu.tsx#L60"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-137",
+      "title": "Broaden repository and data-source integrations",
+      "description": "Expand the connector surface beyond selected Google Docs and recent Slack history as validated needs emerge.",
+      "status": "backlog",
+      "implementationStatus": "planned",
+      "priority": "P2",
+      "phase": "workspace-parity",
+      "ownerRole": "Integrations Engineering",
+      "effort": {
+        "minDays": 10,
+        "maxDays": 22,
+        "uncertainty": "Provider approvals and read boundaries differ. Select implementations after measuring cohort demand."
+      },
+      "userBenefit": "I can bring widely used project and business evidence into a board under a clear sharing policy.",
+      "acceptanceCriteria": [
+        "Document candidate coverage for selected Google Drive files or Sheets, Notion and one cohort-priority work or storage provider. Choose and verify the first new read connector against the same contract.",
+        "Prove consent, data scope, refresh, limits, disconnect, stale permissions, revocation and board-copy retention for each enabled connector.",
+        "Advertise only verified file types and refresh policies. OAuth provider changes must not alter a board artifact without the specified approval."
+      ],
+      "dependencies": [
+        "JZ-122",
+        "JZ-123",
+        "JZ-124",
+        "JZ-131"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Current connector scope",
+          "path": "Jarwiz/apps/server/src/team/README.md#actual-connector-scope"
+        },
+        {
+          "label": "Provider review endpoints",
+          "path": "Jarwiz/apps/server/src/team/index.ts#L176"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "JZ-138",
+      "title": "Prove category coverage with representative workflows",
+      "description": "Benchmarks use real entry points for distinct work, from research and planning to workshops, visual design and data/reporting.",
+      "status": "backlog",
+      "implementationStatus": "planned",
+      "priority": "P1",
+      "phase": "workspace-parity",
+      "ownerRole": "Product Research and QA",
+      "effort": {
+        "minDays": 6,
+        "maxDays": 12,
+        "uncertainty": "Reference-set breadth and live staging evidence require structured testing, including realistic board sizes."
+      },
+      "userBenefit": "I can choose a relevant workflow and trust that it generalizes beyond one demo board.",
+      "acceptanceCriteria": [
+        "Run a manual system diagram, multi-source research brief, editable design prototype, worksheet-backed business review with export and collaborative workshop or roadmap session. Record unsupported steps and verify artifact editing and handoff where appropriate.",
+        "Check keyboard navigation, readable dense boards, load/reopen time, stream cancellation and recovery at representative project sizes.",
+        "Publish a sourced coverage matrix with tested versions and caveats. Claim category parity only for verified rows and preserve an explicit backlog for missing common capability."
+      ],
+      "dependencies": [
+        "JZ-107",
+        "JZ-108",
+        "JZ-132",
+        "JZ-133",
+        "JZ-134",
+        "JZ-135",
+        "JZ-136",
+        "JZ-137"
+      ],
+      "launchGate": "feature-release",
+      "sourceEvidence": [
+        {
+          "label": "Existing seeded use cases",
+          "path": "Jarwiz/apps/web/src/ui/EmbedUseCases.tsx#L155"
+        },
+        {
+          "label": "Reference canvas products",
+          "path": "Folio/docs/jarwiz-canvas-reference-review.md"
+        },
+        {
+          "label": "Open workspace strategy and coverage",
+          "path": "Folio/docs/jarwiz-open-workspace-strategy.md"
+        }
+      ]
+    }
+  ],
+  "implementationStatuses": [
+    {
+      "id": "needs-work",
+      "label": "Needs work",
+      "description": "A known gap needs a product or operational change."
+    },
+    {
+      "id": "implemented-unverified",
+      "label": "Implemented-unverified",
+      "description": "Code exists. The intended beta journey still needs end-to-end evidence."
+    },
+    {
+      "id": "demo-only",
+      "label": "Demo-only",
+      "description": "The represented behavior depends on example data or a capture fixture."
+    },
+    {
+      "id": "planned",
+      "label": "Planned",
+      "description": "This scope has no production implementation in the reviewed snapshot."
+    }
+  ]
+}

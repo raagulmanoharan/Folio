@@ -1,4 +1,12 @@
 import './style.css'
+import './portfolio-frame.css'
+import './reflections-page.css'
+import './page-transitions.css'
+import './reflections-page.js'
+import './case-entry.css'
+import './case-entry.js'
+import './project-sections.css'
+import './project-sections.js'
 
 /* ---------- 3D hero motif (three.js, code-split) ---------- */
 const motifCanvas = document.querySelector('[data-motif]')
@@ -72,65 +80,12 @@ if (drawer && backdrop && openBtn) {
   }
 
   openBtn.addEventListener('click', openDrawer)
+  if (window.location.hash === '#about') openDrawer()
   backdrop.addEventListener('click', closeDrawer)
   drawer.querySelector('[data-drawer-close]').addEventListener('click', closeDrawer)
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer()
   })
-}
-
-/* ---------- Gallery drawer (opens from the top) ---------- */
-const gallery = document.querySelector('[data-gallery]')
-const galleryBackdrop = document.querySelector('[data-gallery-backdrop]')
-const galleryOpenBtn = document.querySelector('[data-gallery-open]')
-
-if (gallery && galleryBackdrop && galleryOpenBtn) {
-  // Load the embedded experiments (a Figma deck, a video) only on first open, so
-  // a visitor who never opens the drawer never hits those external apps.
-  const loadEmbeds = () => {
-    gallery.querySelectorAll('iframe[data-embed-src]').forEach((f) => {
-      f.src = f.getAttribute('data-embed-src')
-      f.removeAttribute('data-embed-src')
-    })
-  }
-  const openGallery = () => {
-    loadEmbeds()
-    gallery.classList.add('is-open')
-    galleryBackdrop.classList.add('is-open')
-    gallery.setAttribute('aria-hidden', 'false')
-    galleryOpenBtn.setAttribute('aria-expanded', 'true')
-  }
-  const closeGallery = () => {
-    gallery.classList.remove('is-open')
-    galleryBackdrop.classList.remove('is-open')
-    gallery.setAttribute('aria-hidden', 'true')
-    galleryOpenBtn.setAttribute('aria-expanded', 'false')
-  }
-
-  galleryOpenBtn.addEventListener('click', openGallery)
-  galleryBackdrop.addEventListener('click', closeGallery)
-  document
-    .querySelectorAll('[data-gallery-close]')
-    .forEach((el) => el.addEventListener('click', closeGallery))
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && gallery.classList.contains('is-open')) closeGallery()
-  })
-
-  // Reveal each project's caption only once it scrolls into view.
-  const figures = gallery.querySelectorAll('[data-figure]')
-  if (figures.length && 'IntersectionObserver' in window) {
-    // Observe against the viewport (not the transformed drawer, whose transform
-    // breaks a scroll-container root); the fixed drawer fills the viewport.
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => e.target.classList.toggle('is-inview', e.isIntersecting))
-      },
-      { threshold: 0.5 },
-    )
-    figures.forEach((f) => io.observe(f))
-  } else {
-    figures.forEach((f) => f.classList.add('is-inview'))
-  }
 }
 
 /* ---------- Wordmark cipher decode ----------
@@ -140,7 +95,8 @@ if (gallery && galleryBackdrop && galleryOpenBtn) {
    Both wordmark forms are wired — the full name on desktop and the "RM" short
    form on mobile — and whichever is visible decodes. Runs once on load and
    again on hover/focus; calm and readable at rest. Skipped for reduced-motion. */
-const wordmarkBtn = document.querySelector('[data-gallery-open]')
+const isWritingNavigation = location.pathname.includes('/reflections/') || document.referrer.includes('/reflections/')
+const wordmarkBtn = document.querySelector('[data-wordmark]')
 if (wordmarkBtn && !reducedMotion) {
   const TAMIL = ['ரா', 'கு', 'ல்', 'ம', 'னோ', 'க', 'ர', 'ன்']
   const TAMIL_FACE = "'Noto Sans Tamil', sans-serif"
@@ -215,7 +171,7 @@ if (wordmarkBtn && !reducedMotion) {
       requestAnimationFrame(tick)
     }
 
-    letters.forEach(scramble) // show scrambled immediately, then resolve
+    if (!isWritingNavigation) letters.forEach(scramble)
     return decode
   }
 
@@ -223,7 +179,7 @@ if (wordmarkBtn && !reducedMotion) {
     .map(makeCipher)
   const decodeAll = () => decoders.forEach((d) => d()) // only the visible form runs
 
-  decodeAll() // decode on load
+  if (!isWritingNavigation) decodeAll()
   if (finePointer) {
     wordmarkBtn.addEventListener('pointerenter', decodeAll) // re-decode on hover
   }
@@ -248,147 +204,6 @@ if (finePointer) {
       { passive: true },
     )
   })
-}
-
-/* ---------- Reflections (full-screen writing panel) ---------- */
-const reflections = document.querySelector('[data-reflections]')
-const reflectionsOpenBtn = document.querySelector('[data-reflections-open]')
-
-if (reflections && reflectionsOpenBtn) {
-  let reflectionsLastFocused = null
-
-  const openReflections = () => {
-    reflectionsLastFocused = document.activeElement
-    reflections.classList.add('is-open')
-    reflections.setAttribute('aria-hidden', 'false')
-    reflectionsOpenBtn.setAttribute('aria-expanded', 'true')
-    document.documentElement.classList.add('is-locked')
-    reflections.scrollTop = 0
-  }
-  const closeReflections = () => {
-    reflections.classList.remove('is-open')
-    reflections.setAttribute('aria-hidden', 'true')
-    reflectionsOpenBtn.setAttribute('aria-expanded', 'false')
-    document.documentElement.classList.remove('is-locked')
-    reflectionsLastFocused?.focus?.()
-    // Drop the deep-link hash so a closed panel doesn't leave a stale URL.
-    if (location.hash.startsWith('#/reflections/')) {
-      history.replaceState(null, '', location.pathname + location.search)
-    }
-  }
-
-  reflectionsOpenBtn.addEventListener('click', openReflections)
-  reflections
-    .querySelectorAll('[data-reflections-close]')
-    .forEach((el) => el.addEventListener('click', closeReflections))
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && reflections.classList.contains('is-open')) closeReflections()
-  })
-
-  // Each article expands in place, and is addressable via a hash deep link
-  // (#/reflections/<slug>) so a single piece can be linked and shared.
-  const RDUR = reducedMotion ? 20 : 500
-  const bar = reflections.querySelector('.reflections-bar')
-  // Smoothly bring an item's heading just under the sticky bar.
-  const scrollToItem = (item) => {
-    const toggle = item.querySelector('[data-refl-toggle]')
-    const y =
-      reflections.scrollTop +
-      toggle.getBoundingClientRect().top -
-      reflections.getBoundingClientRect().top -
-      (bar ? bar.offsetHeight : 0) -
-      12
-    reflections.scrollTo({ top: Math.max(0, y), behavior: reducedMotion ? 'auto' : 'smooth' })
-  }
-
-  // Open or collapse one article. Idempotent, so it's safe to call for a deep
-  // link when the article may already be open.
-  const setItemOpen = (item, open, scroll) => {
-    const toggle = item.querySelector('[data-refl-toggle]')
-    const reveal = item.querySelector('.reflections-item__reveal')
-    if (open === item.classList.contains('is-open')) {
-      if (open && scroll) scrollToItem(item)
-      return
-    }
-    clearTimeout(item._reflSettle)
-    if (open) {
-      item.classList.add('is-open')
-      toggle.setAttribute('aria-expanded', 'true')
-      reveal.style.overflow = 'hidden'
-      reveal.style.maxHeight = `${reveal.scrollHeight}px`
-      item._reflSettle = setTimeout(() => {
-        if (item.classList.contains('is-open')) {
-          reveal.style.maxHeight = 'none'
-          reveal.style.overflow = 'visible' // let the sticky "Collapse" control stick
-          item.classList.add('is-settled')
-        }
-      }, RDUR)
-      if (scroll) scrollToItem(item)
-    } else {
-      item.classList.remove('is-open', 'is-settled')
-      toggle.setAttribute('aria-expanded', 'false')
-      reveal.style.overflow = 'hidden'
-      reveal.style.maxHeight = `${reveal.scrollHeight}px`
-      void reveal.offsetHeight
-      requestAnimationFrame(() => {
-        reveal.style.maxHeight = '0px'
-      })
-    }
-  }
-
-  // ---- Hash deep links -------------------------------------------------
-  const REFL_HASH = '#/reflections/'
-  const slugify = (s) =>
-    s
-      .toLowerCase()
-      .replace(/[’'"]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-  const items = [...reflections.querySelectorAll('.reflections-item')]
-  const slugFor = (item) =>
-    item.dataset.slug || slugify(item.querySelector('.reflections-title')?.textContent || '')
-  const bySlug = new Map(items.map((item) => [slugFor(item), item]))
-  const hashSlug = () =>
-    location.hash.startsWith(REFL_HASH)
-      ? decodeURIComponent(location.hash.slice(REFL_HASH.length))
-      : ''
-  const clearReflHash = () => {
-    if (hashSlug()) history.replaceState(null, '', location.pathname + location.search)
-  }
-
-  items.forEach((item) => {
-    const toggle = item.querySelector('[data-refl-toggle]')
-    toggle.addEventListener('click', () => {
-      const open = !item.classList.contains('is-open')
-      setItemOpen(item, open)
-      const slug = slugFor(item)
-      if (open) {
-        if (hashSlug() !== slug) location.hash = REFL_HASH + slug // shareable URL
-      } else if (hashSlug() === slug) {
-        clearReflHash()
-      }
-    })
-  })
-
-  // The in-article "Collapse" control closes its own article.
-  reflections.querySelectorAll('[data-refl-collapse]').forEach((btn) => {
-    const item = btn.closest('.reflections-item')
-    btn.addEventListener('click', () => {
-      scrollToItem(item)
-      setItemOpen(item, false)
-      if (hashSlug() === slugFor(item)) clearReflHash()
-    })
-  })
-
-  // Arriving at (or navigating to) a deep link opens the panel and the piece.
-  const syncFromHash = (scroll) => {
-    const item = bySlug.get(hashSlug())
-    if (!item) return
-    if (!reflections.classList.contains('is-open')) openReflections()
-    setItemOpen(item, true, scroll)
-  }
-  window.addEventListener('hashchange', () => syncFromHash(true))
-  if (bySlug.has(hashSlug())) requestAnimationFrame(() => syncFromHash(true))
 }
 
 /* ---------- Case study (expands inline, in place, below the work item) ---------- */
@@ -534,6 +349,7 @@ window.addEventListener(
   'scroll',
   () => {
     const y = window.scrollY
+    if (document.body.classList.contains('reflections-page')) return
     if (Math.abs(y - lastY) < THRESHOLD) return
     // Always show near the very top of the page.
     if (y > lastY && y > header.offsetHeight) {

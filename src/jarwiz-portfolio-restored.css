@@ -1,0 +1,145 @@
+@import './portfolio-frame.css';
+@import './page-transitions.css';
+
+/* Restore the approved portfolio project template (staging b1e2de1).
+   Keep the current Jarwiz story and native media behavior within that template. */
+.jarwiz-case {
+  --header-h: 43px;
+  --line: var(--gutter-line);
+  --case-content-padding: 32px;
+  --case-section-gap: 32px;
+  --case-heading-size: clamp(20px, 2.2vw, 24px);
+  --case-body-size: clamp(18px, 1.8vw, 20px);
+}
+html { scroll-padding-top: 59px; }
+.jarwiz-case .site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  height: var(--header-h);
+  padding: 0;
+  display: flex;
+  background: #161616;
+  backdrop-filter: none;
+}
+.jarwiz-case .header-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 100%;
+}
+.jarwiz-case .owner,
+.jarwiz-case .back-link,
+.jarwiz-case #motion-toggle {
+  position: static;
+  transform: none;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .1px;
+  text-transform: uppercase;
+  color: #ededed;
+}
+.jarwiz-case .back-link { justify-self: start; min-width: 28px; min-height: 36px; }
+.jarwiz-case .owner { grid-column: 2; text-align: center; }
+.jarwiz-case #motion-toggle { grid-column: 3; justify-self: end; padding: 8px 0 8px 8px; font-size: 11px; color: #8a8a8a; }
+.jarwiz-case .case-main {
+  width: var(--case-width);
+  max-width: none;
+  margin-inline: auto;
+  padding-top: var(--header-h);
+  border: 0;
+}
+.jarwiz-case .cover { padding: 16px 16px 0; }
+.jarwiz-case .project-name { display: none; }
+.jarwiz-case .cover h1 {
+  max-width: 1100px;
+  margin: 0 0 32px;
+  font-size: clamp(48px, 8vw, 120px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -.055em;
+  overflow-wrap: anywhere;
+}
+.jarwiz-case .cover-deck { display: block; margin: 0 16px 32px; }
+.jarwiz-case .cover-deck p {
+  max-width: 70ch;
+  font-size: var(--case-heading-size);
+  line-height: 1.3;
+  letter-spacing: -.015em;
+  color: #b8b8b8;
+}
+.jarwiz-case .cover-deck .text-link { margin-top: 16px; font-size: 14px; }
+.jarwiz-case .cover-artifact { margin: 0 16px; }
+.jarwiz-case .image-link,
+.jarwiz-case .film-stage { border: 0; border-radius: 0; background: #202020; }
+.jarwiz-case .cover-artifact .image-link { padding: 0; background: #202020; border-radius: 0; }
+.jarwiz-case .cover-artifact img { border-radius: 0; box-shadow: none; }
+.jarwiz-case .artifact figcaption { padding: 12px 0 0; font-size: 13px; line-height: 1.5; color: #8a8a8a; }
+.jarwiz-case .metadata { margin-top: 32px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.jarwiz-case .metadata > div { padding: 12px 16px; }
+.jarwiz-case .metadata h2 { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; color: #8a8a8a; }
+.jarwiz-case .metadata p { font-size: 15px; line-height: 1.5; }
+.jarwiz-case .chapter { padding: var(--case-section-gap) var(--case-content-padding) 0; scroll-margin-top: 59px; }
+.jarwiz-case .section-heading { display: block; margin-bottom: 32px; }
+.jarwiz-case .section-label { display: block; padding: 0; margin-bottom: 16px; font-size: 16px; font-weight: 400; line-height: 1.4; letter-spacing: .03em; color: #a3a3a3; }
+.jarwiz-case :is(.section-heading h2, .artifact-intro h3, .decision h3, .supporting-strip h4, .outcomes h3, .reflection-list h3, .closing h3) {
+  font-size: var(--case-heading-size);
+  line-height: 1.3;
+  font-weight: 400;
+  letter-spacing: -.015em;
+  color: #b8b8b8;
+  margin-bottom: 32px;
+}
+.jarwiz-case :is(.section-heading p, .artifact-intro p, .decision-copy > p, .supporting-strip p, .outcomes p, .reflection-list p, .closing p) {
+  max-width: 70ch;
+  font-size: var(--case-body-size);
+  line-height: 1.6;
+  letter-spacing: 0;
+  color: #ededed;
+  margin-top: 32px;
+}
+.jarwiz-case .system-map { padding: 32px; background: transparent; border-radius: 0; }
+.jarwiz-case .system-map-heading { margin-bottom: 32px; }
+.jarwiz-case .system-steps h3 { font-size: 16px; line-height: 1.4; letter-spacing: .03em; font-weight: 400; }
+.jarwiz-case .step-no { color: #8a8a8a; }
+.jarwiz-case .artifact-intro { display: block; margin: 32px 0; }
+.jarwiz-case .artifact-number { display: block; margin-bottom: 16px; }
+.jarwiz-case .artifact-pair { gap: 32px; margin-top: 32px; }
+.jarwiz-case .decisions { margin-top: 32px; border-top: 0; }
+.jarwiz-case .decision { display: block; padding: 32px 0; }
+.jarwiz-case .decision-copy,
+.jarwiz-case .decision-wide .decision-copy { display: block; max-width: none; }
+.jarwiz-case .decision-index { margin-bottom: 16px; color: #8a8a8a; }
+.jarwiz-case .principle,
+.jarwiz-case .decision-wide .principle { margin-top: 32px; border-color: var(--line); }
+.jarwiz-case .principle p { max-width: 70ch; }
+.jarwiz-case .decision-visual,
+.jarwiz-case .decision-wide .decision-visual { padding-top: 32px; }
+.jarwiz-case .supporting-strip { display: block; }
+.jarwiz-case .supporting-strip figure { margin-top: 32px; }
+.jarwiz-case #impact { padding-top: 32px; }
+.jarwiz-case .outcomes { margin-inline: -32px; }
+.jarwiz-case .outcomes > div { padding: 16px !important; }
+.jarwiz-case .reflection-list { margin-left: 0; }
+.jarwiz-case .reflection-list article { padding: 32px 0; gap: 16px; }
+.jarwiz-case .reflection-list article > span { color: #8a8a8a; }
+.jarwiz-case .closing { margin-top: 32px; padding: 32px 0; text-align: left; background: none; }
+.jarwiz-case .closing .jarwiz-mark { display: none; }
+.jarwiz-case .closing h3 { margin: 0 0 32px; }
+.jarwiz-case .closing p { margin: 0 0 32px; }
+.jarwiz-case .case-footer { padding: 16px; color: #8a8a8a; }
+.jarwiz-case .case-footer span { display: inline; }
+.jarwiz-case .site-footer { min-height: var(--header-h); border-top: 1px solid var(--line); }
+
+@media (max-width: 900px) {
+  .jarwiz-case .metadata { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .jarwiz-case .owner-context { display: none; }
+  .jarwiz-case .metadata p { font-size: 13px; }
+  .jarwiz-case .artifact-pair { grid-template-columns: 1fr; }
+  .jarwiz-case .system-map { padding: 16px; }
+  .jarwiz-case .system-steps { gap: 32px 16px; }
+  .jarwiz-case .artifact figcaption { flex-wrap: wrap; }
+  .jarwiz-case .case-footer { gap: 16px; flex-wrap: wrap; }
+  .jarwiz-case .case-footer span { display: none; }
+}

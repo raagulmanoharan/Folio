@@ -1,0 +1,27 @@
+/* A plain reveal, down into a page and up when returning to the portfolio. */
+@view-transition { navigation: auto; }
+html { view-transition-name: root; }
+.site-header { view-transition-name: portfolio-header; }
+::view-transition-group(portfolio-header) { z-index: 2; animation: none; }
+::view-transition-old(portfolio-header) { animation: none; opacity: 0; }
+::view-transition-new(portfolio-header) { animation: none; opacity: 1; }
+::view-transition-group(root) { animation: none; overflow: clip; background: var(--bg); }
+::view-transition-old(root),
+::view-transition-new(root) { mix-blend-mode: normal; clip-path: inset(43px 0 0); }
+::view-transition-old(root) { animation: none; opacity: 1; z-index: 0; }
+::view-transition-new(root) {
+  z-index: 1;
+  animation: reveal-down 300ms ease-in-out both;
+}
+:root:has(body.portfolio-home)::view-transition-new(root) { animation-name: reveal-up; }
+@keyframes reveal-down {
+  from { clip-path: inset(43px 0 calc(100% - 43px)); }
+  to { clip-path: inset(43px 0 0); }
+}
+@keyframes reveal-up {
+  from { clip-path: inset(100% 0 0); }
+  to { clip-path: inset(43px 0 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+}

@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Jarwiz — New evidence. Updated requirements.</title>
+  <style>
+    @font-face{font-family:Neue;src:url('../jarwiz-review/NeueMontreal-Regular.otf');font-weight:400;font-display:swap}
+    @font-face{font-family:Neue;src:url('../jarwiz-review/NeueMontreal-Medium.otf');font-weight:500 700;font-display:swap}
+    *{box-sizing:border-box}body{margin:0;background:#fff;color:#1b1d1b;font-family:Neue,Arial,sans-serif;-webkit-font-smoothing:antialiased}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;color:inherit;cursor:pointer}a{color:inherit;text-decoration:none}main{max-width:1160px;margin:auto;padding:42px 40px 60px}.masthead{display:flex;align-items:center;justify-content:space-between;gap:20px;font-size:16px}.brand{display:flex;align-items:center;gap:10px;font-weight:500}.brand svg{width:21px;height:21px}.edition{color:#6e746e;font-size:14px}.intro{margin:64px 0 58px;max-width:760px}.eyebrow{font-size:13px;color:#727972;letter-spacing:.08em;text-transform:uppercase;margin:0 0 16px}h1{font-size:44px;line-height:1.05;letter-spacing:-1.8px;font-weight:500;margin:0 0 16px}.description{font-size:19px;line-height:1.5;color:#737973;margin:0}.film{margin:0;border-radius:18px;background:#f5f5f2;overflow:hidden;border:1px solid #e7e9e4;position:relative;aspect-ratio:3/2}video{width:100%;height:100%;display:block;object-fit:contain}.controls{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:17px}.playback{display:flex;align-items:center;gap:8px}.icon-button{width:38px;height:38px;border:1px solid #e4e8e2;border-radius:50%;display:grid;place-items:center;background:white}.icon-button:hover{background:#f3f5f1}.icon-button:focus-visible,.chapter:focus-visible{outline:2px solid #253a2c;outline-offset:4px}.icon-button svg{width:16px;height:16px}.time{font-size:13px;color:#717870;font-variant-numeric:tabular-nums;margin-left:5px}.chapters{display:flex;gap:7px}.chapter{background:#fff;border:1px solid #e4e8e2;border-radius:30px;padding:10px 13px;font-size:13px;color:#737973;transition:background .2s,color .2s,border-color .2s}.chapter[aria-pressed="true"]{background:#20251f;color:#fff;border-color:#20251f}.chapter span{opacity:.6;margin-right:6px}.chapter:disabled{cursor:default;opacity:.45}.footer{margin-top:38px;padding-top:21px;border-top:1px solid #eceee9;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;font-size:13px;color:#737973}.footer a:hover{color:#1b1d1b}.footer a:focus-visible{outline:2px solid #253a2c;outline-offset:4px}.footer-links{display:flex;gap:22px;flex-wrap:wrap;justify-content:flex-end}.static-note{margin:12px 0;color:#737973;font-size:14px}.progress{width:100%;accent-color:#303d31;height:2px;margin-top:19px;display:block;cursor:pointer}.progress:disabled{cursor:default}.fallback{padding:20px}.hide{display:none}
+    @media(max-width:700px){main{padding:25px 18px 32px}.intro{margin:48px 0 42px}h1{font-size:35px;letter-spacing:-1.2px}.description{font-size:17px}.film{border-radius:11px;margin:0 -8px;width:calc(100% + 16px)}.controls{align-items:flex-start;flex-wrap:wrap}.chapters{order:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;gap:5px}.chapter{min-width:0;font-size:11px;padding:11px 4px}.chapter span{display:none}.edition{font-size:12px}.footer{margin-top:28px;gap:16px;align-items:flex-start}.footer-links{justify-content:flex-start;gap:15px}.time{font-size:12px}.progress{margin-top:16px}}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+    .demo-section + .demo-section{margin-top:86px}.demo-heading{margin-bottom:23px}.demo-heading h2{display:flex;align-items:baseline;gap:13px;font-size:25px;line-height:1.2;letter-spacing:-.6px;font-weight:500;margin:0}.step-number{font-size:13px;letter-spacing:0;color:#8a9088}.demo-heading p{font-size:17px;line-height:1.5;color:#737973;margin:9px 0 0}.chapters:empty{display:none}.progress:focus-visible{outline:2px solid #526250;outline-offset:7px}.controls{min-height:38px}.static-note{margin-bottom:0}.film:fullscreen{border:0;border-radius:0;background:#151715}video:fullscreen{background:#151715}
+    @media(max-width:700px){.chapters[data-count="4"]{grid-template-columns:repeat(2,minmax(0,1fr))}.demo-section + .demo-section{margin-top:58px}.demo-heading{margin-bottom:19px}.demo-heading h2{font-size:23px;gap:10px}.demo-heading p{font-size:16px;margin-top:8px}.intro{max-width:100%}}
+  </style>
+</head>
+<body>
+  <main>
+    <nav class="masthead" aria-label="Page">
+      <a class="brand" href="../../case-studies/jarwiz/" aria-label="Jarwiz case study"><svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16 1C14.6 11.3 11.3 14.6 1 16c10.3 1.4 13.6 4.7 15 15 1.4-10.3 4.7-13.6 15-15C20.7 14.6 17.4 11.3 16 1Z"/></svg>Jarwiz</a>
+      <span class="edition">03 / A second pair of eyes</span>
+    </nav>
+    <header class="intro">
+      <p class="eyebrow">A canvas that thinks with you</p>
+      <h1>New evidence. Updated requirements.</h1>
+      <p class="description">Jarwiz reads the onboarding data, flags a conflict, and updates the PRD with your approval.</p>
+    </header>
+    <section class="demo-section" data-player="notice" data-name="Notice" data-metadata="./notice-flow.json?v=prd-flow-v1" aria-labelledby="notice-heading">
+      <header class="demo-heading"><h2 id="notice-heading"><span class="step-number">01</span>Notice the conflict.</h2><p>New onboarding data changes what the PRD should say.</p></header>
+      <figure class="film">
+        <video id="notice-film" muted playsinline loop preload="metadata" poster="./poster.jpg?v=prd-flow-v1" aria-label="Jarwiz reads onboarding data from a spreadsheet and leaves a comment on a conflicting requirement in the PRD.">
+          <source src="./notice-flow.mp4?v=prd-flow-v1" type="video/mp4">
+          <a class="fallback" href="./notice-flow.mp4?v=prd-flow-v1">Watch the notice film</a>
+        </video>
+      </figure>
+      <input class="progress" data-progress type="range" min="0" max="15" disabled step="0.05" value="0" aria-label="Notice video position">
+      <div class="controls">
+        <div class="playback">
+          <button class="icon-button" data-action="toggle" aria-label="Play notice video"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path data-play-icon d="M6 3l11 7-11 7z"/></svg></button>
+          <button class="icon-button" data-action="replay" aria-label="Replay notice video"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3.2 8.5a7 7 0 1 1 .9 5.6M3 3v5.5h5.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="icon-button" data-action="expand" aria-label="View notice video full screen"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8V3h5m4 0h5v5M3 12v5h5m4 0h5v-5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <span class="time" data-time aria-live="off">0:00 / —</span>
+        </div>
+        <div class="chapters" aria-label="Notice video chapters"></div>
+      </div>
+      <p class="static-note hide" data-motion-note>Press play to see Jarwiz connect the new evidence to the PRD.</p>
+    </section>
+    <section class="demo-section" data-player="update" data-name="Update" data-metadata="./update-flow.json?v=prd-flow-v1" aria-labelledby="update-heading">
+      <header class="demo-heading"><h2 id="update-heading"><span class="step-number">02</span>Update with approval.</h2><p>Approve Jarwiz’s suggestion. The requirements update in place.</p></header>
+      <figure class="film">
+        <video id="update-film" muted playsinline loop preload="metadata" poster="./update-poster.jpg?v=prd-flow-v1" aria-label="Approve Jarwiz’s suggestion to update the PRD, then watch the revised requirements stream into the document.">
+          <source src="./update-flow.mp4?v=prd-flow-v1" type="video/mp4">
+          <a class="fallback" href="./update-flow.mp4?v=prd-flow-v1">Watch the update film</a>
+        </video>
+      </figure>
+      <input class="progress" data-progress type="range" min="0" max="12" disabled step="0.05" value="0" aria-label="Update video position">
+      <div class="controls">
+        <div class="playback">
+          <button class="icon-button" data-action="toggle" aria-label="Play update video"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path data-play-icon d="M6 3l11 7-11 7z"/></svg></button>
+          <button class="icon-button" data-action="replay" aria-label="Replay update video"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3.2 8.5a7 7 0 1 1 .9 5.6M3 3v5.5h5.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="icon-button" data-action="expand" aria-label="View update video full screen"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8V3h5m4 0h5v5M3 12v5h5m4 0h5v-5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <span class="time" data-time aria-live="off">0:00 / —</span>
+        </div>
+        <div class="chapters" aria-label="Update video chapters"></div>
+      </div>
+      <p class="static-note hide" data-motion-note>Press play to see the PRD update after approval.</p>
+    </section>
+    <footer class="footer"><span>Actual Jarwiz UI · Prepared AI responses · Illustrative scenario</span><div class="footer-links"><a href="../jarwiz-review/?v=first-flow-v21">Watch the first film ↗</a><a href="../jarwiz-grounded-review/?v=grounded-flow-v5">Watch Build &amp; Refine ↗</a><a href="../../case-studies/jarwiz/">Back to the case study ↗</a></div></footer>
+  </main>
+  <script>
+    const motion=matchMedia('(prefers-reduced-motion: reduce)');
+    const clock=n=>`${Math.floor((n||0)/60)}:${String(Math.floor((n||0)%60)).padStart(2,'0')}`;
+    let active=null,manualChoice=null;
+    const players=[...document.querySelectorAll('[data-player]')].map(section=>{
+      const video=section.querySelector('video'),toggle=section.querySelector('[data-action="toggle"]'),icon=section.querySelector('[data-play-icon]'),progress=section.querySelector('[data-progress]'),time=section.querySelector('[data-time]');
+      const player={section,video,toggle,icon,progress,time,name:section.dataset.player,ratio:0,manualPaused:false,chapters:[]};
+      const duration=()=>Number.isFinite(video.duration)?video.duration:0;
+      player.update=()=>{
+        const total=duration(),t=video.currentTime;
+        progress.value=t;time.textContent=`${clock(t)} / ${total?clock(total):'—'}`;
+        const current=player.chapters.filter(button=>t>=Number(button.dataset.at)).at(-1);
+        player.chapters.forEach(button=>button.setAttribute('aria-pressed',String(button===current)));
+      };
+      player.updatePlayback=()=>{toggle.setAttribute('aria-label',`${video.paused?'Play':'Pause'} ${player.name} video`);icon.setAttribute('d',video.paused?'M6 3l11 7-11 7z':'M5 3h3v14H5zm7 0h3v14h-3z');};
+      const ready=()=>{progress.max=duration()||1;progress.disabled=!duration();player.update();};
+      video.muted=true;
+      toggle.addEventListener('click',()=>{
+        if(video.paused)activate(player,true);
+        else{player.manualPaused=true;if(manualChoice===player)manualChoice=null;video.pause();}
+      });
+      section.querySelector('[data-action="replay"]').addEventListener('click',()=>{video.currentTime=0;player.update();activate(player,true);});
+      section.querySelector('[data-action="expand"]').addEventListener('click',()=>{
+        if(video.webkitEnterFullscreen)video.webkitEnterFullscreen();
+        else if(video.requestFullscreen)video.requestFullscreen().catch(()=>{});
+        else window.open(video.currentSrc||video.querySelector('source').src,'_blank','noopener');
+      });
+      progress.addEventListener('input',()=>{video.currentTime=Number(progress.value);player.update();});
+      video.addEventListener('timeupdate',player.update);video.addEventListener('seeked',player.update);
+      video.addEventListener('loadedmetadata',ready);video.addEventListener('durationchange',ready);
+      video.addEventListener('play',()=>{if(active!==player){video.pause();return;}players.forEach(other=>{if(other!==player)other.video.pause();});player.updatePlayback();});
+      video.addEventListener('pause',player.updatePlayback);
+      if(video.readyState>=1)ready();
+      return player;
+    });
+    function activate(player,manual=false){
+      if(document.hidden)return;
+      if(manual){player.manualPaused=false;manualChoice=player;}
+      active=player;
+      players.forEach(other=>{if(other!==player)other.video.pause();});
+      player.video.play().catch(player.updatePlayback);
+    }
+    function reconcile(){
+      players.forEach(player=>{if(player.ratio<.12)player.video.pause();});
+      if(manualChoice&&manualChoice.ratio<.12)manualChoice=null;
+      if(document.hidden||motion.matches)return;
+      const candidate=manualChoice||players.filter(player=>player.ratio>=.2).sort((a,b)=>b.ratio-a.ratio)[0];
+      if(!candidate){players.forEach(player=>player.video.pause());return;}
+      players.forEach(player=>{if(player!==candidate)player.video.pause();});
+      if(!candidate.manualPaused&&candidate.video.paused)activate(candidate);
+    }
+    const observer=new IntersectionObserver(entries=>{
+      for(const entry of entries){const player=players.find(item=>item.video===entry.target);if(player)player.ratio=entry.intersectionRatio;}
+      reconcile();
+    },{threshold:[0,.12,.2,.35,.5,.65,.8,1]});
+    players.forEach(player=>observer.observe(player.video));
+    const updateMotion=()=>{players.forEach(player=>{player.section.querySelector('[data-motion-note]').classList.toggle('hide',!motion.matches);if(motion.matches)player.video.pause();});manualChoice=null;reconcile();};
+    motion.addEventListener('change',updateMotion);updateMotion();
+    document.addEventListener('visibilitychange',()=>{if(document.hidden){players.forEach(player=>player.video.pause());manualChoice=null;}else reconcile();});
+    async function loadChapters(player){
+      try{
+        const response=await fetch(player.section.dataset.metadata,{cache:'no-store'});if(!response.ok)return;
+        const metadata=await response.json(),total=Number(metadata.duration),items=metadata.chapters;
+        if(!Number.isFinite(total)||total<=0||!Array.isArray(items)||!items.length||items.length>5)return;
+        if(items.some((item,index)=>typeof item.label!=='string'||!item.label.trim()||!Number.isFinite(item.time)||item.time<0||item.time>=total||(index===0&&item.time!==0)||(index>0&&item.time<=items[index-1].time)))return;
+        const container=player.section.querySelector('.chapters');container.replaceChildren();
+        player.chapters=items.map((item,index)=>{
+          const button=document.createElement('button');button.type='button';button.className='chapter';button.dataset.at=String(item.time);button.dataset.chapter=item.label.toLowerCase();button.setAttribute('aria-pressed',String(index===0));
+          const number=document.createElement('span');number.textContent=String(index+1).padStart(2,'0');button.append(number,document.createTextNode(item.label));
+          button.addEventListener('click',()=>{player.video.currentTime=item.time;player.update();activate(player,true);});container.append(button);return button;
+        });
+        container.dataset.count=String(items.length);player.update();
+      }catch{}
+    }
+    players.forEach(loadChapters);
+  </script>
+</body>
+</html>

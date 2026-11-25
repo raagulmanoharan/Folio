@@ -1,0 +1,11 @@
+{
+  "name": "onboarding-v5",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node hyperframes-cli.mjs preview --background",
+    "check": "node hyperframes-cli.mjs check",
+    "snapshot": "node hyperframes-cli.mjs snapshot",
+    "render": "node hyperframes-cli.mjs render --fps 30 --quality high --workers 2 --no-browser-gpu --strict --output ../../public/work/jarwiz-review/onboarding.mp4"
+  }
+}

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#08090a" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Jarwiz product roadmap · Planning review</title>
+  <link rel="preload" href="/work/jarwiz-launch-v1/fonts/InterVariable-v4.1.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/src/jarwiz-roadmap.css" />
+  <script type="module" src="/src/jarwiz-roadmap.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#roadmap">Skip to roadmap</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../closed-beta/" aria-label="Jarwiz closed beta home"><svg class="brand-mark" aria-hidden="true" viewBox="0 0 32 32"><path d="M16 1C17.8 11.4 20.6 14.2 31 16 20.6 17.8 17.8 20.6 16 31 14.2 20.6 11.4 17.8 1 16 11.4 14.2 14.2 11.4 16 1Z" fill="currentColor"/></svg><span>Jarwiz</span><span class="brand-divider" aria-hidden="true"></span><span class="brand-context">Product roadmap</span></a>
+      <a class="back-link" href="../closed-beta/">← <span>Closed beta</span></a>
+    </div>
+  </header>
+  <main id="roadmap" class="page-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Planning review · Product planning</p>
+        <h1 id="page-title">Product roadmap</h1>
+        <p class="intro-copy">From the current beta to a comprehensive, open-source AI workspace with model choice.</p>
+      </div>
+      <div class="updated"><span class="updated-label">Audited baseline</span><strong id="audit-date">Loading…</strong></div>
+    </section>
+
+    <section class="gates-panel" aria-labelledby="gates-title">
+      <div class="section-heading"><div><p class="eyebrow">Release confidence</p><h2 id="gates-title">Launch gates</h2></div><span id="gate-summary" class="gate-summary">Loading gates…</span></div>
+      <div id="launch-gates" class="gates-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="board-section" aria-labelledby="board-title">
+      <div class="board-heading">
+        <div><p class="eyebrow">Execution view</p><h2 id="board-title">Work by status</h2><p id="item-count" class="item-count"></p></div>
+        <div class="toolbar">
+          <label class="search-box"><span class="sr-only">Search roadmap items</span><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search roadmap" autocomplete="off" /></label>
+          <label class="filter-label"><span class="sr-only">Filter by priority or workstream</span><select id="filter"><option value="all">All priorities & workstreams</option></select></label>
+          <button id="reset" class="quiet-button" type="button">Reset changes</button>
+          <button id="export" class="quiet-button" type="button">Export roadmap</button>
+        </div>
+      </div>
+      <p id="save-state" class="save-state" role="status">Changes saved in this browser only</p>
+      <div id="phase-roadmap" class="phase-roadmap" aria-label="Parallel roadmap workstreams"></div>
+      <div id="board" class="board" aria-live="polite"></div>
+    </section>
+    <footer class="page-footer"><span id="source-note">Internal planning view</span><span>Local status edits are private to this browser.</span></footer>
+  </main>
+
+  <dialog id="item-dialog" class="item-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-frame"><div class="dialog-top"><span id="dialog-kicker" class="eyebrow"></span><button id="close-dialog" class="icon-button" type="button" aria-label="Close details">×</button></div><h2 id="dialog-title"></h2><p id="dialog-description" class="dialog-description"></p><div class="dialog-meta" id="dialog-meta"></div><section class="detail-section"><h3>Acceptance criteria</h3><ul id="dialog-criteria"></ul></section><section class="detail-section"><h3>Dependencies</h3><ul id="dialog-dependencies"></ul></section><section class="detail-section"><h3>Source evidence</h3><ul id="dialog-evidence"></ul></section><label class="status-editor">Planning status <select id="dialog-status"></select></label><p class="local-note">Changes are saved in this browser only.</p></div>
+  </dialog>
+</body>
+</html>

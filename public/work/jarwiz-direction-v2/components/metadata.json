@@ -1,0 +1,248 @@
+{
+  "dpr": 2,
+  "sourceSnapshotSha256": "af7c3e96eb3366a28107df3be432873350453b87f2adc5828f094654a008deaf",
+  "preparedSnapshotSha256": "ebc00b6820713ab8f5452031465beacb441cf325f1eda9fbad76be1eda01025b",
+  "placementRule": "At native CSS size, image left=desired border left-borderInset.x; image top=desired border top-borderInset.y. Do not scale. Table and blueprint native title tags already included.",
+  "components": [
+    {
+      "name": "research-desktop",
+      "nativeWidth": 540,
+      "nativeHeight": 1321,
+      "borderInset": {
+        "x": 48.125,
+        "y": 48.125
+      },
+      "nativeViewport": {
+        "width": 1320,
+        "height": 1660
+      },
+      "dpr": 2,
+      "png": "/work/jarwiz-direction-v2/components/research-desktop.png",
+      "webp": "/work/jarwiz-direction-v2/components/research-desktop.webp",
+      "pixelWidth": 1274,
+      "pixelHeight": 1217,
+      "outerCssWidth": 637.0,
+      "outerCssHeight": 608.5,
+      "renderedNativeCropHeight": 560,
+      "visibleNativeHeight": 560.375,
+      "master": "/tmp/jarwiz-direction-v2/components/research-desktop.png",
+      "masterSha256": "6e4b3bb17fe54bdb7e8d9aeebd553519ee86e19072238bfdf55801a59f6098d6",
+      "pngSha256": "7ef8b98fa9975ae7112365a27ed3164cf2a0ce6fef99cb4526122fc3fb7a4af3",
+      "webpSha256": "199b755cfd668397f6aaf39b84962e0a6e19a2c28b6a4b3193224de22ab1e7ec",
+      "pngBytes": 217002,
+      "webpBytes": 52992,
+      "losslessWebpPixelParity": true,
+      "nativeTitleIncluded": false
+    },
+    {
+      "name": "research-mobile",
+      "nativeWidth": 326,
+      "nativeHeight": 2011,
+      "borderInset": {
+        "x": 16.125,
+        "y": 48.125
+      },
+      "nativeViewport": {
+        "width": 358,
+        "height": 2380
+      },
+      "dpr": 2,
+      "png": "/work/jarwiz-direction-v2/components/research-mobile.png",
+      "webp": "/work/jarwiz-direction-v2/components/research-mobile.webp",
+      "pixelWidth": 716,
+      "pixelHeight": 697,
+      "outerCssWidth": 358.0,
+      "outerCssHeight": 348.5,
+      "renderedNativeCropHeight": 300,
+      "visibleNativeHeight": 300.375,
+      "master": "/tmp/jarwiz-direction-v2/components/research-mobile.png",
+      "masterSha256": "3bd1cb149f5567149be8f7e81a193c91359fa3f9ea6a31344c58be6f7e2ad0fb",
+      "pngSha256": "9a24d1eba0989fbfdf22334867ede2aa728d67dbb12c181dbec236b2c34d0386",
+      "webpSha256": "0e6cb3f0cea7ad29a1cb146c13b1601fcdd64684386719306c5e1aa8db9a60ab",
+      "pngBytes": 78364,
+      "webpBytes": 26228,
+      "losslessWebpPixelParity": true,
+      "nativeTitleIncluded": false
+    },
+    {
+      "name": "opportunity",
+      "nativeWidth": 540,
+      "nativeHeight": 334,
+      "borderInset": {
+        "x": 48.125,
+        "y": 72.125
+      },
+      "nativeViewport": {
+        "width": 1320,
+        "height": 960
+      },
+      "dpr": 2,
+      "png": "/work/jarwiz-direction-v2/components/opportunity.png",
+      "webp": "/work/jarwiz-direction-v2/components/opportunity.webp",
+      "pixelWidth": 1274,
+      "pixelHeight": 910,
+      "outerCssWidth": 637.0,
+      "outerCssHeight": 455.0,
+      "renderedNativeCropHeight": null,
+      "visibleNativeHeight": 334,
+      "master": "/tmp/jarwiz-direction-v2/components/opportunity.png",
+      "masterSha256": "a2b79a2b1b083a54911f483a5f957bebe8f63d51bbfb9f4d63f537b6014ab195",
+      "pngSha256": "ee1fde8214f89fabf9afe7e80b49db9939cea6b1cbd3409af9e74c8c1e7e1ec8",
+      "webpSha256": "e9e4826ff478810e1fdc70ce54eba6504bf4c1a71b36078eac691b620aaee23c",
+      "pngBytes": 92397,
+      "webpBytes": 30916,
+      "losslessWebpPixelParity": true,
+      "nativeTitleIncluded": true
+    },
+    {
+      "name": "blueprint",
+      "nativeWidth": 540,
+      "nativeHeight": 507.59375,
+      "borderInset": {
+        "x": 48.125,
+        "y": 72.125
+      },
+      "nativeViewport": {
+        "width": 1320,
+        "height": 960
+      },
+      "dpr": 2,
+      "png": "/work/jarwiz-direction-v2/components/blueprint.png",
+      "webp": "/work/jarwiz-direction-v2/components/blueprint.webp",
+      "pixelWidth": 1274,
+      "pixelHeight": 1256,
+      "outerCssWidth": 637.0,
+      "outerCssHeight": 628.0,
+      "renderedNativeCropHeight": null,
+      "visibleNativeHeight": 507.59375,
+      "master": "/tmp/jarwiz-direction-v2/components/blueprint.png",
+      "masterSha256": "87b0ca7f677a7ccd82f7f4c3aaf76bd97159cf65ab3331dbe2e7551d840714bc",
+      "pngSha256": "10aed4f85964bd1a3673783f31625794ef2626b1e77a0756652b9ce5a48e66ec",
+      "webpSha256": "9c6d74a882f380cf2b3d6fc0bcabb6d4f7e38163eccca2f880353c68f98d50c4",
+      "pngBytes": 141352,
+      "webpBytes": 45040,
+      "losslessWebpPixelParity": true,
+      "nativeTitleIncluded": true
+    },
+    {
+      "name": "composer-desktop",
+      "nativeWidth": 560,
+      "nativeHeight": 112,
+      "borderInset": {
+        "x": 48,
+        "y": 48
+      },
+      "nativeViewport": {
+        "width": 1320,
+        "height": 640
+      },
+      "dpr": 2,
+      "png": "/work/jarwiz-direction-v2/components/composer-desktop.png",
+      "webp": "/work/jarwiz-direction-v2/components/composer-desktop.webp",
+      "pixelWidth": 1312,
+      "pixelHeight": 364,
+      "outerCssWidth": 656.0,
+      "outerCssHeight": 182.0,
+      "renderedNativeCropHeight": null,
+      "visibleNativeHeight": 112,
+      "master": "/tmp/jarwiz-direction-v2/components/composer-desktop.png",
+      "masterSha256": "3675bd59c5da1ebbd2567ea69c7041f5d4febcfe5d53431029b5a4ca56a984f6",
+      "pngSha256": "452c4a00abf7a8105e25219d221c00b916e7a6a8c735c147063710ecf1f0eac0",
+      "webpSha256": "a32fdb5bdc535d845101fa2bd82d39e8e3732188bd19a30835e8336912197870",
+      "pngBytes": 36635,
+      "webpBytes": 16250,
+      "losslessWebpPixelParity": true,
+      "nativeTitleIncluded": false
+    },
+    {
+      "name": "composer-mobile",
+      "nativeWidth": 326,
+      "nativeHeight": 112,
+      "borderInset": {
+        "x": 16,
+        "y": 48
+      },
+      "nativeViewport": {
+        "width": 358,
+        "height": 460
+      },
+      "dpr": 2,
+      "png": "/work/jarwiz-direction-v2/components/composer-mobile.png",
+      "webp": "/work/jarwiz-direction-v2/components/composer-mobile.webp",
+      "pixelWidth": 716,
+      "pixelHeight": 364,
+      "outerCssWidth": 358.0,
+      "outerCssHeight": 182.0,
+      "renderedNativeCropHeight": null,
+      "visibleNativeHeight": 112,
+      "master": "/tmp/jarwiz-direction-v2/components/composer-mobile.png",
+      "masterSha256": "4e2990c134818bb49ff0ce9d6914aa3a31278f6be89cda6f4324db8fd8d0bdc1",
+      "pngSha256": "f3e5932d3fd871c1d016f6f470b33901e85434b5d5c516b22cf226ff9e7316aa",
+      "webpSha256": "2021c27c68a42f5192c0534961e566cdd10b1a3beab5d2d9f848a1e986613126",
+      "pngBytes": 31785,
+      "webpBytes": 14364,
+      "losslessWebpPixelParity": true,
+      "nativeTitleIncluded": false
+    },
+    {
+      "name": "canvas-desktop",
+      "nativeWidth": 1320,
+      "nativeHeight": 640,
+      "borderInset": {
+        "x": 0,
+        "y": 0
+      },
+      "nativeViewport": {
+        "width": 1320,
+        "height": 640
+      },
+      "dpr": 2,
+      "png": "/work/jarwiz-direction-v2/components/canvas-desktop.png",
+      "webp": "/work/jarwiz-direction-v2/components/canvas-desktop.webp",
+      "pixelWidth": 2640,
+      "pixelHeight": 1280,
+      "outerCssWidth": 1320.0,
+      "outerCssHeight": 640.0,
+      "renderedNativeCropHeight": null,
+      "visibleNativeHeight": 640,
+      "master": "/tmp/jarwiz-direction-v2/components/canvas-desktop.png",
+      "masterSha256": "14c6870a8955254ea387d59781e83c1be911fcbcf5722be09fede330d6859be6",
+      "pngSha256": "c328472e07b48ffab24b0c933666708d1cbbc5704106b70c103da9ccfac68299",
+      "webpSha256": "baf89597c4101d8ff70354b109220cfd05214f19c8dbf62b57255d2545e359bc",
+      "pngBytes": 18316,
+      "webpBytes": 552,
+      "losslessWebpPixelParity": true,
+      "nativeTitleIncluded": false
+    },
+    {
+      "name": "canvas-mobile",
+      "nativeWidth": 358,
+      "nativeHeight": 460,
+      "borderInset": {
+        "x": 0,
+        "y": 0
+      },
+      "nativeViewport": {
+        "width": 358,
+        "height": 460
+      },
+      "dpr": 2,
+      "png": "/work/jarwiz-direction-v2/components/canvas-mobile.png",
+      "webp": "/work/jarwiz-direction-v2/components/canvas-mobile.webp",
+      "pixelWidth": 716,
+      "pixelHeight": 920,
+      "outerCssWidth": 358.0,
+      "outerCssHeight": 460.0,
+      "renderedNativeCropHeight": null,
+      "visibleNativeHeight": 460,
+      "master": "/tmp/jarwiz-direction-v2/components/canvas-mobile.png",
+      "masterSha256": "9dc8558699e930a81382116831d12d6427abd7a9a6ad905a08f0e3b9a43a0717",
+      "pngSha256": "dde3097526d75ed75eb9a9ac059b024f79089d03ad2cfbe0d100eff4393c4022",
+      "webpSha256": "516bb40f6ae72375a616a02ec9fd666970629cbed0db9bfee7472546fccaf6eb",
+      "pngBytes": 5222,
+      "webpBytes": 212,
+      "losslessWebpPixelParity": true,
+      "nativeTitleIncluded": false
+    }
+  ]
+}

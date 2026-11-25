@@ -1,0 +1,261 @@
+/**
+ * Jarwiz design tokens — the single source of truth for the visual language.
+ * See docs/DESIGN.md. Imported before index.css; nothing themeable should be
+ * hard-coded in component CSS — reference these custom properties instead.
+ *
+ * Legacy aliases at the bottom keep older selectors working while the codebase
+ * migrates to the new names.
+ */
+
+:root {
+  /* ─── Typography ──────────────────────────────────────────────────────── */
+  --jz-font-ui:
+    'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* One typeface for native chrome, authored text, tables, and data views. */
+  --jz-font-display: var(--jz-font-ui);
+  --jz-font-mono:
+    'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* Type scale — size / line-height / weight pairs used across the app. */
+  --jz-text-display-size: 40px;
+  --jz-text-display-lh: 44px;
+  --jz-text-title-lg-size: 24px;
+  --jz-text-title-lg-lh: 30px;
+  --jz-text-title-size: 16px;
+  --jz-text-title-lh: 24px;
+  --jz-text-heading-size: 15px;
+  --jz-text-heading-lh: 22px;
+  --jz-text-body-size: 14px;
+  --jz-text-body-lh: 22px;
+  --jz-text-body-sm-size: 13px;
+  --jz-text-body-sm-lh: 20px;
+  --jz-text-caption-size: 12px;
+  --jz-text-caption-lh: 18px;
+  --jz-text-micro-size: 11px;
+  --jz-text-micro-lh: 16px;
+  --jz-text-document-size: 16px;
+  --jz-text-document-lh: 24px;
+  --jz-text-reading-size: 16px;
+  --jz-text-reading-lh: 26px;
+  --jz-weight-regular: 400;
+  --jz-weight-medium: 500;
+  --jz-weight-semibold: 600;
+  --jz-control-size: 32px;
+  --jz-inspector-width: 360px;
+
+  /* Quiet directional light adds depth without turning controls into badges. */
+  --jz-surface-sheen: linear-gradient(155deg, rgba(105, 116, 155, .025), transparent 62%);
+  --jz-chrome-sheen: linear-gradient(160deg, rgba(105, 116, 155, .04), transparent 68%);
+  --jz-inset-light: rgba(255, 255, 255, .5);
+
+  /* Native depth roles: shared by every component at the same elevation. */
+  --jz-depth-canvas: #f3f4f6;
+  --jz-depth-chrome: #f8f9fa;
+  --jz-depth-content: #ffffff;
+  --jz-depth-overlay: #ffffff;
+  --jz-text-primary: #17191f;
+  --jz-text-body: #454954;
+  --jz-text-muted: #626875;
+
+  /* Layout rhythm: four-pixel base, with named component insets. */
+  --jz-space-unit: 4px;
+  --jz-inset-compact: 8px;
+  --jz-gap-group: 12px;
+  --jz-inset-content: 16px;
+  --jz-inset-panel: 24px;
+  --jz-inset-reading: 32px;
+
+  /* ─── Surfaces & ink — shared by the product and its demonstrations ───── */
+  --jz-paper: var(--jz-depth-canvas);
+  --jz-paper-deep: var(--jz-depth-canvas);
+  --jz-surface: var(--jz-depth-chrome);
+  --jz-surface-raised: var(--jz-depth-overlay);
+  --jz-card-surface: var(--jz-depth-content);
+  --jz-table-header-surface: var(--jz-depth-content);
+  --jz-table-stripe-surface: var(--jz-depth-content);
+  --jz-evidence-surface: var(--jz-depth-overlay);
+  --jz-text-highlight: #f2edcf;
+
+  --jz-ink-900: var(--jz-text-primary);
+  --jz-ink-700: var(--jz-text-body);
+  --jz-ink-500: var(--jz-text-muted);
+  --jz-ink-400: var(--jz-text-muted);
+  --jz-ink-300: #c5c9d1;
+
+  --jz-hairline: rgba(31, 35, 48, 0.09);
+  --jz-hairline-strong: rgba(31, 35, 48, 0.17);
+  --jz-hover: rgba(31, 35, 48, 0.045);
+  --jz-pressed: rgba(31, 35, 48, 0.08);
+  --jz-selection: rgba(94, 106, 210, 0.10);
+  --jz-grid-dot: rgba(91, 99, 115, 0.23);
+
+  /* Shadow base color, reused at varying alpha in the elevation ramp. */
+  --jz-shadow-rgb: 0, 0, 0;
+
+  /* ─── Semantic ────────────────────────────────────────────────────────── */
+  --jz-danger: #c2410c;
+  --jz-warning: #80621a;
+  --jz-annotation: #4b6486;
+  --jz-annotation-ink: #ffffff;
+  /* Danger legible on INVERTED (accent-ground) chrome — the on-card pills sit
+   * on --jz-accent, so danger text there needs the opposite theme's weight. */
+  --jz-danger-inverse: #fb923c;
+  --jz-focus: #6674d9;
+
+  /* ─── Data-viz ────────────────────────────────────────────────────────────
+   * The ONLY place colour is used — inside generated dashboard/chart cards, so
+   * numbers read as meaning (series, up/down). Chrome stays monochrome. Light
+   * theme values; the dark block re-tunes them for legibility on a dark ground. */
+  --jz-viz-1: #2563eb;   /* primary series — blue */
+  --jz-viz-2: #7c3aed;   /* secondary series — violet */
+  --jz-positive: #18794e; /* up delta / accepted change — green */
+  --jz-negative: #dc2626; /* down delta — red */
+
+  /* Accent — monochrome. The Jarwiz identity mark (✦ spark), primary actions,
+   * and streaming affordances all draw from it. Light theme: near-black accent
+   * with white ink on top. */
+  --jz-accent: #0f0f0f;
+  --jz-accent-ink: #ffffff;
+  --jz-spark: var(--jz-accent);
+
+  /* Extended ink stops referenced by component CSS. */
+  --jz-ink-800: var(--jz-text-primary);
+  --jz-ink-200: #dee1e7;
+  --jz-ink-50: #f6f7f9;
+
+  /* ─── Spacing (4px base) ──────────────────────────────────────────────── */
+  --jz-space-1: 2px;
+  --jz-space-2: 4px;
+  --jz-space-3: 8px;
+  --jz-space-4: 12px;
+  --jz-space-5: 16px;
+  --jz-space-6: 20px;
+  --jz-space-7: 24px;
+  --jz-space-8: 32px;
+  --jz-space-9: 40px;
+  --jz-space-10: 48px;
+  --jz-space-11: 64px;
+
+  /* ─── Radius ──────────────────────────────────────────────────────────── */
+  --jz-radius-xs: 6px;
+  --jz-radius-sm: 8px;
+  --jz-radius-md: 12px;
+  --jz-radius-lg: 12px;
+  --jz-radius-xl: 16px;
+  --jz-card-radius: 12px;
+  --jz-radius-pill: 999px;
+
+  /* ─── Elevation (neutral, shared by cards and floating panels) ─────────── */
+  --jz-e1:
+    0 1px 2px rgba(var(--jz-shadow-rgb), 0.05),
+    0 2px 6px rgba(var(--jz-shadow-rgb), 0.06);
+  --jz-e2:
+    0 1px 3px rgba(var(--jz-shadow-rgb), 0.035),
+    0 6px 18px rgba(var(--jz-shadow-rgb), 0.045);
+  --jz-e3:
+    0 2px 4px rgba(var(--jz-shadow-rgb), 0.03),
+    0 10px 28px rgba(var(--jz-shadow-rgb), 0.06);
+  --jz-e4:
+    0 2px 4px rgba(var(--jz-shadow-rgb), 0.03),
+    0 10px 28px rgba(var(--jz-shadow-rgb), 0.06);
+
+  /* ─── Motion ──────────────────────────────────────────────────────────── */
+  --jz-dur-instant: 80ms;
+  --jz-dur-fast: 140ms;
+  --jz-dur-base: 220ms;
+  --jz-dur-slow: 420ms;
+  --jz-dur-glide: 600ms;
+
+  --jz-ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --jz-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --jz-ease-glide: cubic-bezier(0.22, 1, 0.36, 1);
+  --jz-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ─── Legacy aliases (pre-token names still referenced in index.css) ──── */
+  --jz-font: var(--jz-font-ui);
+  --jz-card: var(--jz-surface);
+  --jz-ink-600: var(--jz-text-body);
+  --jz-line: var(--jz-hairline);
+  --jz-radius: var(--jz-radius-lg);
+  --jz-radius-full: var(--jz-radius-pill);
+  --jz-shadow: var(--jz-e2);
+  --jz-shadow-soft: var(--jz-e1);
+  --jz-dur-1: var(--jz-dur-fast);
+  --jz-ease: var(--jz-ease-out);
+}
+
+/**
+ * Dark theme. Metadata remains legible on both canvas and raised surfaces.
+ */
+:root[data-theme='dark'] {
+  --jz-depth-canvas: #08090b;
+  --jz-depth-chrome: #0c0d0f;
+  --jz-depth-content: #111214;
+  --jz-depth-overlay: #17181b;
+  --jz-text-primary: #ececef;
+  --jz-text-body: #b4b6be;
+  --jz-text-muted: #858994;
+  --jz-paper: var(--jz-depth-canvas);
+  --jz-paper-deep: var(--jz-depth-canvas);
+  --jz-surface: var(--jz-depth-chrome);
+  --jz-surface-raised: var(--jz-depth-overlay);
+  --jz-card-surface: var(--jz-depth-content);
+  --jz-table-header-surface: var(--jz-depth-content);
+  --jz-table-stripe-surface: var(--jz-depth-content);
+  --jz-evidence-surface: var(--jz-depth-overlay);
+  --jz-text-highlight: #39362b;
+
+  --jz-ink-900: var(--jz-text-primary);
+  --jz-ink-700: var(--jz-text-body);
+  --jz-ink-500: var(--jz-text-muted);
+  --jz-ink-400: var(--jz-text-muted);
+  --jz-ink-300: #3e424c;
+
+  --jz-hairline: rgba(235, 238, 255, 0.085);
+  --jz-hairline-strong: rgba(235, 238, 255, 0.16);
+  --jz-hover: rgba(235, 238, 255, 0.05);
+  --jz-pressed: rgba(235, 238, 255, 0.085);
+  --jz-selection: rgba(151, 157, 236, 0.12);
+  --jz-grid-dot: rgba(168, 175, 197, 0.20);
+
+  --jz-shadow-rgb: 0, 0, 0;
+
+  --jz-danger: #f97316;
+  --jz-warning: #d9ba68;
+  --jz-annotation: #94add0;
+  --jz-annotation-ink: #101820;
+  --jz-danger-inverse: #c2410c;
+  --jz-focus: #a5afff;
+
+  /* Data-viz, re-tuned brighter for a dark ground (see light block for intent). */
+  --jz-viz-1: #3b82f6;   /* primary series — blue */
+  --jz-viz-2: #8b5cf6;   /* secondary series — violet */
+  --jz-positive: #10b981; /* up delta — green */
+  --jz-negative: #f87171; /* down delta — red */
+
+  --jz-accent: #eff0f3;
+  --jz-accent-ink: #17181c;
+
+  --jz-ink-800: var(--jz-text-primary);
+  --jz-ink-200: #31343d;
+  --jz-ink-50: #1e2026;
+
+  --jz-e1:
+    0 1px 2px rgba(var(--jz-shadow-rgb), 0.2),
+    0 2px 6px rgba(var(--jz-shadow-rgb), 0.15);
+  --jz-e2:
+    0 2px 4px rgba(var(--jz-shadow-rgb), 0.16),
+    0 8px 24px rgba(var(--jz-shadow-rgb), 0.20);
+  --jz-e3:
+    0 2px 8px rgba(var(--jz-shadow-rgb), 0.25),
+    0 12px 32px rgba(var(--jz-shadow-rgb), 0.25);
+  --jz-e4:
+    0 4px 12px rgba(var(--jz-shadow-rgb), 0.3),
+    0 18px 48px rgba(var(--jz-shadow-rgb), 0.35);
+}
+
+:root[data-theme='dark'] {
+  --jz-surface-sheen: linear-gradient(155deg, rgba(206, 215, 255, .032), transparent 62%);
+  --jz-chrome-sheen: linear-gradient(160deg, rgba(206, 215, 255, .045), transparent 68%);
+  --jz-inset-light: rgba(255, 255, 255, .035);
+}

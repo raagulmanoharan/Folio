@@ -1,0 +1,42 @@
+.project-tile-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 32px; }
+.side-projects { padding: 48px 32px; border-top: 1px solid var(--gutter-line); scroll-margin-top: 43px; }
+.side-projects-heading { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 40px; }
+.side-projects-heading .gallery-note { max-width: 27ch; margin: 0; font-size: 16px; color: var(--fg-dim); }
+.side-project-tile { display: block; position: relative; aspect-ratio: 4/3; overflow: hidden; background: #202020; color: var(--fg); text-decoration: none; }
+.side-project-tile > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.side-project-tile::after { content: ''; position: absolute; inset: 0; background: #0009; opacity: 0; transition: opacity .22s ease; }
+.side-project-overlay { position: absolute; z-index: 1; inset: auto 24px 24px; opacity: 0; transform: translateY(6px); transition: opacity .22s ease, transform .22s ease; }
+.side-project-overlay h3 { margin: 0 0 8px; font-size: 20px; font-weight: 400; line-height: 1.3; }
+.side-project-overlay h3 span { float: right; font-size: 16px; }
+.side-project-overlay p { margin: 0; max-width: 44ch; font-size: 14px; line-height: 1.5; color: #d0d0d0; }
+.side-project-tile:is(:hover,:focus-visible)::after,
+.side-project-tile:is(:hover,:focus-visible) .side-project-overlay { opacity: 1; }
+.side-project-tile:is(:hover,:focus-visible) .side-project-overlay { transform: none; }
+.side-project-tile:focus-visible { outline: 1px solid var(--fg); outline-offset: 4px; }
+.side-video { aspect-ratio: 16/9; background: #202020; }
+.side-video-cover { position: relative; display: block; width: 100%; height: 100%; padding: 0; border: 0; background: #202020; color: #ededed; font: inherit; cursor: pointer; }
+.side-video-cover img { width: 100%; height: 100%; object-fit: cover; }
+.side-video-cover > span { position: absolute; bottom: 24px; left: 24px; font-size: 14px; }
+.side-video iframe { display: block; width: 100%; height: 100%; border: 0; }
+@media (max-width: 800px) {
+  .side-projects-heading { display: block; }
+  .side-projects-heading .gallery-note { margin-top: 24px; }
+}
+@media (max-width: 600px) {
+  .project-tile-grid { grid-template-columns: 1fr; }
+  .side-projects { padding-block: 32px; }
+  .side-projects .gallery-title .mh-row { font-size: clamp(26px,7.5vw,36px); }
+}
+@media (hover: none) {
+  .side-project-tile::after { opacity: 1; background: linear-gradient(transparent 25%,#000c); }
+  .side-project-overlay { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .side-project-tile::after, .side-project-overlay { transition: none; }
+}
+
+/* Shared Info drawer download, aligned with the close control. */
+.drawer-cv { position: absolute; top: 20px; left: 20px; display: inline-flex; align-items: center; gap: 12px; min-height: 22px; color: inherit; text-decoration: none; font: 500 12px/1.4 var(--font); }
+.drawer-cv:hover { opacity: .7; }
+.drawer-cv:focus-visible { outline: 1px solid currentColor; outline-offset: 4px; }
+.drawer:has(.drawer-cv) .drawer-body { padding-top: 54px; }
