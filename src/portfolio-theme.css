@@ -38,8 +38,7 @@ html[data-theme="light"] .command-center-case .cc-framework-band :is(b,span) { c
 html[data-theme="light"] .command-center-case .cc-proof>div { background:#eeede7; }
 html[data-theme="light"] .command-center-case .cc-proof figcaption { background:var(--bg); }
 html[data-theme="light"] .command-center-case .cc-comparison>div:last-child { background:linear-gradient(145deg,#e4e2ed,transparent); }
-/* About stays black and the resume stays red in either website theme. */
-html[data-theme="light"] .home-about { background:#161616; color:#ededed; }
+/* The resume keeps its red treatment in either website theme. */
 html[data-theme="light"] .resume-panel { background:#df0001; color:#fff; }
 .theme-ready body,.theme-ready .site-header { transition:background-color .18s ease,color .18s ease; }
 @media(max-width:600px) { .header-actions { gap:8px; } }

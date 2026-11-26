@@ -1,9 +1,8 @@
-.home-about { background:#161616; color:#ededed; padding:64px 32px 80px; border-top:1px solid #ffffff26; display:grid; grid-template-columns:1fr 1.5fr; gap:48px; --fg:#ededed; --fg-dim:#aaa; --hairline:#ffffff26; }
+.home-about { background:var(--bg); color:var(--fg); padding:64px 32px 80px; border-top:1px solid var(--hairline); display:grid; grid-template-columns:1fr 1.5fr; gap:48px; }
 .home-about h2 { margin:0; font-size:clamp(40px,6vw,80px); font-weight:400; line-height:1; letter-spacing:-.045em; }
 .about-copy { max-width:40ch; }
 .about-copy p { margin:0 0 28px; font-size:clamp(22px,2.2vw,28px); line-height:1.4; letter-spacing:-.02em; }
 .about-copy p:last-child { margin-bottom:0; }
-.about-contact a { color:inherit; text-decoration:none; border-bottom:1px solid #888; padding-bottom:4px; }
 .drawer.resume-panel { padding:20px 24px 48px; color:#fff; --fg:#fff; --fg-dim:#ffd7d7; }
 .resume-toolbar { position:sticky; top:0; z-index:6; display:flex; align-items:center; justify-content:space-between; gap:24px; padding:0 0 20px; margin-bottom:28px; background:#df0001; border-bottom:1px solid #ffffff40; flex-shrink:0; }
 .resume-panel .drawer-cv { position:static; font-size:13px; }
@@ -37,12 +36,12 @@
 }
 
 .about-details { grid-column:1 / -1; display:grid; grid-template-columns:1fr 1fr; gap:64px; margin-top:16px; }
-.about-details h3 { margin:0 0 28px; font-size:18px; line-height:1.4; font-weight:400; color:#aaa; }
+.about-details h3 { margin:0 0 28px; font-size:18px; line-height:1.4; font-weight:400; color:var(--fg-dim); }
 .about-details ul { list-style:none; margin:0; padding:0; }
 .about-details li + li { margin-top:28px; }
 .about-details h4 { margin:0; font-size:22px; line-height:1.3; font-weight:400; letter-spacing:-.02em; }
-.about-details p { margin:8px 0 0; font-size:16px; line-height:1.5; color:#aaa; }
-.about-details span { flex-shrink:0; font-size:14px; line-height:1.6; color:#aaa; }
+.about-details p { margin:8px 0 0; font-size:16px; line-height:1.5; color:var(--fg-dim); }
+.about-details span { flex-shrink:0; font-size:14px; line-height:1.6; color:var(--fg-dim); }
 .about-work-list li,.about-featured-heading { display:flex; justify-content:space-between; align-items:baseline; gap:16px; }
 .about-featured-heading h4 { max-width:28ch; }
 .about-details a { color:inherit; text-decoration:none; }
@@ -54,4 +53,14 @@
  .about-work-list li { flex-wrap:wrap; gap:8px 16px; }
 }
 
-.about-featured .about-contact { display:flex; gap:24px; margin:32px 0 0; font-size:16px; color:#ededed; }
+
+.home-contact { padding:64px 32px 80px; border-top:1px solid var(--hairline); scroll-margin-top:59px; }
+.home-contact .reflections-intro { margin:0 0 40px; }
+.contact-links { display:flex; flex-wrap:wrap; gap:24px; }
+.contact-links a { color:var(--fg); font-size:20px; line-height:1.5; text-decoration:none; border-bottom:1px solid var(--fg-dim); padding-bottom:4px; }
+.contact-links a:hover { opacity:.65; }
+.contact-links a:focus-visible { outline:1px solid currentColor; outline-offset:4px; }
+@media(max-width:600px) {
+ .home-contact { padding-block:48px 64px; }
+ .home-contact .mh-row { font-size:clamp(26px,7.8vw,42px); }
+}
