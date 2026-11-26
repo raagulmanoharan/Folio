@@ -28,9 +28,8 @@
 @media (max-width: 600px) {
   .reflections-page .mh-row { font-size: clamp(26px, 7.8vw, 42px); }
 }
-.home-reflections { border-top:1px solid var(--gutter-line); scroll-margin-top:59px; }
+.home-reflections { scroll-margin-top:59px; }
 .home-reflections .reflections-body { max-width:none; padding:48px 32px 80px; }
-.home-section-title { font-size:clamp(40px,6vw,80px); font-weight:400; letter-spacing:-.045em; line-height:1.05; margin:0 0 48px; }
 .home-reflections .reflections-item { scroll-margin-top:67px; }
 .home-reflections .reflections-item__body { max-width:70ch; }
 .home-reflections .reflections-item__body p { font-size:clamp(18px,1.8vw,20px); }
@@ -42,6 +41,13 @@
 .side-quests-title { margin:0 0 48px; font-size:clamp(48px,8vw,112px); font-weight:400; letter-spacing:-.055em; line-height:1; }
 @media(max-width:600px) {
  .home-reflections .reflections-body { padding-block:32px 64px; }
- .home-section-title { margin-bottom:32px; }
  .side-quests-title { margin-bottom:32px; }
 }
+
+/* Writing uses dividers between entries, with no enclosing rules. */
+.home-reflections .reflections-list > li:first-child { border-top:0; }
+.home-reflections .reflections-list > li:last-child { border-bottom:0; }
+.home-reflections .reflections-intro { margin-top:16px; }
+@media(max-width:600px) { .home-reflections .mh-row { font-size:clamp(26px,7.8vw,42px); } }
+.home-reflections .reflections-list li { border:0; }
+.home-reflections .reflections-list > li + li { border-top:1px solid var(--hairline); }
