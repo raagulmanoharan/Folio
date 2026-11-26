@@ -51,3 +51,6 @@
 @media(max-width:600px) { .home-reflections .mh-row { font-size:clamp(26px,7.8vw,42px); } }
 .home-reflections .reflections-list li { border:0; }
 .home-reflections .reflections-list > li + li { border-top:1px solid var(--hairline); }
+
+/* One reading style for every essay, note and talk. */
+.reflections-item__body { font-family:var(--font); }

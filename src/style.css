@@ -1905,53 +1905,12 @@ html.is-locked body {
   text-wrap: balance;
 }
 
-/* The agents write in a regular (upright) serif — the only thing that separates
-   their entries from mine is the typeface (no italics, bylines, marks, colour). */
-.reflections-title--agent {
-  /* Pirata One — a blackletter display face for the AI-written essay's title. */
-  font-family: 'Pirata One', var(--font-serif);
-  font-style: normal;
-  font-weight: 400;
-  font-size: clamp(1.9rem, 4.2vw, 2.9rem);
-  line-height: 1.05;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--fg);
-  text-wrap: balance;
-}
-
 .reflections-dek {
   max-width: 54ch;
   font-size: clamp(0.95rem, 1.5vw, 1.05rem);
   line-height: 1.5;
   color: var(--fg-dim);
   text-wrap: pretty;
-}
-
-/* An agent's whole article is set in the upright serif (title, standfirst, and
-   body); mine stay in the sans. Same colours — the typeface is the only tell. */
-.reflections-item--agent .reflections-dek {
-  font-family: var(--font-serif);
-  font-style: normal;
-  font-size: clamp(1rem, 1.6vw, 1.12rem);
-}
-
-.reflections-item--agent .reflections-item__body p {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(1.05rem, 1.7vw, 1.2rem);
-  line-height: 1.58;
-  color: #cfcfcf;
-}
-
-/* Everything else in an agent article (subheads, lists, emphasis) is serif too */
-.reflections-item--agent .reflections-item__body h4,
-.reflections-item--agent .reflections-item__body li {
-  font-family: var(--font-serif);
-}
-.reflections-item--agent .reflections-item__body li {
-  font-size: clamp(1.02rem, 1.6vw, 1.14rem);
-  line-height: 1.5;
 }
 
 @media (prefers-reduced-motion: reduce) {
