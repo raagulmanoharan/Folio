@@ -1,3 +1,4 @@
+import './portfolio-theme.js'
 import './protected-project.css'
 import { unlockCase, restoreCase } from './case-crypto.js'
 

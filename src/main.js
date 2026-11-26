@@ -1,3 +1,5 @@
+import './portfolio-theme.js'
+import './portfolio-resume.css'
 import './style.css'
 import './portfolio-frame.css'
 import './reflections-page.css'
@@ -67,20 +69,33 @@ const openBtn = document.querySelector('[data-drawer-open]')
 
 if (drawer && backdrop && openBtn) {
   const openDrawer = () => {
+    drawer.inert = false
     drawer.classList.add('is-open')
     backdrop.classList.add('is-open')
     drawer.setAttribute('aria-hidden', 'false')
     openBtn.setAttribute('aria-expanded', 'true')
+    document.body.style.overflow = 'hidden'
+    drawer.querySelector('[data-drawer-close]').focus()
   }
   const closeDrawer = () => {
     drawer.classList.remove('is-open')
+    drawer.inert = true
     backdrop.classList.remove('is-open')
     drawer.setAttribute('aria-hidden', 'true')
     openBtn.setAttribute('aria-expanded', 'false')
+    document.body.style.overflow = ''
+    openBtn.focus({ preventScroll: true })
   }
 
+  drawer.addEventListener('keydown', event => {
+    if (event.key !== 'Tab') return
+    const stops = [...drawer.querySelectorAll('a[href],button:not([disabled])')]
+    const first = stops[0], last = stops.at(-1)
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus() }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus() }
+  })
   openBtn.addEventListener('click', openDrawer)
-  if (window.location.hash === '#about') openDrawer()
+  if (window.location.hash === '#resume') openDrawer()
   backdrop.addEventListener('click', closeDrawer)
   drawer.querySelector('[data-drawer-close]').addEventListener('click', closeDrawer)
   window.addEventListener('keydown', (e) => {
