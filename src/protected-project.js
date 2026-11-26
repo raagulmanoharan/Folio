@@ -6,8 +6,9 @@ const main = document.querySelector('main')
 const form = document.querySelector('[data-case-unlock]')
 const error = document.querySelector('#project-access-error')
 const show = html => {
-  main.innerHTML = html
+  main.innerHTML = html.replaceAll('%BASE_URL%', import.meta.env.BASE_URL).replaceAll('/foliostaging/', import.meta.env.BASE_URL)
   main.dataset.unlocked = 'true'
+  if (slug === 'jarwiz') import('./jarwiz-portfolio.js')
   // The legacy related-reading URL now leads to the full Reflections page.
   main.querySelectorAll('a[href*="#/reflections/"]').forEach(link => {
     const article = link.href.split('#/reflections/')[1]
