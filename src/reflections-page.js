@@ -2,7 +2,7 @@ const base = import.meta.env.BASE_URL
 const legacyPrefix = '#/reflections/'
 // Preserve previously shared drawer URLs when the writing moves to its own page.
 if (!document.querySelector('[data-reflections-page]') && location.hash.startsWith(legacyPrefix)) {
-  location.replace(`${base}reflections/#${location.hash.slice(legacyPrefix.length)}`)
+  location.replace(`${base}#${location.hash.slice(legacyPrefix.length)}`)
 }
 
 const page = document.querySelector('[data-reflections-page]')
@@ -47,13 +47,13 @@ if (page) {
     toggle.addEventListener('click', () => {
       const open = !item.classList.contains('is-open')
       setOpen(item, open)
-      history.pushState(null, '', open ? `#${item.id}` : location.pathname)
+      history.pushState(null, '', open ? `#${item.id}` : '#reflections')
       if (open) scrollToItem(item)
     })
     item.querySelector('[data-refl-collapse]').addEventListener('click', () => {
       toggle.focus({ preventScroll: true })
       setOpen(item, false)
-      history.replaceState(null, '', location.pathname)
+      history.replaceState(null, '', '#reflections')
       scrollToItem(item)
     })
   })

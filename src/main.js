@@ -95,7 +95,7 @@ if (drawer && backdrop && openBtn) {
    Both wordmark forms are wired — the full name on desktop and the "RM" short
    form on mobile — and whichever is visible decodes. Runs once on load and
    again on hover/focus; calm and readable at rest. Skipped for reduced-motion. */
-const isWritingNavigation = location.pathname.includes('/reflections/') || document.referrer.includes('/reflections/')
+const isWritingNavigation = location.pathname.includes('/side-quests/') || document.referrer.includes('/side-quests/') || location.pathname.includes('/reflections/') || document.referrer.includes('/reflections/')
 const wordmarkBtn = document.querySelector('[data-wordmark]')
 if (wordmarkBtn && !reducedMotion) {
   const TAMIL = ['ரா', 'கு', 'ல்', 'ம', 'னோ', 'க', 'ர', 'ன்']
@@ -349,7 +349,7 @@ window.addEventListener(
   'scroll',
   () => {
     const y = window.scrollY
-    if (document.body.classList.contains('reflections-page')) return
+    if (document.body.matches('.reflections-page, .side-quests-page')) return
     if (Math.abs(y - lastY) < THRESHOLD) return
     // Always show near the very top of the page.
     if (y > lastY && y > header.offsetHeight) {
