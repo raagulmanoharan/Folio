@@ -12,3 +12,7 @@
 .public-project .site-footer { min-height: 43px; border-top: 1px solid var(--gutter-line); }
 .case-placeholder { display: grid; place-items: center; aspect-ratio: 16/9; background: #202020; border: 1px solid var(--gutter-line); color: var(--fg-dim); font-size: 14px; }
 @media (max-width:600px) { .public-project .header-link--center { font-size: 10px; } }
+
+.public-project .case-project-link { margin:0 0 32px; font-size:15px; }
+.public-project .case-project-link a { text-decoration:none; border-bottom:1px solid #777; padding-bottom:6px; }
+.public-project .case-image + .case-image { margin-top:48px; }
