@@ -28,7 +28,7 @@
 @media (max-width: 600px) {
   .reflections-page .mh-row { font-size: clamp(26px, 7.8vw, 42px); }
 }
-.home-reflections { scroll-margin-top:59px; }
+.home-reflections { scroll-margin-top:59px; border-top:1px solid var(--hairline); }
 .home-reflections .reflections-body { max-width:none; padding:48px 32px 80px; }
 .home-reflections .reflections-item { scroll-margin-top:67px; }
 .home-reflections .reflections-item__body { max-width:70ch; }
