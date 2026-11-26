@@ -54,8 +54,9 @@
 }
 
 
-.home-contact { padding:64px 32px 80px; border-top:1px solid var(--hairline); scroll-margin-top:59px; }
-.home-contact .reflections-intro { margin:0 0 40px; }
+.home-contact { padding:64px 32px 80px; background:#df0001; color:#fff; --fg:#fff; --fg-dim:#ffffffb3; border-top:1px solid #ffffff30; scroll-margin-top:59px; }
+.home-contact .reflections-intro { margin:0 0 32px; }
+.contact-invitation { margin:0 0 32px; max-width:40ch; font-size:clamp(18px,2vw,24px); line-height:1.4; letter-spacing:-.02em; }
 .contact-links { display:flex; flex-wrap:wrap; gap:24px; }
 .contact-links a { color:var(--fg); font-size:20px; line-height:1.5; text-decoration:none; border-bottom:1px solid var(--fg-dim); padding-bottom:4px; }
 .contact-links a:hover { opacity:.65; }
